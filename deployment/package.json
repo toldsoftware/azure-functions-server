@@ -1,0 +1,27 @@
+{
+  "name": "@told/azure-functions-server-DEPLOYMENT",
+  "version": "1.0.0",
+  "description": "Azure Functions Server DEPLOYMENT",
+  "main": "index.ts",
+  "scripts": {
+    "test": "karma start karma.conf.js"
+  },
+  "bin": {
+    "afs": "./bin/afs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toldsoftware/azure-functions-server.git"
+  },
+  "keywords": [
+    "typescript",
+    "module",
+    "boilerplate"
+  ],
+  "author": "Rick Love",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/toldsoftware/azure-functions-server/issues"
+  },
+  "homepage": "https://github.com/toldsoftware/azure-functions-server#readme"
+}
