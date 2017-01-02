@@ -1,4 +1,4 @@
-import { nothing } from "./index";
+import * as T from "./types";
 
 describe("nothing", () => {
     it("should be 0", () => {

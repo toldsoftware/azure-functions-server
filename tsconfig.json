@@ -3,8 +3,9 @@
     "compilerOptions": {
         "module": "commonjs",
         "noImplicitAny": true,
-        "outDir": "tmp",
-        "target": "ES5",
+        "outDir": "lib",
+        "declaration": true,
+        "target": "ES5",        
         "sourceMap": true,
         "types": [
             "jasmine"

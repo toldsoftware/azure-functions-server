@@ -6,6 +6,9 @@
   "scripts": {
     "test": "karma start karma.conf.js"
   },
+  "bin": {
+    "afs": "./bin/afs"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/toldsoftware/azure-functions-server.git"
