@@ -29,14 +29,14 @@ Note: You might want to make a copy of this file if needed
 - x Setup NPM
     - x npm install
     - x npm test (Verify everything is working)
-- Commit and Push Project to Github
-- Create *Coveralls* Project for repo: https://coveralls.io
+- x Commit and Push Project to Github
+- x Create *Coveralls* Project for repo: https://coveralls.io
     - Add Repo
     - Sync repos (At bottom)
     - Find and Add Repo
     - Copy Token: 
         - Settings > Repo Token > [Copy]
-- Create *Travis* Project for repo: https://travis-ci.org
+- x Create *Travis* Project for repo: https://travis-ci.org
     - Add Repo
     - Sync Account
     - Set Environment Variable for *Coveralls*
