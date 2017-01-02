@@ -1,0 +1,17 @@
+{
+    "typescript.tsdk": "./node_modules/typescript/lib",
+    "files.exclude": {
+        "**/*.js.map": true,
+        "node_modules": true,
+        "coverage": true,
+        "lcov": true,
+        "typings": true,
+        ".gitignore": true,
+        ".travis.yml": true,
+        "index.ts": true,
+        "karma.conf.js": true,
+        "LICENSE": true,
+        "tsconfig.json": true,
+        "tslint.json": true
+    }
+}
