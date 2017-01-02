@@ -16,7 +16,7 @@ export function main(context: T.Context<ExampleFunctionResponseData>, request: E
         },
         body: {
             ok: true,
-            data: { text: "Example Output" },
+            data: { text: "Example Output DEPLOYMENT FOLDER" },
         }
     });
 }
