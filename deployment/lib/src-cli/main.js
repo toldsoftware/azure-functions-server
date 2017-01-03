@@ -37,7 +37,7 @@ function createDeployment() {
                 if (err) {
                     console.error(err);
                 }
-                if (data.match(/export\s+function\s+main\s*\(/)) {
+                if (data.match(/export\s+async\s+function\s+main\s*\(/)) {
                     console.log('src-server main file: ', f);
                     var functionName_1 = f.replace('.ts', '');
                     // Clone the function-BOILERPLATE folder

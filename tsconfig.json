@@ -5,11 +5,13 @@
         "noImplicitAny": true,
         "outDir": "lib",
         "declaration": true,
-        "target": "ES5",        
+        "target": "ES5",
         "sourceMap": true,
+        "importHelpers": true,
         "types": [
             "jasmine"
-        ]
+        ],
+        "lib": ["dom", "es2015.promise", "es5"]
     },
     "exclude": [
         "node_modules",

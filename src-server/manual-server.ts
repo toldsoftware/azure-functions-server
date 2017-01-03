@@ -6,7 +6,7 @@ let url = require('url');
 let queryString = require('querystring');
 // let jsonparse = require("jsonparse");
 
-export function manualServer<T, TQuery, TBody>(main: T.MainEntryPoint<T, TQuery, TBody>, port = 9876) {
+export function serve<T, TQuery, TBody>(main: T.MainEntryPoint<T, TQuery, TBody>, port = 9876) {
     console.log('Server Started at http://localhost:' + port);
 
     http.createServer(function (req: any, res: any) {
@@ -35,7 +35,9 @@ export function manualServer<T, TQuery, TBody>(main: T.MainEntryPoint<T, TQuery,
                 }
             };
 
-            main(context, { query, body: JSON.parse(req.body || '{}') });
+            main(context, { query, body: JSON.parse(req.body || '{}') })
+                .then(() => { })
+                .catch(err => console.error(err));
         });
 
     }).listen(port);

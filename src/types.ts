@@ -22,7 +22,8 @@ export interface ResponseBody<T> {
 
 export interface Context<T> {
     log(...text: any[]): void;
-    done(u?: any, response?: Response<T>): void;
+    done(err?: any, response?: Response<T>): void;
 }
 
-export type MainEntryPoint<T, TQuery, TBody> = (context: Context<T>, request: Request<TQuery, TBody>) => void;
+export type MainEntryPoint<T, TQuery, TBody> = (context: Context<T>, request: Request<TQuery, TBody>) => Promise<{}>;
+export type MainEntryPoint_Sync<T, TQuery, TBody> = (context: Context<T>, request: Request<TQuery, TBody>) => void;

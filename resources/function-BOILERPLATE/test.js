@@ -1,1 +1,1 @@
-module.exports = require('./../lib/src-server/azure-function-process.node').serve(require('./../lib/src-server/FUNCTION_NAME').main);
+module.exports = require('./../lib/src-server/manual-server').serve(require('./../lib/src-server/FUNCTION_NAME').main);
