@@ -33,13 +33,13 @@
     "karma-firefox-launcher": "^1.0.0",
     "karma-jasmine": "^1.0.2",
     "karma-typescript": "^2.1.5",
-    "typescript": "^2.1.4",
+    "typescript": "^2.1.4"
+  },
+  "dependencies": {
+    "tslib": "^1.4.0",
     "ncp": "^2.0.0",
     "node-watch": "^0.4.1",
     "replacestream": "^4.0.2",
     "rimraf": "^2.5.4"
-  },
-  "dependencies": {
-    "tslib": "^1.4.0"
   }
 }
