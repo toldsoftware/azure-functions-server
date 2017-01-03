@@ -50,7 +50,7 @@ function createDeployment() {
                     let functionName = f.replace('.ts', '');
 
                     // Clone the function-BOILERPLATE folder
-                    let functionBoilerplateDir = __dirname + '/src-cli/function-BOILERPLATE';
+                    let functionBoilerplateDir = __dirname + '/function-BOILERPLATE';
                     ncp(functionBoilerplateDir, './deployment/' + functionName, {
                         transform: (read: any, write: any) => {
                             read
