@@ -1,4 +1,6 @@
 declare var require: any;
+declare var __dirname: string;
+
 const ncp = require('ncp').ncp;
 const fs = require('fs');
 const replaceStream = require('replacestream');
@@ -48,7 +50,8 @@ function createDeployment() {
                     let functionName = f.replace('.ts', '');
 
                     // Clone the function-BOILERPLATE folder
-                    ncp('./src-cli/function-BOILERPLATE', './deployment/' + functionName, {
+                    let functionBoilerplateDir = __dirname + '/src-cli/function-BOILERPLATE';
+                    ncp(functionBoilerplateDir, './deployment/' + functionName, {
                         transform: (read: any, write: any) => {
                             read
                                 .pipe(replaceStream('FUNCTION_NAME', functionName))

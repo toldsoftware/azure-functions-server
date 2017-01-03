@@ -1,4 +1,5 @@
 declare var require: any;
+declare var __dirname: string;
 declare const ncp: any;
 declare const fs: any;
 declare const replaceStream: any;
