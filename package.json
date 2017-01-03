@@ -25,14 +25,15 @@
   },
   "homepage": "https://github.com/toldsoftware/azure-functions-server#readme",
   "devDependencies": {
-    "typescript": "^2.1.4",
-    "karma": "^1.3.0",
-    "karma-typescript": "^2.1.5",
-    "jasmine-core": "^2.4.1",
-    "karma-jasmine": "^1.0.2",
+    "@told/platform": "^1.0.2",
     "@types/jasmine": "^2.5.35",
+    "coveralls": "^2.11.15",
+    "jasmine-core": "^2.4.1",
+    "karma": "^1.3.0",
     "karma-firefox-launcher": "^1.0.0",
-    "coveralls": "^2.11.15"
+    "karma-jasmine": "^1.0.2",
+    "karma-typescript": "^2.1.5",
+    "typescript": "^2.1.4"
   },
   "dependencies": {
     "ncp": "^2.0.0",

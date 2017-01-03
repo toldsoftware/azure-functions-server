@@ -11,7 +11,7 @@ function main(context, request) {
         },
         body: {
             ok: true,
-            data: { text: 'Example Output DEPLOYMENT FOLDER' },
+            data: { text: 'Example Output' },
         }
     });
 }
