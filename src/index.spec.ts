@@ -1,4 +1,4 @@
-import * as T from "./types";
+import * as T from './types';
 
 // describe("nothing", () => {
 //     it("should be 0", () => {

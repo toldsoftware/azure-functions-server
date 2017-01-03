@@ -1,7 +1,7 @@
 {
-  "name": "@told/azure-functions-server-DEPLOYMENT",
+  "name": "@told/azure-functions-server",
   "version": "1.0.0",
-  "description": "Azure Functions Server DEPLOYMENT",
+  "description": "Azure Functions Server",
   "main": "index.ts",
   "scripts": {
     "test": "karma start karma.conf.js"
@@ -23,5 +23,21 @@
   "bugs": {
     "url": "https://github.com/toldsoftware/azure-functions-server/issues"
   },
-  "homepage": "https://github.com/toldsoftware/azure-functions-server#readme"
+  "homepage": "https://github.com/toldsoftware/azure-functions-server#readme",
+  "devDependencies": {
+    "typescript": "^2.1.4",
+    "karma": "^1.3.0",
+    "karma-typescript": "^2.1.5",
+    "jasmine-core": "^2.4.1",
+    "karma-jasmine": "^1.0.2",
+    "@types/jasmine": "^2.5.35",
+    "karma-firefox-launcher": "^1.0.0",
+    "coveralls": "^2.11.15"
+  },
+  "dependencies": {
+    "ncp": "^2.0.0",
+    "node-watch": "^0.4.1",
+    "replacestream": "^4.0.2",
+    "rimraf": "^2.5.4"
+  }
 }

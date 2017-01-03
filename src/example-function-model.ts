@@ -1,4 +1,4 @@
-import * as T from "./types";
+import * as T from './types';
 
 export interface ExampleFunctionRequest extends T.Request<{ setup?: boolean }, {}> {
 }

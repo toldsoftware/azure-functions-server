@@ -5,8 +5,8 @@ export interface Request<TQuery, TBody> {
 export interface Response<T> {
     status?: number;
     headers?: {
-        "Access-Control-Allow-Origin"?: string;
-        "Content-Type"?: string;
+        'Access-Control-Allow-Origin'?: string;
+        'Content-Type'?: string;
         [key: string]: string;
     };
     body: ResponseBody<T>;

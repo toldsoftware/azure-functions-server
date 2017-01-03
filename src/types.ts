@@ -7,8 +7,8 @@ export interface Response<T> {
     status?: number;
     headers?: {
         // Note: CORS Must be set in Azure Functions Manually
-        "Access-Control-Allow-Origin"?: string,
-        "Content-Type"?: string,
+        'Access-Control-Allow-Origin'?: string,
+        'Content-Type'?: string,
         [key: string]: string,
     };
     body: ResponseBody<T>;
