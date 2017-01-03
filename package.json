@@ -7,7 +7,7 @@
     "test": "karma start karma.conf.js"
   },
   "bin": {
-    "afs": "./bin/afs"
+    "afs": "./bin/afs.js"
   },
   "repository": {
     "type": "git",
