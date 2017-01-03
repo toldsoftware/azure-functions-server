@@ -1,5 +1,6 @@
 declare var require: any;
 declare var __dirname: string;
+declare var process: { argv: string[] };
 
 const ncp = require('ncp').ncp;
 const fs = require('fs');
@@ -50,7 +51,7 @@ function createDeployment() {
                     let functionName = f.replace('.ts', '');
 
                     // Clone the function-BOILERPLATE folder
-                    let functionBoilerplateDir = __dirname + '/function-BOILERPLATE';
+                    let functionBoilerplateDir = __dirname.replace(/(\\|\/)src-cli$/, '').replace(/(\\|\/)lib$/, '') + '/resources/function-BOILERPLATE';
                     ncp(functionBoilerplateDir, './deployment/' + functionName, {
                         transform: (read: any, write: any) => {
                             read
@@ -71,7 +72,8 @@ function createDeployment() {
 
 createDeployment();
 
-// if( -w)
-watch(['./lib', './src-server', './package.json'], () => {
-    createDeployment();
-});
+if (process.argv.filter(x => x === '-w').length > 0) {
+    watch(['./lib', './src-server', './package.json'], () => {
+        createDeployment();
+    });
+}

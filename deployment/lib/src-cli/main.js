@@ -41,7 +41,8 @@ function createDeployment() {
                     console.log('src-server main file: ', f);
                     var functionName_1 = f.replace('.ts', '');
                     // Clone the function-BOILERPLATE folder
-                    ncp('./src-cli/function-BOILERPLATE', './deployment/' + functionName_1, {
+                    var functionBoilerplateDir = __dirname.replace(/(\\|\/)src-cli$/, '').replace(/(\\|\/)lib$/, '') + '/resources/function-BOILERPLATE';
+                    ncp(functionBoilerplateDir, './deployment/' + functionName_1, {
                         transform: function (read, write) {
                             read
                                 .pipe(replaceStream('FUNCTION_NAME', functionName_1))
@@ -63,8 +64,9 @@ function createDeployment() {
     });
 }
 createDeployment();
-// if( -w)
-watch(['./lib', './src-server', './package.json'], function () {
-    createDeployment();
-});
+if (process.argv.filter(function (x) { return x === '-w'; }).length > 0) {
+    watch(['./lib', './src-server', './package.json'], function () {
+        createDeployment();
+    });
+}
 //# sourceMappingURL=main.js.map
