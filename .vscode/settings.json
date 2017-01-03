@@ -11,10 +11,10 @@
         "index.ts": true,
         "karma.conf.js": true,
         "LICENSE": true,
-        // "tsconfig.json": true,
+        "tsconfig.json": true,
         "tslint.json": true,
-        // "lib": true,
-        //"deployment": true,
-        //".deployment": true
+        "lib": true,
+        "deployment": true,
+        ".deployment": true
     }
 }
