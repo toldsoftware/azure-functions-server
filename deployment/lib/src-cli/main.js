@@ -60,7 +60,7 @@ function createDeployment() {
     console.log('Make Deployment Folders');
     fs.mkdirSync('deployment');
     fs.mkdirSync('deployment/lib');
-    fs.mkdirSync('deployment/lib/resources');
+    fs.mkdirSync('deployment/resources');
     // Not Needed with Webpack
     // // Copy package.json
     // webpackPending++;
