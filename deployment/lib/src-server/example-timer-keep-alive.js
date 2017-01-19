@@ -14,6 +14,7 @@ function tick(context, timer) {
             urlParts = urls.map(function (x) {
                 var m = x.match(/(https?):\/\/(.*)\/(.*)/);
                 return {
+                    raw: x,
                     https: m[1] === 'https',
                     host: m[2],
                     path: m[3]
@@ -21,6 +22,7 @@ function tick(context, timer) {
             });
             for (_i = 0, urlParts_1 = urlParts; _i < urlParts_1.length; _i++) {
                 x = urlParts_1[_i];
+                context.log('Keep Alive: ', x.raw);
                 if (x.https) {
                     https(x);
                 }
@@ -30,7 +32,7 @@ function tick(context, timer) {
             }
             timeStamp = new Date().toISOString();
             if (timer.isPastDue) {
-                console.log('Timer is Past Due');
+                context.log('Timer is Past Due');
             }
             context.log('Timer ran!', timeStamp);
             context.done();

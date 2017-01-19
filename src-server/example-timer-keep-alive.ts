@@ -15,6 +15,7 @@ export async function tick(context: T.TimerContext, timer: T.Timer) {
     let urlParts = urls.map(x => {
         let m = x.match(/(https?):\/\/(.*)\/(.*)/);
         return {
+            raw: x,
             https: m[1] === 'https',
             host: m[2],
             path: m[3]
@@ -22,6 +23,7 @@ export async function tick(context: T.TimerContext, timer: T.Timer) {
     });
 
     for (let x of urlParts) {
+        context.log('Keep Alive: ', x.raw);
         if (x.https) {
             https(x);
         } else {
@@ -32,7 +34,7 @@ export async function tick(context: T.TimerContext, timer: T.Timer) {
     let timeStamp = new Date().toISOString();
 
     if (timer.isPastDue) {
-        console.log('Timer is Past Due');
+        context.log('Timer is Past Due');
     }
     context.log('Timer ran!', timeStamp);
     context.done();
