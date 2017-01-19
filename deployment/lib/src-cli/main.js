@@ -57,15 +57,16 @@ function createDeployment() {
     fs.mkdirSync('deployment');
     fs.mkdirSync('deployment/lib');
     fs.mkdirSync('deployment/lib/resources');
-    // Copy package.json
-    webpackPending++;
-    ncp('./package.json', './deployment/package.json', function (err) {
-        if (err) {
-            console.error(err);
-        }
-        console.log('Copied "package.json" to "deployment"');
-        readyForWebpack();
-    });
+    // Not Needed with Webpack
+    // // Copy package.json
+    // webpackPending++;
+    // ncp('./package.json', './deployment/package.json', (err: any) => {
+    //     if (err) {
+    //         console.error(err);
+    //     }
+    //     console.log('Copied "package.json" to "deployment"');
+    //     readyForWebpack();
+    // });
     // Copy lib folder
     webpackPending++;
     ncp('./lib', './deployment/lib', function (err) {

@@ -1,2 +1,2 @@
 require('./build');
-module.export  = ___export;
+module.exports  = ___export;
