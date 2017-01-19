@@ -89,6 +89,7 @@ function createDeployment() {
             let stream = fs.readFile(path, 'utf8', (err: any, data: string) => {
                 if (err) { console.error(err); }
 
+                // Http Responses
                 if (data.match(/export\s+async\s+function\s+main\s*\(/)) {
                     console.log('src-server main file: ', f);
 
@@ -103,6 +104,42 @@ function createDeployment() {
                                 // Replace Function Name
                                 .pipe(replaceStream('FUNCTION_NAME', functionName))
                                 .pipe(replaceStream(afsLibPath, targetAfsLibPath))
+                                .pipe(write);
+                        }
+                    }, (err: any) => {
+                        if (err) { console.error(err); }
+                        console.log('Created Function Boilerplate for ' + functionName);
+                    });
+
+                    // Ready for Webpack
+                    functionDirs.push(functionDir);
+                    readyForWebpack();
+                }
+                // Timers
+                else if (data.match(/export\s+async\s+function\s+tick\s*\(/)) {
+                    console.log('src-server tick file: ', f);
+
+                    let functionName = f.replace('.ts', '');
+                    let functionDir = './deployment/' + functionName;
+
+                    let schedule = '0 */5 * * * *';
+                    let targetSchedule = '0 */5 * * * *';
+
+                    let scheduleRegex = /\/\/\s*schedule:((?:\s+(?:\*|\*\/[0-9]+|[0-9]+)){6})/;
+                    let mSchedule = data.match(scheduleRegex);
+                    if (mSchedule) {
+                        targetSchedule = mSchedule[1].trim();
+                    }
+
+                    // Clone the function-BOILERPLATE folder
+                    let functionBoilerplateDir = __dirname.replace(/(\\|\/)src-cli$/, '').replace(/(\\|\/)lib$/, '') + '/resources/timer-BOILERPLATE';
+                    ncp(functionBoilerplateDir, functionDir, {
+                        transform: (read: any, write: any) => {
+                            read
+                                // Replace Function Name
+                                .pipe(replaceStream('FUNCTION_NAME', functionName))
+                                .pipe(replaceStream(afsLibPath, targetAfsLibPath))
+                                .pipe(replaceStream(schedule, targetSchedule))
                                 .pipe(write);
                         }
                     }, (err: any) => {

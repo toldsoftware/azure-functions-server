@@ -80,6 +80,7 @@ function createDeployment() {
                 if (err) {
                     console.error(err);
                 }
+                // Http Responses
                 if (data.match(/export\s+async\s+function\s+main\s*\(/)) {
                     console.log('src-server main file: ', f);
                     var functionName_1 = f.replace('.ts', '');
@@ -98,6 +99,37 @@ function createDeployment() {
                             console.error(err);
                         }
                         console.log('Created Function Boilerplate for ' + functionName_1);
+                    });
+                    // Ready for Webpack
+                    functionDirs.push(functionDir);
+                    readyForWebpack();
+                }
+                else if (data.match(/export\s+async\s+function\s+tick\s*\(/)) {
+                    console.log('src-server tick file: ', f);
+                    var functionName_2 = f.replace('.ts', '');
+                    var functionDir = './deployment/' + functionName_2;
+                    var schedule_1 = '0 */5 * * * *';
+                    var targetSchedule_1 = '0 */5 * * * *';
+                    var scheduleRegex = /\/\/\s*schedule:((?:\s+(?:\*|\*\/[0-9]+|[0-9]+)){6})/;
+                    var mSchedule = data.match(scheduleRegex);
+                    if (mSchedule) {
+                        targetSchedule_1 = mSchedule[1].trim();
+                    }
+                    // Clone the function-BOILERPLATE folder
+                    var functionBoilerplateDir = __dirname.replace(/(\\|\/)src-cli$/, '').replace(/(\\|\/)lib$/, '') + '/resources/timer-BOILERPLATE';
+                    ncp(functionBoilerplateDir, functionDir, {
+                        transform: function (read, write) {
+                            read
+                                .pipe(replaceStream('FUNCTION_NAME', functionName_2))
+                                .pipe(replaceStream(afsLibPath, targetAfsLibPath))
+                                .pipe(replaceStream(schedule_1, targetSchedule_1))
+                                .pipe(write);
+                        }
+                    }, function (err) {
+                        if (err) {
+                            console.error(err);
+                        }
+                        console.log('Created Function Boilerplate for ' + functionName_2);
                     });
                     // Ready for Webpack
                     functionDirs.push(functionDir);

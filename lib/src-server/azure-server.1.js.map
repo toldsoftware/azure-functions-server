@@ -1,0 +1,1 @@
+{"version":3,"file":"azure-server.1.js","sourceRoot":"","sources":["../../src-server/azure-server.1.ts"],"names":[],"mappings":";AAEA,eAA4C,IAA4C;IACpF,MAAM,CAAC,UAAC,OAAyB,EAAE,OAAiC;QAChE,IAAI,CAAC,OAAO,EAAE,OAAO,CAAC;aACjB,IAAI,CAAC,cAAQ,CAAC,CAAC;aACf,KAAK,CAAC,UAAA,GAAG,IAAI,OAAA,OAAO,CAAC,KAAK,CAAC,GAAG,CAAC,EAAlB,CAAkB,CAAC,CAAC;IAC1C,CAAC,CAAC;AAEN,CAAC;AAPD,sBAOC"}

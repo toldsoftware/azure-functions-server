@@ -63,50 +63,36 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 256);
+/******/ 	return __webpack_require__(__webpack_require__.s = 259);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 117:
+/***/ 120:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var tslib_1 = __webpack_require__(17);
-var fs = __webpack_require__(18);
-var p = __webpack_require__(30);
-function main(context, request) {
+// https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer
+// {second} {minute} {hour} {day} {month} {day of the week}
+// schedule: 0 0 0 * * *
+function tick(context, timer) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var path;
+        var timeStamp;
         return tslib_1.__generator(this, function (_a) {
-            path = p.resolve(__dirname, '..', 'resources', request.query.name);
-            fs.readFile(path, function (err, data) {
-                context.log('path=' + path + ' err=' + err);
-                var body = data;
-                var type = 'application/javascript';
-                if (path.match('\.jpg$')) {
-                    type = 'image/jpg';
-                }
-                if (path.match('\.png$')) {
-                    type = 'image/png';
-                }
-                if (path.match('\.html$')) {
-                    type = 'text/html';
-                }
-                context.done(null, {
-                    headers: {
-                        'Content-Type': type,
-                    },
-                    body: body
-                });
-            });
+            timeStamp = new Date().toISOString();
+            if (timer.isPastDue) {
+                console.log('Timer is Past Due');
+            }
+            context.log('Timer ran!', timeStamp);
+            context.done();
             return [2 /*return*/];
         });
     });
 }
-exports.main = main;
-//# sourceMappingURL=example-function-resource.js.map
+exports.tick = tick;
+//# sourceMappingURL=example-timer.js.map
 
 /***/ }),
 
@@ -216,43 +202,29 @@ function __generator(thisArg, body) {
 
 /***/ }),
 
-/***/ 18:
-/***/ (function(module, exports) {
-
-module.exports = require("fs");
-
-/***/ }),
-
-/***/ 25:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-function serve(main) {
-    return function (context, request) {
-        main(context, request)
-            .then(function () { })
-            .catch(function (err) { return console.error(err); });
-    };
-}
-exports.serve = serve;
-//# sourceMappingURL=azure-server.js.map
-
-/***/ }),
-
-/***/ 256:
+/***/ 259:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Intentionally global
-___export = __webpack_require__(25).serve(__webpack_require__(117).main);
+___export = __webpack_require__(41).run(__webpack_require__(120).tick);
 module.exports = ___export;
 
 /***/ }),
 
-/***/ 30:
-/***/ (function(module, exports) {
+/***/ 41:
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("path");
+"use strict";
+
+function run(tick) {
+    return function (context, timer) {
+        tick(context, timer)
+            .then(function () { })
+            .catch(function (err) { return console.error(err); });
+    };
+}
+exports.run = run;
+//# sourceMappingURL=azure-timer.js.map
 
 /***/ })
 

@@ -63,17 +63,17 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 254);
+/******/ 	return __webpack_require__(__webpack_require__.s = 257);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 117:
+/***/ 118:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var tslib_1 = __webpack_require__(38);
+var tslib_1 = __webpack_require__(17);
 function main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         return tslib_1.__generator(this, function (_a) {
@@ -100,33 +100,7 @@ exports.main = main;
 
 /***/ }),
 
-/***/ 23:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-function serve(main) {
-    return function (context, request) {
-        main(context, request)
-            .then(function () { })
-            .catch(function (err) { return console.error(err); });
-    };
-}
-exports.serve = serve;
-//# sourceMappingURL=azure-server.js.map
-
-/***/ }),
-
-/***/ 254:
-/***/ (function(module, exports, __webpack_require__) {
-
-// Intentionally global
-___export = __webpack_require__(23).serve(__webpack_require__(117).main);
-module.exports = ___export;
-
-/***/ }),
-
-/***/ 38:
+/***/ 17:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -229,6 +203,32 @@ function __generator(thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+
+/***/ }),
+
+/***/ 25:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function serve(main) {
+    return function (context, request) {
+        main(context, request)
+            .then(function () { })
+            .catch(function (err) { return console.error(err); });
+    };
+}
+exports.serve = serve;
+//# sourceMappingURL=azure-server.js.map
+
+/***/ }),
+
+/***/ 257:
+/***/ (function(module, exports, __webpack_require__) {
+
+// Intentionally global
+___export = __webpack_require__(25).serve(__webpack_require__(118).main);
+module.exports = ___export;
 
 /***/ })
 

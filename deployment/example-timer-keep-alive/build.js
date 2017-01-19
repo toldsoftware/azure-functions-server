@@ -63,50 +63,57 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 256);
+/******/ 	return __webpack_require__(__webpack_require__.s = 258);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 117:
+/***/ 119:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var tslib_1 = __webpack_require__(17);
-var fs = __webpack_require__(18);
-var p = __webpack_require__(30);
-function main(context, request) {
+var http = __webpack_require__(19);
+var https = __webpack_require__(29);
+// schedule: 0 0 0 * * *
+function tick(context, timer) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var path;
+        var urls, urlParts, _i, urlParts_1, x, timeStamp;
         return tslib_1.__generator(this, function (_a) {
-            path = p.resolve(__dirname, '..', 'resources', request.query.name);
-            fs.readFile(path, function (err, data) {
-                context.log('path=' + path + ' err=' + err);
-                var body = data;
-                var type = 'application/javascript';
-                if (path.match('\.jpg$')) {
-                    type = 'image/jpg';
-                }
-                if (path.match('\.png$')) {
-                    type = 'image/png';
-                }
-                if (path.match('\.html$')) {
-                    type = 'text/html';
-                }
-                context.done(null, {
-                    headers: {
-                        'Content-Type': type,
-                    },
-                    body: body
-                });
+            urls = [
+                'https://azure-blob-access-test.azurewebsites.net/api/get-blob',
+                'https://told-azure-functions-server-test.azurewebsites.net/api/example-function-get-blob',
+            ];
+            urlParts = urls.map(function (x) {
+                var m = x.match(/(https?):\/\/(.*)\/(.*)/);
+                return {
+                    https: m[1] === 'https',
+                    host: m[2],
+                    path: m[3]
+                };
             });
+            for (_i = 0, urlParts_1 = urlParts; _i < urlParts_1.length; _i++) {
+                x = urlParts_1[_i];
+                if (x.https) {
+                    https(x);
+                }
+                else {
+                    http(x);
+                }
+            }
+            timeStamp = new Date().toISOString();
+            if (timer.isPastDue) {
+                console.log('Timer is Past Due');
+            }
+            context.log('Timer ran!', timeStamp);
+            context.done();
             return [2 /*return*/];
         });
     });
 }
-exports.main = main;
-//# sourceMappingURL=example-function-resource.js.map
+exports.tick = tick;
+//# sourceMappingURL=example-timer-keep-alive.js.map
 
 /***/ }),
 
@@ -216,43 +223,43 @@ function __generator(thisArg, body) {
 
 /***/ }),
 
-/***/ 18:
+/***/ 19:
 /***/ (function(module, exports) {
 
-module.exports = require("fs");
+module.exports = require("http");
 
 /***/ }),
 
-/***/ 25:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-function serve(main) {
-    return function (context, request) {
-        main(context, request)
-            .then(function () { })
-            .catch(function (err) { return console.error(err); });
-    };
-}
-exports.serve = serve;
-//# sourceMappingURL=azure-server.js.map
-
-/***/ }),
-
-/***/ 256:
+/***/ 258:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Intentionally global
-___export = __webpack_require__(25).serve(__webpack_require__(117).main);
+___export = __webpack_require__(41).run(__webpack_require__(119).tick);
 module.exports = ___export;
 
 /***/ }),
 
-/***/ 30:
+/***/ 29:
 /***/ (function(module, exports) {
 
-module.exports = require("path");
+module.exports = require("https");
+
+/***/ }),
+
+/***/ 41:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function run(tick) {
+    return function (context, timer) {
+        tick(context, timer)
+            .then(function () { })
+            .catch(function (err) { return console.error(err); });
+    };
+}
+exports.run = run;
+//# sourceMappingURL=azure-timer.js.map
 
 /***/ })
 

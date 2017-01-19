@@ -27,3 +27,16 @@ export interface Context<T> {
 
 export type MainEntryPoint<T, TQuery, TBody> = (context: Context<T>, request: Request<TQuery, TBody>) => Promise<{}>;
 export type MainEntryPoint_Sync<T, TQuery, TBody> = (context: Context<T>, request: Request<TQuery, TBody>) => void;
+
+
+export interface Timer {
+    isPastDue: boolean;
+};
+
+export interface TimerContext {
+    log(...text: any[]): void;
+    done(): void;
+}
+
+export type MainEntryPoint_Timer = (context: TimerContext, timer: Timer) => Promise<{}>;
+export type MainEntryPoint_Timer_Sync = (context: TimerContext, timer: Timer) => void;
