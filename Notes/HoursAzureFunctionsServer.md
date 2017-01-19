@@ -12,3 +12,9 @@
 ## 15:00-16:09
 
 - Change ASF to async
+
+# 2017-01-19
+
+## 8:30-10:18
+
+- Use Webpack

@@ -1,9 +1,10 @@
 {
   "name": "@told/azure-functions-server",
-  "version": "1.0.7",
+  "version": "1.2.0",
   "description": "Azure Functions Server",
   "main": "index.ts",
   "scripts": {
+    "afs": "node bin\\afs -w",
     "test": "karma start karma.conf.js"
   },
   "bin": {
@@ -33,13 +34,14 @@
     "karma-firefox-launcher": "^1.0.0",
     "karma-jasmine": "^1.0.2",
     "karma-typescript": "^2.1.5",
-    "typescript": "^2.1.4",
+    "typescript": "^2.1.4"
+  },
+  "dependencies": {
     "ncp": "^2.0.0",
     "node-watch": "^0.4.1",
     "replacestream": "^4.0.2",
-    "rimraf": "^2.5.4"
-  },
-  "dependencies": {
-    "tslib": "^1.4.0"
+    "rimraf": "^2.5.4",
+    "tslib": "^1.4.0",
+    "webpack": "^2.2.0"
   }
 }

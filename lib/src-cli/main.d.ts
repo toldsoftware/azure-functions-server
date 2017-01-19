@@ -8,4 +8,6 @@ declare const fs: any;
 declare const replaceStream: any;
 declare const watch: any;
 declare const rimraf: any;
+declare const webpack: any;
+declare function runWebpack(functionDirs: string[]): void;
 declare function createDeployment(): void;
