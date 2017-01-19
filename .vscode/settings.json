@@ -8,7 +8,7 @@
         "typings": true,
         ".gitignore": true,
         ".travis.yml": true,
-        "index.ts": true,
+        "index.js": true,
         "karma.conf.js": true,
         "LICENSE": true,
         // "tsconfig.json": true,
