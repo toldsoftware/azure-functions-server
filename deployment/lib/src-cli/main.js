@@ -1,44 +1,10 @@
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};
+"use strict";
+var run_webpack_1 = require("./run-webpack");
 var ncp = require('ncp').ncp;
 var fs = require('fs');
 var replaceStream = require('replacestream');
 var watch = require('node-watch');
 var rimraf = require('rimraf');
-var webpack = require('webpack');
-// Webpack
-function runWebpack(functionDirs) {
-    var entries = {};
-    functionDirs.filter(function (x) { return x.length > 0; }).forEach(function (x) { return entries[x + '/build.js'] = x + '/build.source.js'; });
-    console.log('Webpack START');
-    console.log('entries=', entries);
-    webpack({
-        // configuration
-        entry: __assign({}, entries),
-        output: {
-            path: './',
-            filename: '[name]'
-        },
-        target: 'node',
-        node: {
-            __filename: false,
-            __dirname: false,
-        },
-    }, function (err, stats) {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        console.log('Webpack END');
-        // console.log(stats);
-    });
-}
 function createDeployment() {
     var functionDirs = [];
     var webpackPending = 0;
@@ -49,7 +15,7 @@ function createDeployment() {
             return;
         }
         // console.log('Webpack Ready:', webpackPending, functionDirs);
-        runWebpack(functionDirs);
+        run_webpack_1.runWebpack(functionDirs);
     };
     console.log('Create Deployment');
     // Clean Directory

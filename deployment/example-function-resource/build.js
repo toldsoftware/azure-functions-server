@@ -63,12 +63,12 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 254);
+/******/ 	return __webpack_require__(__webpack_require__.s = 253);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 117:
+/***/ 116:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -106,7 +106,7 @@ function main(context, request) {
     });
 }
 exports.main = main;
-//# sourceMappingURL=example-resource.js.map
+//# sourceMappingURL=example-function-resource.js.map
 
 /***/ }),
 
@@ -134,11 +134,11 @@ exports.serve = serve;
 
 /***/ }),
 
-/***/ 254:
+/***/ 253:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Intentionally global
-___export = __webpack_require__(23).serve(__webpack_require__(117).main);
+___export = __webpack_require__(23).serve(__webpack_require__(116).main);
 module.exports = ___export;
 
 /***/ }),

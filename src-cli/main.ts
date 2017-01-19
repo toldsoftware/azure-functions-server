@@ -1,3 +1,5 @@
+import { runWebpack } from './run-webpack';
+
 declare var require: any;
 declare var __dirname: string;
 declare var process: { argv: string[] };
@@ -7,38 +9,6 @@ const fs = require('fs');
 const replaceStream = require('replacestream');
 const watch = require('node-watch');
 const rimraf = require('rimraf');
-
-const webpack = require('webpack');
-
-// Webpack
-function runWebpack(functionDirs: string[]) {
-    let entries: { [name: string]: string } = {};
-    functionDirs.filter(x => x.length > 0).forEach(x => entries[x + '/build.js'] = x + '/build.source.js');
-
-    console.log('Webpack START');
-    console.log('entries=', entries);
-
-    webpack({
-        // configuration
-        entry: {
-            // './index.webpack.js': './index.js',
-            ...entries
-        },
-        output: {
-            path: './',
-            filename: '[name]'
-        },
-        target: 'node',
-        node: {
-            __filename: false,
-            __dirname: false,
-        },
-    }, (err: any, stats: any) => {
-        if (err) { console.error(err); return; }
-        console.log('Webpack END');
-        // console.log(stats);
-    });
-}
 
 function createDeployment() {
     let functionDirs: string[] = [];

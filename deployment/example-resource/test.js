@@ -1,1 +1,0 @@
-module.exports = require('./../lib/src-server/manual-server').serve(require('./../lib/src-server/example-resource').main);
