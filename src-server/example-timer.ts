@@ -7,7 +7,7 @@ export async function tick(context: T.TimerContext, timer: T.Timer) {
     let timeStamp = new Date().toISOString();
 
     if (timer.isPastDue) {
-        console.log('Timer is Past Due');
+        context.log('Timer is Past Due');
     }
     context.log('Timer ran!', timeStamp);
     context.done();

@@ -83,7 +83,7 @@ function tick(context, timer) {
         return tslib_1.__generator(this, function (_a) {
             timeStamp = new Date().toISOString();
             if (timer.isPastDue) {
-                console.log('Timer is Past Due');
+                context.log('Timer is Past Due');
             }
             context.log('Timer ran!', timeStamp);
             context.done();
