@@ -34,7 +34,10 @@
     "karma-firefox-launcher": "^1.0.0",
     "karma-jasmine": "^1.0.2",
     "karma-typescript": "^2.1.5",
-    "typescript": "^2.1.4"
+    "typescript": "^2.1.4",
+
+    "azure-storage": "^1.4.0",
+    "node-uuid": "^1.4.7"
   },
   "dependencies": {
     "ncp": "^2.0.0",
@@ -42,8 +45,6 @@
     "replacestream": "^4.0.2",
     "rimraf": "^2.5.4",
     "tslib": "^1.4.0",
-    "webpack": "^2.2.0",
-    "azure-storage": "^1.4.0",
-    "node-uuid": "^1.4.7"
+    "webpack": "^2.2.0"
   }
 }
