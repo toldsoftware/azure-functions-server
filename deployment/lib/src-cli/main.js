@@ -25,7 +25,11 @@ function runWebpack(functionDirs) {
             path: './',
             filename: '[name]'
         },
-        target: 'node'
+        target: 'node',
+        node: {
+            __filename: false,
+            __dirname: false,
+        },
     }, function (err, stats) {
         if (err) {
             console.error(err);

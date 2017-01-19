@@ -63,40 +63,57 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 253);
+/******/ 	return __webpack_require__(__webpack_require__.s = 254);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 116:
+/***/ 117:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var tslib_1 = __webpack_require__(38);
+var fs = __webpack_require__(17);
+var p = __webpack_require__(28);
 function main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
+        var path;
         return tslib_1.__generator(this, function (_a) {
-            if (request.query.setup) {
-                console.log('Setup was triggered');
-            }
-            context.done(null, {
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/javascript',
-                    'X-Told-Test-Header': 'test-header',
-                },
-                body: {
-                    ok: true,
-                    data: { text: 'Example Output' },
+            path = p.resolve(__dirname, '..', 'resources', request.query.name);
+            fs.readFile(path, function (err, data) {
+                context.log('path=' + path + ' err=' + err);
+                var body = data;
+                var type = 'application/javascript';
+                if (path.match('\.jpg$')) {
+                    type = 'image/jpg';
                 }
+                if (path.match('\.png$')) {
+                    type = 'image/png';
+                }
+                if (path.match('\.html$')) {
+                    type = 'text/html';
+                }
+                context.done(null, {
+                    headers: {
+                        'Content-Type': type,
+                    },
+                    body: body
+                });
             });
             return [2 /*return*/];
         });
     });
 }
 exports.main = main;
-//# sourceMappingURL=example-function.js.map
+//# sourceMappingURL=example-resource.js.map
+
+/***/ }),
+
+/***/ 17:
+/***/ (function(module, exports) {
+
+module.exports = require("fs");
 
 /***/ }),
 
@@ -117,12 +134,19 @@ exports.serve = serve;
 
 /***/ }),
 
-/***/ 253:
+/***/ 254:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Intentionally global
-___export = __webpack_require__(23).serve(__webpack_require__(116).main);
+___export = __webpack_require__(23).serve(__webpack_require__(117).main);
 module.exports = ___export;
+
+/***/ }),
+
+/***/ 28:
+/***/ (function(module, exports) {
+
+module.exports = require("path");
 
 /***/ }),
 
