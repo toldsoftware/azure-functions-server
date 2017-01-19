@@ -25,9 +25,9 @@ export async function tick(context: T.TimerContext, timer: T.Timer) {
     for (let x of urlParts) {
         context.log('Keep Alive: ', x.raw);
         if (x.https) {
-            https(x);
+            https.request(x);
         } else {
-            http(x);
+            http.request(x);
         }
     }
 

@@ -24,10 +24,10 @@ function tick(context, timer) {
                 x = urlParts_1[_i];
                 context.log('Keep Alive: ', x.raw);
                 if (x.https) {
-                    https(x);
+                    https.request(x);
                 }
                 else {
-                    http(x);
+                    http.request(x);
                 }
             }
             timeStamp = new Date().toISOString();
