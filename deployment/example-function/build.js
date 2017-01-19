@@ -63,32 +63,17 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 252);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 116:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-function serve(main) {
-    return function (context, request) {
-        main(context, request)
-            .then(function () { })
-            .catch(function (err) { return console.error(err); });
-    };
-}
-exports.serve = serve;
-//# sourceMappingURL=azure-server.js.map
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var tslib_1 = __webpack_require__(2);
+var tslib_1 = __webpack_require__(68);
 function main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         return tslib_1.__generator(this, function (_a) {
@@ -114,7 +99,34 @@ exports.main = main;
 //# sourceMappingURL=example-function.js.map
 
 /***/ }),
-/* 2 */
+
+/***/ 252:
+/***/ (function(module, exports, __webpack_require__) {
+
+// Intentionally global
+___export = __webpack_require__(39).serve(__webpack_require__(116).main);
+module.exports = ___export;
+
+/***/ }),
+
+/***/ 39:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function serve(main) {
+    return function (context, request) {
+        main(context, request)
+            .then(function () { })
+            .catch(function (err) { return console.error(err); });
+    };
+}
+exports.serve = serve;
+//# sourceMappingURL=azure-server.js.map
+
+/***/ }),
+
+/***/ 68:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -218,13 +230,6 @@ function __generator(thisArg, body) {
     }
 };
 
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// Intentionally global
-___export = __webpack_require__(0).serve(__webpack_require__(1).main);
-module.exports = ___export;
-
 /***/ })
-/******/ ]);
+
+/******/ });
