@@ -13,7 +13,7 @@ const webpack = require('webpack');
 // Webpack
 function runWebpack(functionDirs: string[]) {
     let entries: { [name: string]: string } = {};
-    functionDirs.filter(x => x.length > 0).forEach(x => entries[x + '/index.js'] = x + '/index.raw.js');
+    functionDirs.filter(x => x.length > 0).forEach(x => entries[x + '/build.js'] = x + '/build.raw.js');
 
     console.log('Webpack START');
     console.log('entries=', entries);
@@ -28,7 +28,7 @@ function runWebpack(functionDirs: string[]) {
             path: './',
             filename: '[name]'
         },
-        target: 'node',
+        target: 'node'
     }, (err: any, stats: any) => {
         if (err) { console.error(err); return; }
         console.log('Webpack END');

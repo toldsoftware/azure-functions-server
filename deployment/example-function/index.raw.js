@@ -1,1 +1,0 @@
-module.exports = require('./../lib/src-server/azure-server').serve(require('./../lib/src-server/example-function').main);
