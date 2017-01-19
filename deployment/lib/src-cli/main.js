@@ -15,7 +15,7 @@ var webpack = require('webpack');
 // Webpack
 function runWebpack(functionDirs) {
     var entries = {};
-    functionDirs.filter(function (x) { return x.length > 0; }).forEach(function (x) { return entries[x + '/build.js'] = x + '/build.raw.js'; });
+    functionDirs.filter(function (x) { return x.length > 0; }).forEach(function (x) { return entries[x + '/build.js'] = x + '/build.source.js'; });
     console.log('Webpack START');
     console.log('entries=', entries);
     webpack({

@@ -13,7 +13,7 @@ const webpack = require('webpack');
 // Webpack
 function runWebpack(functionDirs: string[]) {
     let entries: { [name: string]: string } = {};
-    functionDirs.filter(x => x.length > 0).forEach(x => entries[x + '/build.js'] = x + '/build.raw.js');
+    functionDirs.filter(x => x.length > 0).forEach(x => entries[x + '/build.js'] = x + '/build.source.js');
 
     console.log('Webpack START');
     console.log('entries=', entries);

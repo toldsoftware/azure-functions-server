@@ -1,2 +1,2 @@
-require('build');
+require('./build');
 module.export  = ___export;
