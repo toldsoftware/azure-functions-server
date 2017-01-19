@@ -25,6 +25,7 @@ function runWebpack(functionDirs) {
             path: './',
             filename: '[name]'
         },
+        target: 'node',
     }, function (err, stats) {
         if (err) {
             console.error(err);

@@ -18,3 +18,7 @@
 ## 8:30-10:18
 
 - Use Webpack
+
+## 10:19-
+
+- Configure Webpack for Node.js
