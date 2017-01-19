@@ -1,6 +1,6 @@
 {
   "name": "@told/azure-functions-server",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Azure Functions Server",
   "main": "index.ts",
   "scripts": {
