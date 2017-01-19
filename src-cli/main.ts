@@ -87,9 +87,9 @@ function createDeployment() {
 
     // Copy resources folder
     webpackPending++;
-    ncp('./resources', './deployment/lib/resources', (err: any) => {
+    ncp('./resources', './deployment/resources', (err: any) => {
         if (err) { console.error(err); }
-        console.log('Copied "resources/" to "deployment/lib/resources"');
+        console.log('Copied "resources/" to "deployment/resources"');
         readyForWebpack();
     });
 
