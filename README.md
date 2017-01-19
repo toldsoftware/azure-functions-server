@@ -65,3 +65,5 @@ At time of writing, the configuration settings are:
 
 - At time of testing, npm references were causing the cold start for a node function with large node_modules to sometimes exceed 5 minutes (often over 2 minutes).
 - Using webpack to package all node_modules references into a single file, reduced the cold start to around 10 seconds. (Not great, but acceptable.)
+
+![Webpack Performance](https://raw.github.com/toldsoftware/azure-functions-server/raw/master/Notes/WebpackPerformance.png)
