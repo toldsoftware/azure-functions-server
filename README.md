@@ -10,7 +10,8 @@ Cli tool and Base Code for Node Azure Functions with Typescript
 
 ```bash
 npm install @told/azure-functions-server --save
-// Add this to package.json>scripts "afs": ".\\node_modules\\.bin\\afs -w",
+// Add this to package.json > scripts:
+// "afs": ".\\node_modules\\.bin\\afs -w",
 npm run afs
 ```
 
@@ -63,7 +64,10 @@ At time of writing, the configuration settings are:
 
 ### Webpack Performance
 
-- At time of testing, npm references were causing the cold start for a node function with large node_modules to sometimes exceed 5 minutes (often over 2 minutes).
-- Using webpack to package all node_modules references into a single file, reduced the cold start to around 10 seconds. (Not great, but acceptable.)
+The chart below shows an example of the difference between using webpack and removing node_modules or just using node_modules.
+
+The tested function used the azure-storage npm package to create a random blob sas url.
+
+Webpack was able to package the azure-storage without a problem and cold start performance increased from a failure rate of 80secs to an acceptable 3 sec cold start (25x increase).
 
 ![Webpack Performance](https://toldazureblobaccesstest.blob.core.windows.net/test/WebpackPerformance2.png)
