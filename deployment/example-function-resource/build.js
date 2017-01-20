@@ -82,10 +82,11 @@ function main(context, request) {
         return tslib_1.__generator(this, function (_a) {
             filePath = request.query.name || request.pathName.replace(/\/$/, '');
             path = p.resolve(__dirname, '..', 'resources', filePath);
+            context.log('filePath=' + filePath + ' path=' + path + ' request.query.name=' + request.query.name + ' request.pathName=' + request.pathName);
             fs.readFile(path, function (err, data) {
                 context.log('path=' + path + ' err=' + err);
                 if (err != null) {
-                    context.done(null, {
+                    context.done(err, {
                         status: 404,
                         headers: {
                             'Content-Type': 'plain/text',

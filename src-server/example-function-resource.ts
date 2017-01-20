@@ -12,11 +12,13 @@ export async function main(context: T.RawContext, request: T.Request<{ name: str
     let filePath = request.query.name || request.pathName.replace(/\/$/, '');
     let path = p.resolve(__dirname, '..', 'resources', filePath);
 
+    context.log('filePath=' + filePath + ' path=' + path + ' request.query.name=' + request.query.name + ' request.pathName=' + request.pathName);
+
     fs.readFile(path, (err: any, data: any) => {
         context.log('path=' + path + ' err=' + err);
 
         if (err != null) {
-            context.done(null, {
+            context.done(err, {
                 status: 404,
                 headers: {
                     'Content-Type': 'plain/text',
