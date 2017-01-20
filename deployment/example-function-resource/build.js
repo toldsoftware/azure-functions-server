@@ -87,7 +87,7 @@ function main(context, request) {
                 context.log('path=' + path);
                 if (err != null) {
                     context.log('ERROR: ' + err);
-                    context.done(err, {
+                    context.done(null, {
                         status: 404,
                         headers: {
                             'Content-Type': 'text/plain',

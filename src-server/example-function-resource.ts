@@ -19,7 +19,7 @@ export async function main(context: T.RawContext, request: T.Request<{ name: str
 
         if (err != null) {
             context.log('ERROR: ' + err);
-            context.done(err, {
+            context.done(null, {
                 status: 404,
                 headers: {
                     'Content-Type': 'text/plain',
