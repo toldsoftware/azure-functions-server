@@ -215,7 +215,7 @@ var tslib_1 = __webpack_require__(13);
 function serve(main) {
     return function (context, request) {
         var req = tslib_1.__assign({}, request);
-        req.pathName = req.pathName || '';
+        req.pathName = req.pathName || context.bindingData.pathName || '';
         req.pathParts = req.pathName.split('/').filter(function (x) { return x.length > 0; });
         if (req.query.ping != null) {
             context.done(null, {

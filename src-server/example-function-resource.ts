@@ -15,9 +15,10 @@ export async function main(context: T.RawContext, request: T.Request<{ name: str
     context.log('filePath=' + filePath + ' path=' + path + ' request.query.name=' + request.query.name + ' request.pathName=' + request.pathName);
 
     fs.readFile(path, (err: any, data: any) => {
-        context.log('path=' + path + ' err=' + err);
+        context.log('path=' + path);
 
         if (err != null) {
+            context.log('ERROR ' + err);
             context.done(err, {
                 status: 404,
                 headers: {

@@ -84,8 +84,9 @@ function main(context, request) {
             path = p.resolve(__dirname, '..', 'resources', filePath);
             context.log('filePath=' + filePath + ' path=' + path + ' request.query.name=' + request.query.name + ' request.pathName=' + request.pathName);
             fs.readFile(path, function (err, data) {
-                context.log('path=' + path + ' err=' + err);
+                context.log('path=' + path);
                 if (err != null) {
+                    context.log('ERROR ' + err);
                     context.done(err, {
                         status: 404,
                         headers: {
@@ -244,7 +245,7 @@ var tslib_1 = __webpack_require__(13);
 function serve(main) {
     return function (context, request) {
         var req = tslib_1.__assign({}, request);
-        req.pathName = req.pathName || '';
+        req.pathName = req.pathName || context.bindingData.pathName || '';
         req.pathParts = req.pathName.split('/').filter(function (x) { return x.length > 0; });
         if (req.query.ping != null) {
             context.done(null, {
