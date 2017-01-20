@@ -27084,11 +27084,19 @@ var azure_storage_1 = __webpack_require__(128);
 var guid = __webpack_require__(32).v1;
 function main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var containerName, blobBaseName, service, expiryDate, sharedAccessPolicy, suffixes, urls, _i, suffixes_1, suffix, blobSas, blobUrl, blobSasUrl;
+        var containerName, blobBaseName, cookie, m, service, expiryDate, sharedAccessPolicy, suffixes, urls, _i, suffixes_1, suffix, blobSas, blobUrl, blobSasUrl;
         return tslib_1.__generator(this, function (_a) {
             context.log('START', 'request.query', request.query);
             containerName = 'user-storage';
             blobBaseName = '' + guid();
+            cookie = request.headers['Cookie'] || request.headers['cookie'];
+            context.log('cookie=', cookie);
+            if (cookie != null) {
+                m = cookie.match(/blobBaseName=([^;]+)(?:;|$)/);
+                if (m) {
+                    blobBaseName = m[1];
+                }
+            }
             service = azure_storage_1.createBlobService();
             // One-time setup
             if (request.query.setup) {
@@ -27125,7 +27133,7 @@ function main(context, request) {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/javascript',
-                    'X-Told-Test-Header': 'test-header',
+                    'Set-Cookie': "blobBaseName=" + blobBaseName + "; Expires=" + new Date(Date.now() + 356 * 24 * 60 * 60 * 1000).toUTCString() + "; Secure; HttpOnly"
                 },
                 body: {
                     ok: true,

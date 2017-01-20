@@ -1,6 +1,9 @@
 export interface SimpleRequest {
     pathName: string;
     pathParts: string[];
+    headers: {
+        [name: string]: string;
+    };
 }
 export interface QueryRequest<TQuery> extends SimpleRequest {
     query: TQuery;

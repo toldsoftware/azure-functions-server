@@ -1,7 +1,7 @@
 import { createBlobService, BlobUtilities } from 'azure-storage';
-import { Context, Request, Response, ResponseBody, MainEntryPoint } from './../src';
+import * as T from './../src';
 
-export interface GetBlobRequest extends Request<{ setup?: boolean, suffixesCsv?: string }, {}> {
+export interface GetBlobRequest extends T.Request<{ setup?: boolean, suffixesCsv?: string }, {}> {
 }
 
 export interface GetBlobResponseData {
@@ -11,19 +11,30 @@ export interface GetBlobResponseData {
     }[];
 }
 
-export interface GetBlobResponseBody extends ResponseBody<GetBlobResponseData> { }
+export interface GetBlobResponseBody extends T.ResponseBody<GetBlobResponseData> { }
 
 declare var require: any;
 interface Guid extends String { };
 let guid = require('node-uuid').v1 as () => Guid;
 
-export async function main(context: Context<GetBlobResponseData>, request: GetBlobRequest) {
+export async function main(context: T.Context<GetBlobResponseData>, request: GetBlobRequest) {
     context.log('START',
         'request.query', request.query
     );
 
     let containerName = 'user-storage';
     let blobBaseName = '' + guid();
+
+    let cookie = request.headers['Cookie'] || request.headers['cookie'];
+
+    context.log('cookie=', cookie);
+
+    if (cookie != null) {
+        let m = cookie.match(/blobBaseName=([^;]+)(?:;|$)/);
+        if (m) {
+            blobBaseName = m[1];
+        }
+    }
 
     // Uses env.AZURE_STORAGE_CONNECTION_STRING
     let service = createBlobService();
@@ -72,7 +83,7 @@ export async function main(context: Context<GetBlobResponseData>, request: GetBl
         headers: {
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/javascript',
-            'X-Told-Test-Header': 'test-header',
+            'Set-Cookie': `blobBaseName=${blobBaseName}; Expires=${new Date(Date.now() + 356 * 24 * 60 * 60 * 1000).toUTCString()}; Secure; HttpOnly`
         },
         body: {
             ok: true,
