@@ -31,11 +31,15 @@ export async function main(context: T.RawContext, request: T.Request<{ name: str
 
         let body = data;
 
-        let type = 'application/javascript';
+        let type = 'text/plain';
 
-        if (path.match('\.jpg$')) { type = 'image/jpg'; }
-        if (path.match('\.png$')) { type = 'image/png'; }
         if (path.match('\.html$')) { type = 'text/html'; }
+        if (path.match('\.css$')) { type = 'text/css'; }
+        if (path.match('\.js$')) { type = 'application/x-javascript'; }
+        if (path.match('\.json$')) { type = 'application/json'; }
+        if (path.match('\.jpg$')) { type = 'image/jpeg'; }
+        if (path.match('\.png$')) { type = 'image/png'; }
+        if (path.match('\.gif$')) { type = 'image/gif'; }
         if (path.match('\.ico$')) { type = 'image/x-icon'; }
 
         context.done(null, {
