@@ -107,6 +107,9 @@ function main(context, request) {
                 if (path.match('\.html$')) {
                     type = 'text/html';
                 }
+                if (path.match('\.ico$')) {
+                    type = 'image/x-icon';
+                }
                 context.done(null, {
                     headers: {
                         'Content-Type': type,

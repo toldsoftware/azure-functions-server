@@ -36,6 +36,7 @@ export async function main(context: T.RawContext, request: T.Request<{ name: str
         if (path.match('\.jpg$')) { type = 'image/jpg'; }
         if (path.match('\.png$')) { type = 'image/png'; }
         if (path.match('\.html$')) { type = 'text/html'; }
+        if (path.match('\.ico$')) { type = 'image/x-icon'; }
 
         context.done(null, {
             headers: {
