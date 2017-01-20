@@ -1,7 +1,15 @@
 "use strict";
+var tslib_1 = require("tslib");
 function serve(main) {
     return function (context, request) {
-        main(context, request)
+        var req = tslib_1.__assign({}, request);
+        req.pathName = req.pathName || '';
+        req.pathParts = req.pathName.split('/').filter(function (x) { return x.length > 0; });
+        if (req.query.ping != null) {
+            context.done(null, { body: 'PING', status: 200, headers: null });
+            return;
+        }
+        main(context, req)
             .then(function () { })
             .catch(function (err) { return console.error(err); });
     };

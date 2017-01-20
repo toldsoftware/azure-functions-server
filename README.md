@@ -68,6 +68,12 @@ The chart below shows an example of the difference between using webpack and rem
 
 The tested function used the azure-storage npm package to create a random blob sas url.
 
-Webpack was able to package the azure-storage without a problem and cold start performance increased from a failure rate of 80secs to an acceptable 3 sec cold start (25x increase).
+Webpack was able to package the azure-storage without a problem and cold start performance increased from an unnacceptable time of 80 secs to an acceptable 3 sec cold start (25x increase).
 
 ![Webpack Performance](https://toldazureblobaccesstest.blob.core.windows.net/test/WebpackPerformance2.png)
+
+### Keep Alive Timer Trigger Function
+
+Futher improvements can be gained by using a timer function (at around 4 mins) to keep the functions from going cold.
+
+Although this will help for services that have sporadic requests, it does not help with services that require scaling up quickly as scaling to another instance still requires a cold start.

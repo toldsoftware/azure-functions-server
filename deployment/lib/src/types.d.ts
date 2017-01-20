@@ -1,27 +1,37 @@
-export interface Request<TQuery, TBody> {
-    query: TQuery;
-    body: TBody;
+export interface SimpleRequest {
+    pathName: string;
+    pathParts: string[];
 }
-export interface Response<T> {
+export interface QueryRequest<TQuery> extends SimpleRequest {
+    query: TQuery;
+}
+export interface Request<TQuery, TRequestBody> extends QueryRequest<TQuery> {
+    body: TRequestBody;
+}
+export interface Response<TResponseData> {
     status?: number;
     headers?: {
         'Access-Control-Allow-Origin'?: string;
         'Content-Type'?: string;
         [key: string]: string;
     };
-    body: ResponseBody<T>;
+    body: ResponseBody<TResponseData>;
 }
-export interface ResponseBody<T> {
+export interface ResponseBody<TResponseData> {
     ok: boolean;
-    data?: T;
+    data?: TResponseData;
     errors?: string[];
 }
-export interface Context<T> {
+export interface Context<TResponseData> {
     log(...text: any[]): void;
-    done(err?: any, response?: Response<T>): void;
+    done(err?: any, response?: Response<TResponseData>): void;
 }
-export declare type MainEntryPoint<T, TQuery, TBody> = (context: Context<T>, request: Request<TQuery, TBody>) => Promise<{}>;
-export declare type MainEntryPoint_Sync<T, TQuery, TBody> = (context: Context<T>, request: Request<TQuery, TBody>) => void;
+export interface RawContext {
+    log(...text: any[]): void;
+    done(err?: any, response?: any): void;
+}
+export declare type MainEntryPoint<TResponseData, TQuery, TRequestBody> = (context: Context<TResponseData>, request: Request<TQuery, TRequestBody>) => Promise<{}>;
+export declare type MainEntryPoint_Sync<TResponseData, TQuery, TRequestBody> = (context: Context<TResponseData>, request: Request<TQuery, TRequestBody>) => void;
 export interface Timer {
     isPastDue: boolean;
 }

@@ -73,7 +73,7 @@
 
 "use strict";
 
-var tslib_1 = __webpack_require__(17);
+var tslib_1 = __webpack_require__(13);
 var fs = __webpack_require__(18);
 var p = __webpack_require__(30);
 function main(context, request) {
@@ -110,7 +110,7 @@ exports.main = main;
 
 /***/ }),
 
-/***/ 17:
+/***/ 13:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -228,9 +228,17 @@ module.exports = require("fs");
 
 "use strict";
 
+var tslib_1 = __webpack_require__(13);
 function serve(main) {
     return function (context, request) {
-        main(context, request)
+        var req = tslib_1.__assign({}, request);
+        req.pathName = req.pathName || '';
+        req.pathParts = req.pathName.split('/').filter(function (x) { return x.length > 0; });
+        if (req.query.ping != null) {
+            context.done(null, { body: 'PING', status: 200, headers: null });
+            return;
+        }
+        main(context, req)
             .then(function () { })
             .catch(function (err) { return console.error(err); });
     };

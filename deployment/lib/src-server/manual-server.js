@@ -28,7 +28,7 @@ function serve(main, port) {
                     console.log('END Request:', r.body);
                 }
             };
-            main(context, { query: query, body: JSON.parse(req.body || '{}') })
+            main(context, { query: query, body: JSON.parse(req.body || '{}'), pathName: uri.pathName || '', pathParts: uri.pathName.split('/').filter(function (p) { return p.length > 0; }) })
                 .then(function () { })
                 .catch(function (err) { return console.error(err); });
         });

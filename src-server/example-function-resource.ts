@@ -5,7 +5,7 @@ declare let __dirname: string;
 const fs = require('fs');
 const p = require('path') as { resolve(...parts: string[]): string };
 
-export async function main(context: T.Context<any>, request: T.Request<{ name: string }, any>) {
+export async function main(context: T.RawContext, request: T.Request<{ name: string }, any>) {
 
     let path = p.resolve(__dirname, '..', 'resources', request.query.name);
 

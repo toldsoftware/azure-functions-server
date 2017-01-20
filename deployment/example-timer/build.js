@@ -73,7 +73,7 @@
 
 "use strict";
 
-var tslib_1 = __webpack_require__(17);
+var tslib_1 = __webpack_require__(13);
 // https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer
 // {second} {minute} {hour} {day} {month} {day of the week}
 // schedule: 0 0 0 * * *
@@ -96,7 +96,7 @@ exports.tick = tick;
 
 /***/ }),
 
-/***/ 17:
+/***/ 13:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
