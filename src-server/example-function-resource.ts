@@ -14,18 +14,6 @@ export async function main(context: T.RawContext, request: T.Request<{ name: str
 
     context.log('filePath=' + filePath + ' path=' + path + ' request.query.name=' + request.query.name + ' request.pathName=' + request.pathName);
 
-    if (!fs.existsSync(path)) {
-        context.log('ERROR: File does not exist: ' + path);
-        context.done(null, {
-            status: 404,
-            headers: {
-                'Content-Type': 'plain/text',
-            },
-            body: ('File not Found: ' + filePath) as any
-        });
-        return;
-    }
-
     fs.readFile(path, (err: any, data: any) => {
         context.log('path=' + path);
 
@@ -34,9 +22,9 @@ export async function main(context: T.RawContext, request: T.Request<{ name: str
             context.done(err, {
                 status: 404,
                 headers: {
-                    'Content-Type': 'plain/text',
+                    'Content-Type': 'text/plain',
                 },
-                body: ('File Error: ' + filePath) as any
+                body: ('File Not Found: ' + filePath) as any
             });
             return;
         }

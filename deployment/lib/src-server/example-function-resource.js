@@ -9,17 +9,6 @@ function main(context, request) {
             filePath = request.query.name || request.pathName.replace(/\/$/, '').replace(/\/(file)$/, '');
             path = p.resolve(__dirname, '..', 'resources', filePath);
             context.log('filePath=' + filePath + ' path=' + path + ' request.query.name=' + request.query.name + ' request.pathName=' + request.pathName);
-            if (!fs.existsSync(path)) {
-                context.log('ERROR: File does not exist: ' + path);
-                context.done(null, {
-                    status: 404,
-                    headers: {
-                        'Content-Type': 'plain/text',
-                    },
-                    body: ('File not Found: ' + filePath)
-                });
-                return [2 /*return*/];
-            }
             fs.readFile(path, function (err, data) {
                 context.log('path=' + path);
                 if (err != null) {
@@ -27,9 +16,9 @@ function main(context, request) {
                     context.done(err, {
                         status: 404,
                         headers: {
-                            'Content-Type': 'plain/text',
+                            'Content-Type': 'text/plain',
                         },
-                        body: ('File Error: ' + filePath)
+                        body: ('File Not Found: ' + filePath)
                     });
                     return;
                 }
