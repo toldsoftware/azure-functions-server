@@ -7,7 +7,10 @@ const p = require('path') as { resolve(...parts: string[]): string };
 
 export async function main(context: T.RawContext, request: T.Request<{ name: string }, any>) {
 
-    let path = p.resolve(__dirname, '..', 'resources', request.query.name || request.pathName);
+    // BUG: File extensions are not supported
+    // Workaround is to add an / at the end, so need to remove that here
+    let filePath = request.query.name || request.pathName.replace(/\/$/, '');
+    let path = p.resolve(__dirname, '..', 'resources', filePath);
 
     fs.readFile(path, (err: any, data: any) => {
         context.log('path=' + path + ' err=' + err);

@@ -78,9 +78,10 @@ var fs = __webpack_require__(18);
 var p = __webpack_require__(30);
 function main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var path;
+        var filePath, path;
         return tslib_1.__generator(this, function (_a) {
-            path = p.resolve(__dirname, '..', 'resources', request.query.name || request.pathName);
+            filePath = request.query.name || request.pathName.replace(/\/$/, '');
+            path = p.resolve(__dirname, '..', 'resources', filePath);
             fs.readFile(path, function (err, data) {
                 context.log('path=' + path + ' err=' + err);
                 var body = data;
