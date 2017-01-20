@@ -15,6 +15,17 @@ export async function main(context: T.RawContext, request: T.Request<{ name: str
     fs.readFile(path, (err: any, data: any) => {
         context.log('path=' + path + ' err=' + err);
 
+        if (err != null) {
+            context.done(null, {
+                status: 404,
+                headers: {
+                    'Content-Type': 'plain/text',
+                },
+                body: ('File not Found: ' + filePath) as any
+            });
+            return;
+        }
+
         let body = data;
 
         let type = 'application/javascript';

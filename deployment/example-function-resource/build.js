@@ -84,6 +84,16 @@ function main(context, request) {
             path = p.resolve(__dirname, '..', 'resources', filePath);
             fs.readFile(path, function (err, data) {
                 context.log('path=' + path + ' err=' + err);
+                if (err != null) {
+                    context.done(null, {
+                        status: 404,
+                        headers: {
+                            'Content-Type': 'plain/text',
+                        },
+                        body: ('File not Found: ' + filePath)
+                    });
+                    return;
+                }
                 var body = data;
                 var type = 'application/javascript';
                 if (path.match('\.jpg$')) {
