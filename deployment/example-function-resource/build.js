@@ -235,7 +235,11 @@ function serve(main) {
         req.pathName = req.pathName || '';
         req.pathParts = req.pathName.split('/').filter(function (x) { return x.length > 0; });
         if (req.query.ping != null) {
-            context.done(null, { body: 'PING', status: 200, headers: null });
+            context.done(null, {
+                status: 200,
+                headers: { 'Content-Type': 'text/plain' },
+                body: 'PING',
+            });
             return;
         }
         main(context, req)

@@ -8,7 +8,11 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
         req.pathParts = req.pathName.split('/').filter(x => x.length > 0);
 
         if ((req.query as any).ping != null) {
-            context.done(null, { body: 'PING' as any, status: 200, headers: null });
+            context.done(null, {
+                status: 200,
+                headers: { 'Content-Type': 'text/plain' },
+                body: 'PING' as any,
+            });
             return;
         }
 
