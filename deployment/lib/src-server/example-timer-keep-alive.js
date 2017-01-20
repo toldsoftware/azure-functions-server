@@ -5,37 +5,40 @@ var https = require('https');
 // schedule: 0 0 0 * * *
 function tick(context, timer) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var urls, urlParts, _i, urlParts_1, x, timeStamp;
+        var urls, doneCount, callDone, _loop_1, _i, urls_1, x, timeStamp;
         return tslib_1.__generator(this, function (_a) {
             urls = [
-                'https://azure-blob-access-test.azurewebsites.net/api/get-blob',
                 'https://told-azure-functions-server-test.azurewebsites.net/api/example-function-get-blob',
+                'https://azure-blob-access-test.azurewebsites.net/api/get-blob',
             ];
-            urlParts = urls.map(function (x) {
-                var m = x.match(/(https?):\/\/(.*)\/(.*)/);
-                return {
-                    raw: x,
-                    https: m[1] === 'https',
-                    host: m[2],
-                    path: m[3]
-                };
-            });
-            for (_i = 0, urlParts_1 = urlParts; _i < urlParts_1.length; _i++) {
-                x = urlParts_1[_i];
-                context.log('Keep Alive: ', x.raw);
-                if (x.https) {
-                    https.request(x);
+            doneCount = 0;
+            callDone = function (url) {
+                doneCount++;
+                context.log('Keep Alive END: ', url);
+                if (doneCount >= urls.length) {
+                    context.done();
                 }
-                else {
-                    http.request(x);
+            };
+            _loop_1 = function (x) {
+                context.log('Keep Alive START: ', x);
+                var http_s = http;
+                if (x.match(/^https/)) {
+                    http_s = https;
                 }
+                http_s.get(x, function (res) {
+                    console.log('statusCode:', res.statusCode);
+                    callDone(x);
+                });
+            };
+            for (_i = 0, urls_1 = urls; _i < urls_1.length; _i++) {
+                x = urls_1[_i];
+                _loop_1(x);
             }
             timeStamp = new Date().toISOString();
             if (timer.isPastDue) {
                 context.log('Timer is Past Due');
             }
-            context.log('Timer ran!', timeStamp);
-            context.done();
+            context.log('Timer started!', timeStamp);
             return [2 /*return*/];
         });
     });

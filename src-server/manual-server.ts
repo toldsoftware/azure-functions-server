@@ -26,7 +26,7 @@ export function serve<T, TQuery, TBody>(main: T.MainEntryPoint<T, TQuery, TBody>
             );
 
             let context: T.Context<T> = {
-                log: x => console.log(x),
+                log: (m, ...x) => console.log(m, ...x),
                 done: (u, r) => {
                     res.writeHead(r.status || 200, r.headers || { 'Content-Type': 'text/plain' });
                     res.end(JSON.stringify(r.body));

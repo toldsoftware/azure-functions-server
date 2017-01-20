@@ -8,27 +8,32 @@ const https = require('https');
 export async function tick(context: T.TimerContext, timer: T.Timer) {
 
     let urls = [
-        'https://azure-blob-access-test.azurewebsites.net/api/get-blob',
         'https://told-azure-functions-server-test.azurewebsites.net/api/example-function-get-blob',
+        'https://azure-blob-access-test.azurewebsites.net/api/get-blob',
     ];
 
-    let urlParts = urls.map(x => {
-        let m = x.match(/(https?):\/\/(.*)\/(.*)/);
-        return {
-            raw: x,
-            https: m[1] === 'https',
-            host: m[2],
-            path: m[3]
-        };
-    });
+    let doneCount = 0;
 
-    for (let x of urlParts) {
-        context.log('Keep Alive: ', x.raw);
-        if (x.https) {
-            https.request(x);
-        } else {
-            http.request(x);
+    let callDone = (url: string) => {
+        doneCount++;
+        context.log('Keep Alive END: ', url);
+
+        if (doneCount >= urls.length) {
+            context.done();
         }
+    };
+
+    for (let x of urls) {
+        context.log('Keep Alive START: ', x);
+        let http_s = http;
+        if (x.match(/^https/)) {
+            http_s = https;
+        }
+
+        http_s.get(x, (res: any) => {
+            console.log('statusCode:', res.statusCode);
+            callDone(x);
+        });
     }
 
     let timeStamp = new Date().toISOString();
@@ -36,6 +41,5 @@ export async function tick(context: T.TimerContext, timer: T.Timer) {
     if (timer.isPastDue) {
         context.log('Timer is Past Due');
     }
-    context.log('Timer ran!', timeStamp);
-    context.done();
+    context.log('Timer started!', timeStamp);
 }
