@@ -9,7 +9,7 @@ function serve(main) {
             context.done(null, {
                 status: 200,
                 headers: { 'Content-Type': 'text/plain' },
-                body: 'PING',
+                body: 'PONG',
             });
             return;
         }

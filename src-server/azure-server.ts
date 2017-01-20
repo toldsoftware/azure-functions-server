@@ -11,7 +11,7 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
             context.done(null, {
                 status: 200,
                 headers: { 'Content-Type': 'text/plain' },
-                body: 'PING' as any,
+                body: 'PONG' as any,
             });
             return;
         }
