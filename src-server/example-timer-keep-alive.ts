@@ -8,8 +8,9 @@ const https = require('https');
 export async function tick(context: T.TimerContext, timer: T.Timer) {
 
     let urls = [
-        'https://told-azure-functions-server-test.azurewebsites.net/api/example-function-get-blob',
-        'https://azure-blob-access-test.azurewebsites.net/api/get-blob',
+        'https://told-azure-functions-server-test.azurewebsites.net/api/example-function?ping=true',
+        'https://told-azure-functions-server-test.azurewebsites.net/api/example-function-get-blob?ping=true',
+        'https://told-azure-functions-server-test.azurewebsites.net/api/example-function-resource?ping=true',
     ];
 
     let doneCount = 0;

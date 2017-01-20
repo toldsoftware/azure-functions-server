@@ -8,8 +8,9 @@ function tick(context, timer) {
         var urls, doneCount, callDone, _loop_1, _i, urls_1, x, timeStamp;
         return tslib_1.__generator(this, function (_a) {
             urls = [
-                'https://told-azure-functions-server-test.azurewebsites.net/api/example-function-get-blob',
-                'https://azure-blob-access-test.azurewebsites.net/api/get-blob',
+                'https://told-azure-functions-server-test.azurewebsites.net/api/example-function?ping=true',
+                'https://told-azure-functions-server-test.azurewebsites.net/api/example-function-get-blob?ping=true',
+                'https://told-azure-functions-server-test.azurewebsites.net/api/example-function-resource?ping=true',
             ];
             doneCount = 0;
             callDone = function (url) {
