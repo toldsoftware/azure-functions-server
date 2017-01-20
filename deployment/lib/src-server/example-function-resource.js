@@ -6,7 +6,7 @@ function main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         var filePath, path;
         return tslib_1.__generator(this, function (_a) {
-            filePath = request.query.name || request.pathName.replace(/\/$/, '');
+            filePath = request.query.name || request.pathName.replace(/\/$/, '').replace(/\/(c|C)(d|D)(n|N)$/, '');
             path = p.resolve(__dirname, '..', 'resources', filePath);
             context.log('filePath=' + filePath + ' path=' + path + ' request.query.name=' + request.query.name + ' request.pathName=' + request.pathName);
             fs.readFile(path, function (err, data) {

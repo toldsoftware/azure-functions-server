@@ -8,8 +8,8 @@ const p = require('path') as { resolve(...parts: string[]): string };
 export async function main(context: T.RawContext, request: T.Request<{ name: string }, any>) {
 
     // BUG: File extensions are not supported
-    // Workaround is to add an / at the end, so need to remove that here
-    let filePath = request.query.name || request.pathName.replace(/\/$/, '');
+    // Workaround is to add an /CDN at the end, so need to remove that here
+    let filePath = request.query.name || request.pathName.replace(/\/$/, '').replace(/\/(c|C)(d|D)(n|N)$/, '');
     let path = p.resolve(__dirname, '..', 'resources', filePath);
 
     context.log('filePath=' + filePath + ' path=' + path + ' request.query.name=' + request.query.name + ' request.pathName=' + request.pathName);
