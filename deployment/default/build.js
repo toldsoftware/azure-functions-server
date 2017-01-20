@@ -63,40 +63,40 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 259);
+/******/ 	return __webpack_require__(__webpack_require__.s = 256);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 119:
+/***/ 117:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var tslib_1 = __webpack_require__(7);
+var R = __webpack_require__(53);
 function main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         return tslib_1.__generator(this, function (_a) {
-            if (request.query.setup) {
-                console.log('Setup was triggered');
+            switch (_a.label) {
+                case 0:
+                    // Serve index.html as the default file
+                    request.query.name = 'index.html';
+                    return [4 /*yield*/, R.main(context, request)];
+                case 1: return [2 /*return*/, _a.sent()];
             }
-            context.done(null, {
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/javascript',
-                    'X-Told-Test-Header': 'test-header',
-                },
-                body: {
-                    ok: true,
-                    data: { text: 'Example Output' },
-                }
-            });
-            return [2 /*return*/];
         });
     });
 }
 exports.main = main;
-//# sourceMappingURL=example-function.js.map
+//# sourceMappingURL=default.js.map
+
+/***/ }),
+
+/***/ 15:
+/***/ (function(module, exports) {
+
+module.exports = require("fs");
 
 /***/ }),
 
@@ -129,12 +129,77 @@ exports.serve = serve;
 
 /***/ }),
 
-/***/ 259:
+/***/ 21:
+/***/ (function(module, exports) {
+
+module.exports = require("path");
+
+/***/ }),
+
+/***/ 256:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Intentionally global
-___export = __webpack_require__(16).serve(__webpack_require__(119).main);
+___export = __webpack_require__(16).serve(__webpack_require__(117).main);
 module.exports = ___export;
+
+/***/ }),
+
+/***/ 53:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var tslib_1 = __webpack_require__(7);
+var fs = __webpack_require__(15);
+var p = __webpack_require__(21);
+function main(context, request) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+        var filePath, path;
+        return tslib_1.__generator(this, function (_a) {
+            filePath = request.query.name || request.pathName.replace(/\/$/, '').replace(/\/(file)$/, '');
+            path = p.resolve(__dirname, '..', 'resources', filePath);
+            context.log('filePath=' + filePath + ' path=' + path + ' request.query.name=' + request.query.name + ' request.pathName=' + request.pathName);
+            fs.readFile(path, function (err, data) {
+                context.log('path=' + path);
+                if (err != null) {
+                    context.log('ERROR: ' + err);
+                    context.done(null, {
+                        status: 404,
+                        headers: {
+                            'Content-Type': 'text/plain',
+                        },
+                        body: ('File Not Found: ' + filePath)
+                    });
+                    return;
+                }
+                var body = data;
+                var type = 'application/javascript';
+                if (path.match('\.jpg$')) {
+                    type = 'image/jpg';
+                }
+                if (path.match('\.png$')) {
+                    type = 'image/png';
+                }
+                if (path.match('\.html$')) {
+                    type = 'text/html';
+                }
+                if (path.match('\.ico$')) {
+                    type = 'image/x-icon';
+                }
+                context.done(null, {
+                    headers: {
+                        'Content-Type': type,
+                    },
+                    body: body
+                });
+            });
+            return [2 /*return*/];
+        });
+    });
+}
+exports.main = main;
+//# sourceMappingURL=example-function-resource.js.map
 
 /***/ }),
 

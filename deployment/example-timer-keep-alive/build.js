@@ -63,19 +63,19 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 258);
+/******/ 	return __webpack_require__(__webpack_require__.s = 260);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 119:
+/***/ 120:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var tslib_1 = __webpack_require__(13);
-var http = __webpack_require__(19);
-var https = __webpack_require__(29);
+var tslib_1 = __webpack_require__(7);
+var http = __webpack_require__(20);
+var https = __webpack_require__(30);
 // schedule: 0 0 0 * * *
 function tick(context, timer) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
@@ -123,7 +123,47 @@ exports.tick = tick;
 
 /***/ }),
 
-/***/ 13:
+/***/ 20:
+/***/ (function(module, exports) {
+
+module.exports = require("http");
+
+/***/ }),
+
+/***/ 260:
+/***/ (function(module, exports, __webpack_require__) {
+
+// Intentionally global
+___export = __webpack_require__(41).run(__webpack_require__(120).tick);
+module.exports = ___export;
+
+/***/ }),
+
+/***/ 30:
+/***/ (function(module, exports) {
+
+module.exports = require("https");
+
+/***/ }),
+
+/***/ 41:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function run(tick) {
+    return function (context, timer) {
+        tick(context, timer)
+            .then(function () { })
+            .catch(function (err) { return console.error(err); });
+    };
+}
+exports.run = run;
+//# sourceMappingURL=azure-timer.js.map
+
+/***/ }),
+
+/***/ 7:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -226,46 +266,6 @@ function __generator(thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-
-/***/ }),
-
-/***/ 19:
-/***/ (function(module, exports) {
-
-module.exports = require("http");
-
-/***/ }),
-
-/***/ 258:
-/***/ (function(module, exports, __webpack_require__) {
-
-// Intentionally global
-___export = __webpack_require__(41).run(__webpack_require__(119).tick);
-module.exports = ___export;
-
-/***/ }),
-
-/***/ 29:
-/***/ (function(module, exports) {
-
-module.exports = require("https");
-
-/***/ }),
-
-/***/ 41:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-function run(tick) {
-    return function (context, timer) {
-        tick(context, timer)
-            .then(function () { })
-            .catch(function (err) { return console.error(err); });
-    };
-}
-exports.run = run;
-//# sourceMappingURL=azure-timer.js.map
 
 /***/ })
 

@@ -63,19 +63,71 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 256);
+/******/ 	return __webpack_require__(__webpack_require__.s = 258);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 117:
+/***/ 15:
+/***/ (function(module, exports) {
+
+module.exports = require("fs");
+
+/***/ }),
+
+/***/ 16:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var tslib_1 = __webpack_require__(13);
-var fs = __webpack_require__(18);
-var p = __webpack_require__(30);
+var tslib_1 = __webpack_require__(7);
+function serve(main) {
+    return function (context, request) {
+        var req = tslib_1.__assign({}, request);
+        req.pathName = req.pathName || context.bindingData.pathName || '';
+        req.pathParts = req.pathName.split('/').filter(function (x) { return x.length > 0; });
+        if (req.query.ping != null) {
+            context.done(null, {
+                status: 200,
+                headers: { 'Content-Type': 'text/plain' },
+                body: 'PONG',
+            });
+            return;
+        }
+        main(context, req)
+            .then(function () { })
+            .catch(function (err) { return console.error(err); });
+    };
+}
+exports.serve = serve;
+//# sourceMappingURL=azure-server.js.map
+
+/***/ }),
+
+/***/ 21:
+/***/ (function(module, exports) {
+
+module.exports = require("path");
+
+/***/ }),
+
+/***/ 258:
+/***/ (function(module, exports, __webpack_require__) {
+
+// Intentionally global
+___export = __webpack_require__(16).serve(__webpack_require__(53).main);
+module.exports = ___export;
+
+/***/ }),
+
+/***/ 53:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var tslib_1 = __webpack_require__(7);
+var fs = __webpack_require__(15);
+var p = __webpack_require__(21);
 function main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         var filePath, path;
@@ -126,7 +178,7 @@ exports.main = main;
 
 /***/ }),
 
-/***/ 13:
+/***/ 7:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -229,58 +281,6 @@ function __generator(thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-
-/***/ }),
-
-/***/ 18:
-/***/ (function(module, exports) {
-
-module.exports = require("fs");
-
-/***/ }),
-
-/***/ 25:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var tslib_1 = __webpack_require__(13);
-function serve(main) {
-    return function (context, request) {
-        var req = tslib_1.__assign({}, request);
-        req.pathName = req.pathName || context.bindingData.pathName || '';
-        req.pathParts = req.pathName.split('/').filter(function (x) { return x.length > 0; });
-        if (req.query.ping != null) {
-            context.done(null, {
-                status: 200,
-                headers: { 'Content-Type': 'text/plain' },
-                body: 'PONG',
-            });
-            return;
-        }
-        main(context, req)
-            .then(function () { })
-            .catch(function (err) { return console.error(err); });
-    };
-}
-exports.serve = serve;
-//# sourceMappingURL=azure-server.js.map
-
-/***/ }),
-
-/***/ 256:
-/***/ (function(module, exports, __webpack_require__) {
-
-// Intentionally global
-___export = __webpack_require__(25).serve(__webpack_require__(117).main);
-module.exports = ___export;
-
-/***/ }),
-
-/***/ 30:
-/***/ (function(module, exports) {
-
-module.exports = require("path");
 
 /***/ })
 

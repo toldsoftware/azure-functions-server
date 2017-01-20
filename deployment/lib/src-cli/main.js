@@ -85,8 +85,12 @@ function createDeployment() {
                     console.log('src-server main file: ', f);
                     var functionName_1 = f.replace('.ts', '');
                     var functionDir = './deployment/' + functionName_1;
+                    var boilerplatePath = '/resources/function-BOILERPLATE';
+                    if (f.match(/^default\./)) {
+                        boilerplatePath = '/resources/default-BOILERPLATE';
+                    }
                     // Clone the function-BOILERPLATE folder
-                    var functionBoilerplateDir = __dirname.replace(/(\\|\/)src-cli$/, '').replace(/(\\|\/)lib$/, '') + '/resources/function-BOILERPLATE';
+                    var functionBoilerplateDir = __dirname.replace(/(\\|\/)src-cli$/, '').replace(/(\\|\/)lib$/, '') + boilerplatePath;
                     ncp(functionBoilerplateDir, functionDir, {
                         transform: function (read, write) {
                             read

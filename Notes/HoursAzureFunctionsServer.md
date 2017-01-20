@@ -22,3 +22,14 @@
 ## 10:19-
 
 - Configure Webpack for Node.js
+
+# Design
+
+## Routes to use for default static file serving with CDN
+
+- {default?}
+    - Match all names of single path 
+- {default:maxlength(0)?}
+    - Default route to match only the empty route
+- {*default}
+    -  Matches everything
