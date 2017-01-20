@@ -6,7 +6,7 @@ function main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         var path;
         return tslib_1.__generator(this, function (_a) {
-            path = p.resolve(__dirname, '..', 'resources', request.query.name);
+            path = p.resolve(__dirname, '..', 'resources', request.query.name || request.pathName);
             fs.readFile(path, function (err, data) {
                 context.log('path=' + path + ' err=' + err);
                 var body = data;

@@ -7,7 +7,7 @@ const p = require('path') as { resolve(...parts: string[]): string };
 
 export async function main(context: T.RawContext, request: T.Request<{ name: string }, any>) {
 
-    let path = p.resolve(__dirname, '..', 'resources', request.query.name);
+    let path = p.resolve(__dirname, '..', 'resources', request.query.name || request.pathName);
 
     fs.readFile(path, (err: any, data: any) => {
         context.log('path=' + path + ' err=' + err);
