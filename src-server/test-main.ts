@@ -49,16 +49,12 @@ export function serve<T, TQuery, TBody>(functions: { name: string, main: T.MainE
             // Process Request
             let request = { query, body: JSON.parse(req.body || '{}'), pathName: uri.pathname || '', pathParts: (uri.pathname as string).split('/').filter(p => p.length > 0), headers: {} };
             if (request.pathParts.length === 0) {
-                request.query.name = '../deployment/resources/test-main.html';
+                request.query.name = 'test-main.html';
                 resourceMain(context, request).then();
-            } else if (request.pathParts[0] === 'resources' || request.pathParts[0] === 'example-function-resource') {
+            } else if (request.pathParts[0] === 'resources') {
                 request.pathName = request.pathName
-                    .replace('/resources/', '../deployment/resources/')
-                    .replace('resources/', '../deployment/resources/')
-                    .replace('/example-function-resource/', '../deployment/resources/')
-                    .replace('example-function-resource/', '../deployment/resources/')
-                    ;
-
+                    .replace('/resources/', '/')
+                    .replace('resources/', '');
                 request.pathParts.splice(0, 1);
                 resourceMain(context, request).then();
             } else if (functions.filter(x => x.name === request.pathParts[0]).length > 0) {

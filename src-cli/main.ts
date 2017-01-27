@@ -75,17 +75,19 @@ async function createDeployment() {
                         functionNames.sort();
 
                         let functions = functionNames
-                            .map(x => `{name: '${x}', main: require('${'./../lib/src-server/' + x}').main }`)
+                            .map(x => `{name: '${x}', main: require('${'./../../lib/src-server/' + x}').main }`)
                             .join(',\n\t');
 
                         console.log('Create Test Main');
+                        fs.mkdirSync('deployment/test-main');
+                        
                         fs.createReadStream(getBoilerplatePath('/resources/test-main-RESOURCES/test-main.js'))
                             .on('end', () => resolve())
-                            .pipe(replaceStream(afsLibPath, targetAfsLibPath.replace('./../../lib', './../lib')))
+                            .pipe(replaceStream(afsLibPath, targetAfsLibPath))
                             .pipe(replaceStream('FUNCTION_MODULES', functions))
-                            .pipe(fs.createWriteStream('./deployment/test-main.source.js'));
+                            .pipe(fs.createWriteStream('./deployment/test-main/test-main.source.js'));
 
-                        functionDirsOrFiles.push('./deployment/test-main.source.js');
+                        functionDirsOrFiles.push('./deployment/test-main/test-main.source.js');
 
                         // Index
                         let functionsLinks = functionNames
@@ -105,8 +107,8 @@ async function createDeployment() {
 
                 // Wabpack
                 console.log('Webpack');
-                await runWebpackAzureFunction(functionDirsOrFiles);
                 await runWebpackClient(entrySourceFiles);
+                await runWebpackAzureFunction(functionDirsOrFiles);
             })().then();
         };
 
