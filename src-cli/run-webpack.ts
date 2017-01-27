@@ -59,7 +59,25 @@ export function runWebpackClient(entrySourceFiles: string[]) {
                 path: './',
                 filename: '[name]'
             },
-            devtool: 'source-map',
+            devtool: '#source-map',
+            module: {
+                rules: [
+                    {
+                        test: /\.js$/,
+                        use: ['source-map-loader'],
+                        enforce: 'pre'
+                    }
+                ]
+            }
+            // resolve: {
+            //     extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
+            // },
+            // module: {
+            //     rules: [{
+            //         test: /\.tsx?$/,
+            //         loader: 'ts-loader'
+            //     }]
+            // },
             plugins: [
                 //     new BrowserSyncPlugin({
                 //     host: 'localhost',
@@ -69,12 +87,12 @@ export function runWebpackClient(entrySourceFiles: string[]) {
                 //     }
                 // })
                 // , 
-                // Uglify
-                new webpack.optimize.UglifyJsPlugin({
-                    sourceMap: true,
-                    mangle: false,
-                    test: /\.(js|jsx)$/
-                })
+                // // Uglify
+                // new webpack.optimize.UglifyJsPlugin({
+                //     sourceMap: true,
+                //     mangle: false,
+                //     test: /\.(js|jsx)$/
+                // })
             ]
         }, (err: any, stats: any) => {
             if (err) { console.error(err); reject(); return; }

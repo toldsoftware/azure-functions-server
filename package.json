@@ -39,15 +39,16 @@
     "node-uuid": "^1.4.7"
   },
   "dependencies": {
+    "@types/ncp": "^2.0.0",
     "@types/node": "^6.0.62",
     "@types/node-uuid": "0.0.28",
-    "@types/ncp": "^2.0.0",
     "@types/rimraf": "^0.0.28",
     "@types/webpack": "^2.2.4",
     "ncp": "^2.0.0",
     "node-watch": "^0.4.1",
     "replacestream": "^4.0.2",
     "rimraf": "^2.5.4",
+    "source-map-loader": "^0.1.6",
     "tslib": "^1.4.0",
     "webpack": "^2.2.0"
   }

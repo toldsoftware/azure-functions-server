@@ -74,14 +74,18 @@ async function createDeployment() {
         console.log('Create Deployment');
 
         // Clean Directory
-        console.log('Clean Deployment Folder');
-        if (fs.existsSync('deployment')) {
-            rimraf.sync('deployment');
+        try {
+            console.log('Clean Deployment Folder');
+            if (fs.existsSync('deployment')) {
+                rimraf.sync('deployment');
+            }
+            console.log('Make Deployment Folders');
+            fs.mkdirSync('deployment');
+            // fs.mkdirSync('deployment/lib');
+            fs.mkdirSync('deployment/resources');
+        } catch (err) {
+            // Debugger might prevent this
         }
-        console.log('Make Deployment Folders');
-        fs.mkdirSync('deployment');
-        // fs.mkdirSync('deployment/lib');
-        fs.mkdirSync('deployment/resources');
 
         // Not Needed with Webpack
         // // Copy package.json
