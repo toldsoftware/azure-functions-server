@@ -16,6 +16,17 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
             return;
         }
 
+        // Auto-Parse Json
+        if (typeof req.body === 'string') {
+            let orig = req.body;
+            try {
+                req.body = JSON.parse(req.body as any) as any;
+            }
+            catch (err) {
+                req.body = orig;
+            }
+        }
+
         main(context, req)
             .then(() => { })
             .catch(err => {

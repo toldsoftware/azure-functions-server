@@ -78294,7 +78294,17 @@ function serve(functions, port) {
         var content = '';
         req.on('data', function (chunk) { return content += chunk; });
         req.on('end', function () {
-            var body = JSON.parse(content.length > 0 ? content : '{}');
+            var body = content;
+            // Auto-Parse Json
+            if (typeof body === 'string') {
+                var orig = body;
+                try {
+                    body = JSON.parse(body);
+                }
+                catch (err) {
+                    body = orig;
+                }
+            }
             console.log('START Request:', 'query', query, 'body', body);
             var context = {
                 log: function (m) {
@@ -78320,7 +78330,7 @@ function serve(functions, port) {
                 }
             };
             // Process Request
-            var request = { query: query, body: JSON.parse(req.body || '{}'), pathName: uri.pathname || '', pathParts: uri.pathname.split('/').filter(function (p) { return p.length > 0; }), headers: {} };
+            var request = { query: query, body: body, pathName: uri.pathname || '', pathParts: uri.pathname.split('/').filter(function (p) { return p.length > 0; }), headers: {} };
             if (request.pathParts.length === 0) {
                 request.query.name = 'test-main.html';
                 example_function_resource_1.main(context, request).then();

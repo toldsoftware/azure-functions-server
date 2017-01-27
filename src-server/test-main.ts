@@ -19,7 +19,17 @@ export function serve<T, TQuery, TBody>(functions: { name: string, main: T.MainE
 
         req.on('data', (chunk: any) => content += chunk);
         req.on('end', () => {
-            let body = JSON.parse(content.length > 0 ? content : '{}');
+            let body = content;
+            // Auto-Parse Json
+            if (typeof body === 'string') {
+                let orig = body;
+                try {
+                    body = JSON.parse(body as any) as any;
+                }
+                catch (err) {
+                    body = orig;
+                }
+            }
 
             console.log('START Request:',
                 'query', query,
@@ -47,7 +57,8 @@ export function serve<T, TQuery, TBody>(functions: { name: string, main: T.MainE
             };
 
             // Process Request
-            let request = { query, body: JSON.parse(req.body || '{}'), pathName: uri.pathname || '', pathParts: (uri.pathname as string).split('/').filter(p => p.length > 0), headers: {} };
+            let request = { query, body: body, pathName: uri.pathname || '', pathParts: (uri.pathname as string).split('/').filter(p => p.length > 0), headers: {} };
+
             if (request.pathParts.length === 0) {
                 request.query.name = 'test-main.html';
                 resourceMain(context, request).then();

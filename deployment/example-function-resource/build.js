@@ -216,6 +216,16 @@ function serve(main) {
             });
             return;
         }
+        // Auto-Parse Json
+        if (typeof req.body === 'string') {
+            var orig = req.body;
+            try {
+                req.body = JSON.parse(req.body);
+            }
+            catch (err) {
+                req.body = orig;
+            }
+        }
         main(context, req)
             .then(function () { })
             .catch(function (err) {
