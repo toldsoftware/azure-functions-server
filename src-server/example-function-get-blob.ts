@@ -1,13 +1,14 @@
 import { createBlobService, BlobUtilities } from 'azure-storage';
 import * as T from './../src';
 
-export interface GetBlobRequest extends T.Request<{ setup?: boolean, suffixesCsv?: string }, {}> {
+export interface GetBlobRequest extends T.Request<{ setup?: boolean, suffixes?: string }, {}> {
 }
 
 export interface GetBlobResponseData {
     urls: {
         blobUrl: string;
         blobSasUrl: string;
+        suffix: string;
     }[];
 }
 
@@ -64,19 +65,19 @@ export async function main(context: T.Context<GetBlobResponseData>, request: Get
         },
     };
 
-    let suffixes = (request.query.suffixesCsv || '').split(',').map(x => x.trim()).filter(x => x.length > 0);
+    let suffixes = (request.query.suffixes || '').split(',').map(x => x.trim()).filter(x => x.length > 0);
     if (suffixes.length === 0) {
         suffixes = [''];
     }
 
-    let urls: { blobUrl: string, blobSasUrl: string }[] = [];
+    let urls: { blobUrl: string, blobSasUrl: string, suffix: string }[] = [];
 
     for (let suffix of suffixes) {
-        let blobSas = service.generateSharedAccessSignature(containerName, blobBaseName, sharedAccessPolicy);
-        let blobUrl = service.getUrl(containerName, blobBaseName);
-        let blobSasUrl = service.getUrl(containerName, blobBaseName, blobSas);
+        let blobSas = service.generateSharedAccessSignature(containerName, blobBaseName + '-' + suffix, sharedAccessPolicy);
+        let blobUrl = service.getUrl(containerName, blobBaseName + '-' + suffix);
+        let blobSasUrl = service.getUrl(containerName, blobBaseName + '-' + suffix, blobSas);
 
-        urls.push({ blobUrl, blobSasUrl });
+        urls.push({ blobUrl, blobSasUrl, suffix });
     }
 
     context.done(null, {

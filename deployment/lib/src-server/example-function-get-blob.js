@@ -38,17 +38,17 @@ function main(context, request) {
                     Expiry: expiryDate
                 },
             };
-            suffixes = (request.query.suffixesCsv || '').split(',').map(function (x) { return x.trim(); }).filter(function (x) { return x.length > 0; });
+            suffixes = (request.query.suffixes || '').split(',').map(function (x) { return x.trim(); }).filter(function (x) { return x.length > 0; });
             if (suffixes.length === 0) {
                 suffixes = [''];
             }
             urls = [];
             for (_i = 0, suffixes_1 = suffixes; _i < suffixes_1.length; _i++) {
                 suffix = suffixes_1[_i];
-                blobSas = service.generateSharedAccessSignature(containerName, blobBaseName, sharedAccessPolicy);
-                blobUrl = service.getUrl(containerName, blobBaseName);
-                blobSasUrl = service.getUrl(containerName, blobBaseName, blobSas);
-                urls.push({ blobUrl: blobUrl, blobSasUrl: blobSasUrl });
+                blobSas = service.generateSharedAccessSignature(containerName, blobBaseName + '-' + suffix, sharedAccessPolicy);
+                blobUrl = service.getUrl(containerName, blobBaseName + '-' + suffix);
+                blobSasUrl = service.getUrl(containerName, blobBaseName + '-' + suffix, blobSas);
+                urls.push({ blobUrl: blobUrl, blobSasUrl: blobSasUrl, suffix: suffix });
             }
             context.done(null, {
                 headers: {

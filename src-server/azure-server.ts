@@ -18,7 +18,10 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
 
         main(context, req)
             .then(() => { })
-            .catch(err => console.error(err));
+            .catch(err => {
+                context.log('Uncaught Error:', err);
+                context.done(err, null);
+            });
     };
 
 }

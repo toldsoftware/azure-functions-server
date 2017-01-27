@@ -1,13 +1,14 @@
 import * as T from './../src';
 export interface GetBlobRequest extends T.Request<{
     setup?: boolean;
-    suffixesCsv?: string;
+    suffixes?: string;
 }, {}> {
 }
 export interface GetBlobResponseData {
     urls: {
         blobUrl: string;
         blobSasUrl: string;
+        suffix: string;
     }[];
 }
 export interface GetBlobResponseBody extends T.ResponseBody<GetBlobResponseData> {

@@ -15,7 +15,10 @@ function serve(main) {
         }
         main(context, req)
             .then(function () { })
-            .catch(function (err) { return console.error(err); });
+            .catch(function (err) {
+            context.log('Uncaught Error:', err);
+            context.done(err, null);
+        });
     };
 }
 exports.serve = serve;
