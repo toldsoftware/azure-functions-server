@@ -1,4 +1,6 @@
 import { createBlobService, BlobUtilities } from 'azure-storage';
+import { v1 as guid } from 'node-uuid';
+
 import * as T from './../src';
 
 export interface GetBlobRequest extends T.Request<{ setup?: boolean, suffixes?: string }, {}> {
@@ -13,10 +15,6 @@ export interface GetBlobResponseData {
 }
 
 export interface GetBlobResponseBody extends T.ResponseBody<GetBlobResponseData> { }
-
-declare var require: any;
-interface Guid extends String { };
-let guid = require('node-uuid').v1 as () => Guid;
 
 export async function main(context: T.Context<GetBlobResponseData>, request: GetBlobRequest) {
     context.log('START',

@@ -1,8 +1,7 @@
-import * as T from '../src/types';
+import * as http from 'http';
+import * as https from 'https';
 
-declare let require: any;
-const http = require('http');
-const https = require('https');
+import * as T from '../src/types';
 
 // schedule: 0 0 0 * * *
 export async function tick(context: T.TimerContext, timer: T.Timer) {
@@ -26,7 +25,7 @@ export async function tick(context: T.TimerContext, timer: T.Timer) {
 
     for (let x of urls) {
         context.log('Keep Alive START: ', x);
-        let http_s = http;
+        let http_s = http as { get: typeof http.get };
         if (x.match(/^https/)) {
             http_s = https;
         }

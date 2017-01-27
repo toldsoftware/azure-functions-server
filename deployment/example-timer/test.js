@@ -1,1 +1,1 @@
-module.exports = require('./../lib/src-server/manual-timer').run(require('./../lib/src-server/example-timer').tick);
+module.exports = require('./../../lib/src-server/test-timer').run(require('./../../lib/src-server/example-timer').tick);

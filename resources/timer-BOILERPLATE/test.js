@@ -1,1 +1,1 @@
-module.exports = require('@told/azure-functions-server/lib/src-server/manual-timer').run(require('./../lib/src-server/FUNCTION_NAME').tick);
+module.exports = require('@told/azure-functions-server/lib/src-server/test-timer').run(require('./../../lib/src-server/FUNCTION_NAME').tick);

@@ -1,1 +1,1 @@
-module.exports = require('@told/azure-functions-server/lib/src-server/manual-server').serve(require('./../lib/src-server/FUNCTION_NAME').main);
+module.exports = require('@told/azure-functions-server/lib/src-server/test-server').serve(require('./../../lib/src-server/FUNCTION_NAME').main);

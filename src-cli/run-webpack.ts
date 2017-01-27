@@ -1,31 +1,86 @@
 declare var require: any;
 const webpack = require('webpack');
 
-export function runWebpack(functionDirs: string[]) {
-    let entries: { [name: string]: string } = {};
-    functionDirs.filter(x => x.length > 0).forEach(x => entries[x + '/build.js'] = x + '/build.source.js');
+export function runWebpackAzureFunction(functionDirsOrFiles: string[]) {
+    return new Promise((resolve, reject) => {
+        let entries: { [name: string]: string } = {};
+        functionDirsOrFiles.filter(x => x.length > 0).forEach(x => {
+            if (x.indexOf('.source.js') >= 0) {
+                entries[x.replace('.source.js', '.js')] = x;
+            } else {
+                entries[x + '/build.js'] = x + '/build.source.js';
+            }
+        });
 
-    console.log('Webpack START');
-    console.log('entries=', entries);
+        console.log('Webpack Azure Functions START');
+        console.log('entries=', entries);
 
-    webpack({
-        // configuration
-        entry: {
-            // './index.webpack.js': './index.js',
-            ...entries
-        },
-        output: {
-            path: './',
-            filename: '[name]'
-        },
-        target: 'node',
-        node: {
-            __filename: false,
-            __dirname: false,
-        },
-    }, (err: any, stats: any) => {
-        if (err) { console.error(err); return; }
-        console.log('Webpack END');
-        // console.log(stats);
+        webpack({
+            // configuration
+            entry: {
+                // './index.webpack.js': './index.js',
+                ...entries
+            },
+            output: {
+                path: './',
+                filename: '[name]'
+            },
+            devtool: 'source-map',
+            target: 'node',
+            node: {
+                __filename: false,
+                __dirname: false,
+            }
+        }, (err: any, stats: any) => {
+            if (err) { console.error(err); reject(); return; }
+            console.log('Webpack Azure Functions END');
+            // console.log(stats);
+
+            resolve();
+        });
+    });
+}
+
+export function runWebpackClient(entrySourceFiles: string[]) {
+    return new Promise((resolve, reject) => {
+        let entries: { [name: string]: string } = {};
+        entrySourceFiles.filter(x => x.length > 0).forEach(x => entries[x.replace('.source.js', '.js')] = x);
+
+        console.log('Webpack Client START');
+        console.log('entries=', entries);
+
+        webpack({
+            // configuration
+            entry: {
+                // './index.webpack.js': './index.js',
+                ...entries
+            },
+            output: {
+                path: './',
+                filename: '[name]'
+            },
+            devtool: 'source-map',
+            plugins: [
+                //     new BrowserSyncPlugin({
+                //     host: 'localhost',
+                //     port: 3000,
+                //     server: {
+                //         baseDir: ['./resources']
+                //     }
+                // })
+                // , 
+                // Uglify
+                new webpack.optimize.UglifyJsPlugin({
+                    sourceMap: true,
+                    mangle: false,
+                    test: /\.(js|jsx)$/
+                })
+            ]
+        }, (err: any, stats: any) => {
+            if (err) { console.error(err); reject(); return; }
+            console.log('Webpack Client END');
+            // console.log(stats);
+            resolve();
+        });
     });
 }

@@ -19,9 +19,17 @@
 
 - Use Webpack
 
-## 10:19-
+## 10:19-11:00
 
 - Configure Webpack for Node.js
+
+# 2017-01-27
+
+## 7:30-
+
+- Add Client Webpack
+- Add Source Maps to Webpack
+- Support Node Debugging
 
 # Design
 

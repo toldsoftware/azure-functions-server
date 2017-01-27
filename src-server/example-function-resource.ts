@@ -1,18 +1,16 @@
-import * as T from './../src';
+import * as fs from 'fs';
+import * as Path from 'path';
 
-declare let require: any;
-declare let __dirname: string;
-const fs = require('fs');
-const p = require('path') as { resolve(...parts: string[]): string };
+import * as T from './../src';
 
 export async function main(context: T.RawContext, request: T.Request<{ name: string }, any>) {
 
     // BUG: File extensions are not supported
     // Workaround is to add an /file at the end, so need to remove that here
     let filePath = request.query.name || request.pathName.replace(/\/$/, '').replace(/\/(file)$/, '');
-    let path = p.resolve(__dirname, '..', 'resources', filePath);
+    let path = Path.resolve(__dirname, '..', 'resources', filePath);
 
-    context.log('filePath=' + filePath + ' path=' + path + ' request.query.name=' + request.query.name + ' request.pathName=' + request.pathName);
+    context.log('filePath=' + filePath + ' path=' + path + ' __dirname=' + __dirname + ' request.query.name=' + request.query.name + ' request.pathName=' + request.pathName);
 
     fs.readFile(path, (err: any, data: any) => {
         context.log('path=' + path);

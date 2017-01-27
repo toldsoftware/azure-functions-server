@@ -1,1 +1,0 @@
-{"version":3,"file":"azure-timer.js","sourceRoot":"","sources":["../../src-server/azure-timer.ts"],"names":[],"mappings":";AAEA,aAAoB,IAA4B;IAC5C,MAAM,CAAC,UAAC,OAAuB,EAAE,KAAc;QAC3C,IAAI,CAAC,OAAO,EAAE,KAAK,CAAC;aACf,IAAI,CAAC,cAAQ,CAAC,CAAC;aACf,KAAK,CAAC,UAAA,GAAG,IAAI,OAAA,OAAO,CAAC,KAAK,CAAC,GAAG,CAAC,EAAlB,CAAkB,CAAC,CAAC;IAC1C,CAAC,CAAC;AAEN,CAAC;AAPD,kBAOC"}

@@ -1,1 +1,2 @@
-export declare function runWebpack(functionDirs: string[]): void;
+export declare function runWebpackAzureFunction(functionDirsOrFiles: string[]): Promise<{}>;
+export declare function runWebpackClient(entrySourceFiles: string[]): Promise<{}>;
