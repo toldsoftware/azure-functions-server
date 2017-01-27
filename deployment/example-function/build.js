@@ -96,7 +96,7 @@ function main(context, request) {
     });
 }
 exports.main = main;
-//# sourceMappingURL=example-function.js.map
+
 
 /***/ }),
 
@@ -128,7 +128,7 @@ function serve(main) {
     };
 }
 exports.serve = serve;
-//# sourceMappingURL=azure-server.js.map
+
 
 /***/ }),
 

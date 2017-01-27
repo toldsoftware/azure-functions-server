@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Launch Program",
             "program": "${workspaceRoot}\\deployment\\test-main.js",
-            "cwd": "${workspaceRoot}\\deployment",
+            "cwd": "${workspaceRoot}",
             "outFiles": [],
             "sourceMaps": true
         },

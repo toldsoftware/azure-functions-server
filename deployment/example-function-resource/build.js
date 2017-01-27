@@ -110,7 +110,7 @@ function serve(main) {
     };
 }
 exports.serve = serve;
-//# sourceMappingURL=azure-server.js.map
+
 
 /***/ }),
 
@@ -189,7 +189,7 @@ function main(context, request) {
     });
 }
 exports.main = main;
-//# sourceMappingURL=example-function-resource.js.map
+
 
 /***/ }),
 

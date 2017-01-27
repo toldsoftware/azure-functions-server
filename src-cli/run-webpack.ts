@@ -30,6 +30,15 @@ export function runWebpackAzureFunction(functionDirsOrFiles: string[]) {
             node: {
                 __filename: false,
                 __dirname: false,
+            },
+            module: {
+                rules: [
+                    {
+                        test: /\.js$/,
+                        use: ['source-map-loader'],
+                        enforce: 'pre'
+                    }
+                ]
             }
         }, (err: any, stats: any) => {
             if (err) { console.error(err); reject(); return; }
@@ -68,7 +77,7 @@ export function runWebpackClient(entrySourceFiles: string[]) {
                         enforce: 'pre'
                     }
                 ]
-            }
+            },
             // resolve: {
             //     extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
             // },

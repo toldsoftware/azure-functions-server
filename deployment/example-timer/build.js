@@ -92,7 +92,7 @@ function tick(context, timer) {
     });
 }
 exports.tick = tick;
-//# sourceMappingURL=example-timer.js.map
+
 
 /***/ }),
 
@@ -118,7 +118,7 @@ function run(tick) {
     };
 }
 exports.run = run;
-//# sourceMappingURL=azure-timer.js.map
+
 
 /***/ }),
 

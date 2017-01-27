@@ -127,7 +127,7 @@ function serve(port) {
     }).listen(port);
 }
 exports.serve = serve;
-//# sourceMappingURL=test-main.js.map
+
 
 /***/ }),
 
@@ -232,7 +232,7 @@ function main(context, request) {
     });
 }
 exports.main = main;
-//# sourceMappingURL=example-function-resource.js.map
+
 
 /***/ }),
 
