@@ -78367,8 +78367,8 @@ exports.serve = serve;
 /***/ (function(module, exports, __webpack_require__) {
 
 var functions = [
-    {name: 'example-function-get-blob', main: __webpack_require__(118).main },
-	{name: 'default', main: __webpack_require__(117).main },
+    {name: 'default', main: __webpack_require__(117).main },
+	{name: 'example-function-get-blob', main: __webpack_require__(118).main },
 	{name: 'example-function-resource', main: __webpack_require__(52).main },
 	{name: 'example-function', main: __webpack_require__(119).main },
 	{name: 'example-timer-keep-alive', main: __webpack_require__(120).main },

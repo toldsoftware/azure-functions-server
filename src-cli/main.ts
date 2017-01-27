@@ -72,6 +72,8 @@ async function createDeployment() {
                             .filter(x => x.length > 0 && x.indexOf('.js') < 0)
                             .map(x => x.replace('./deployment/', ''));
 
+                        functionNames.sort();
+
                         let functions = functionNames
                             .map(x => `{name: '${x}', main: require('${'./../lib/src-server/' + x}').main }`)
                             .join(',\n\t');
