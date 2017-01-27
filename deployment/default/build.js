@@ -73,8 +73,8 @@
 
 "use strict";
 
-var tslib_1 = __webpack_require__(5);
-var R = __webpack_require__(33);
+var tslib_1 = __webpack_require__(13);
+var R = __webpack_require__(52);
 function main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         return tslib_1.__generator(this, function (_a) {
@@ -93,132 +93,7 @@ exports.main = main;
 
 /***/ }),
 
-/***/ 14:
-/***/ (function(module, exports) {
-
-module.exports = require("fs");
-
-/***/ }),
-
-/***/ 17:
-/***/ (function(module, exports) {
-
-module.exports = require("path");
-
-/***/ }),
-
-/***/ 18:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var tslib_1 = __webpack_require__(5);
-function serve(main) {
-    return function (context, request) {
-        var req = tslib_1.__assign({}, request);
-        req.pathName = req.pathName || context.bindingData.pathName || '';
-        req.pathParts = req.pathName.split('/').filter(function (x) { return x.length > 0; });
-        if (req.query.ping != null) {
-            context.done(null, {
-                status: 200,
-                headers: { 'Content-Type': 'text/plain' },
-                body: 'PONG',
-            });
-            return;
-        }
-        main(context, req)
-            .then(function () { })
-            .catch(function (err) {
-            context.log('Uncaught Error:', err);
-            context.done(err, null);
-        });
-    };
-}
-exports.serve = serve;
-
-
-/***/ }),
-
-/***/ 257:
-/***/ (function(module, exports, __webpack_require__) {
-
-// Intentionally global
-___export = __webpack_require__(18).serve(__webpack_require__(117).main);
-module.exports = ___export;
-
-/***/ }),
-
-/***/ 33:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var tslib_1 = __webpack_require__(5);
-var fs = __webpack_require__(14);
-var Path = __webpack_require__(17);
-function main(context, request) {
-    return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var filePath, path;
-        return tslib_1.__generator(this, function (_a) {
-            filePath = request.query.name || request.pathName.replace(/\/$/, '').replace(/\/(file)$/, '');
-            path = Path.resolve(__dirname, '..', 'resources', filePath);
-            context.log('filePath=' + filePath + ' path=' + path + ' __dirname=' + __dirname + ' request.query.name=' + request.query.name + ' request.pathName=' + request.pathName);
-            fs.readFile(path, function (err, data) {
-                context.log('path=' + path);
-                if (err != null) {
-                    context.log('ERROR: ' + err);
-                    context.done(null, {
-                        status: 404,
-                        headers: {
-                            'Content-Type': 'text/plain',
-                        },
-                        body: ('File Not Found: ' + filePath)
-                    });
-                    return;
-                }
-                var body = data;
-                var type = 'text/plain';
-                if (path.match('\.html$')) {
-                    type = 'text/html';
-                }
-                if (path.match('\.css$')) {
-                    type = 'text/css';
-                }
-                if (path.match('\.js$')) {
-                    type = 'application/x-javascript';
-                }
-                if (path.match('\.json$')) {
-                    type = 'application/json';
-                }
-                if (path.match('\.jpg$')) {
-                    type = 'image/jpeg';
-                }
-                if (path.match('\.png$')) {
-                    type = 'image/png';
-                }
-                if (path.match('\.gif$')) {
-                    type = 'image/gif';
-                }
-                if (path.match('\.ico$')) {
-                    type = 'image/x-icon';
-                }
-                context.done(null, {
-                    headers: {
-                        'Content-Type': type,
-                    },
-                    body: body
-                });
-            });
-            return [2 /*return*/];
-        });
-    });
-}
-exports.main = main;
-
-
-/***/ }),
-
-/***/ 5:
+/***/ 13:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -321,6 +196,131 @@ function __generator(thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+
+/***/ }),
+
+/***/ 15:
+/***/ (function(module, exports) {
+
+module.exports = require("fs");
+
+/***/ }),
+
+/***/ 25:
+/***/ (function(module, exports) {
+
+module.exports = require("path");
+
+/***/ }),
+
+/***/ 257:
+/***/ (function(module, exports, __webpack_require__) {
+
+// Intentionally global
+___export = __webpack_require__(40).serve(__webpack_require__(117).main);
+module.exports = ___export;
+
+/***/ }),
+
+/***/ 40:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var tslib_1 = __webpack_require__(13);
+function serve(main) {
+    return function (context, request) {
+        var req = tslib_1.__assign({}, request);
+        req.pathName = req.pathName || context.bindingData.pathName || '';
+        req.pathParts = req.pathName.split('/').filter(function (x) { return x.length > 0; });
+        if (req.query.ping != null) {
+            context.done(null, {
+                status: 200,
+                headers: { 'Content-Type': 'text/plain' },
+                body: 'PONG',
+            });
+            return;
+        }
+        main(context, req)
+            .then(function () { })
+            .catch(function (err) {
+            context.log('Uncaught Error:', err);
+            context.done(err, null);
+        });
+    };
+}
+exports.serve = serve;
+
+
+/***/ }),
+
+/***/ 52:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var tslib_1 = __webpack_require__(13);
+var fs = __webpack_require__(15);
+var Path = __webpack_require__(25);
+function main(context, request) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+        var filePath, path;
+        return tslib_1.__generator(this, function (_a) {
+            filePath = request.query.name || request.pathName.replace(/\/$/, '').replace(/\/(file)$/, '');
+            path = Path.resolve(__dirname, '..', 'resources', filePath.replace(/^\//, ''));
+            context.log('filePath=' + filePath + ' path=' + path + ' __dirname=' + __dirname + ' request.query.name=' + request.query.name + ' request.pathName=' + request.pathName);
+            fs.readFile(path, function (err, data) {
+                context.log('path=' + path);
+                if (err != null) {
+                    context.log('ERROR: ' + err);
+                    context.done(null, {
+                        status: 404,
+                        headers: {
+                            'Content-Type': 'text/plain',
+                        },
+                        body: ('File Not Found: ' + filePath)
+                    });
+                    return;
+                }
+                var body = data;
+                var type = 'text/plain';
+                if (path.match('\.html$')) {
+                    type = 'text/html';
+                }
+                if (path.match('\.css$')) {
+                    type = 'text/css';
+                }
+                if (path.match('\.js$')) {
+                    type = 'application/x-javascript';
+                }
+                if (path.match('\.json$')) {
+                    type = 'application/json';
+                }
+                if (path.match('\.jpg$')) {
+                    type = 'image/jpeg';
+                }
+                if (path.match('\.png$')) {
+                    type = 'image/png';
+                }
+                if (path.match('\.gif$')) {
+                    type = 'image/gif';
+                }
+                if (path.match('\.ico$')) {
+                    type = 'image/x-icon';
+                }
+                context.done(null, {
+                    headers: {
+                        'Content-Type': type,
+                    },
+                    body: body
+                });
+            });
+            return [2 /*return*/];
+        });
+    });
+}
+exports.main = main;
+
 
 /***/ })
 

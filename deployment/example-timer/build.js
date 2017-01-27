@@ -68,12 +68,29 @@
 /************************************************************************/
 /******/ ({
 
+/***/ 116:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function run(tick) {
+    return function (context, timer) {
+        tick(context, timer)
+            .then(function () { })
+            .catch(function (err) { return console.error(err); });
+    };
+}
+exports.run = run;
+
+
+/***/ }),
+
 /***/ 121:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var tslib_1 = __webpack_require__(5);
+var tslib_1 = __webpack_require__(13);
 // https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer
 // {second} {minute} {hour} {day} {month} {day of the week}
 // schedule: 0 0 0 * * *
@@ -96,33 +113,7 @@ exports.tick = tick;
 
 /***/ }),
 
-/***/ 262:
-/***/ (function(module, exports, __webpack_require__) {
-
-// Intentionally global
-___export = __webpack_require__(42).run(__webpack_require__(121).tick);
-module.exports = ___export;
-
-/***/ }),
-
-/***/ 42:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-function run(tick) {
-    return function (context, timer) {
-        tick(context, timer)
-            .then(function () { })
-            .catch(function (err) { return console.error(err); });
-    };
-}
-exports.run = run;
-
-
-/***/ }),
-
-/***/ 5:
+/***/ 13:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -225,6 +216,15 @@ function __generator(thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+
+/***/ }),
+
+/***/ 262:
+/***/ (function(module, exports, __webpack_require__) {
+
+// Intentionally global
+___export = __webpack_require__(116).run(__webpack_require__(121).tick);
+module.exports = ___export;
 
 /***/ })
 

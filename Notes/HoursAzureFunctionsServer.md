@@ -25,7 +25,8 @@
 
 # 2017-01-27
 
-## 7:30-
+## 7:30-12:00
+## 12:30-15:20
 
 - Add Client Webpack
 - Add Source Maps to Webpack

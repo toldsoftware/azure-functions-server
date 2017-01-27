@@ -11,7 +11,7 @@ export async function main(context: T.Context<ExampleFunctionResponseData>, requ
     context.done(null, {
         headers: {
             'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/javascript',
+            'Content-Type': 'application/json',
             'X-Told-Test-Header': 'test-header',
         },
         body: {

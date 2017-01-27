@@ -8,7 +8,7 @@ export async function main(context: T.RawContext, request: T.Request<{ name: str
     // BUG: File extensions are not supported
     // Workaround is to add an /file at the end, so need to remove that here
     let filePath = request.query.name || request.pathName.replace(/\/$/, '').replace(/\/(file)$/, '');
-    let path = Path.resolve(__dirname, '..', 'resources', filePath);
+    let path = Path.resolve(__dirname, '..', 'resources', filePath.replace(/^\//, ''));
 
     context.log('filePath=' + filePath + ' path=' + path + ' __dirname=' + __dirname + ' request.query.name=' + request.query.name + ' request.pathName=' + request.pathName);
 

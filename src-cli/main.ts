@@ -30,7 +30,7 @@ function keepAlive() {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {
         isRunning = false;
-    }, 5000);
+    }, 30000);
 }
 
 function waitUntilReady() {
@@ -55,16 +55,54 @@ async function createDeployment() {
 
         let pending = 0;
         let ready = () => {
-            (async () => {
-                keepAlive();
-                pending--;
-                if (pending > 0) {
-                    // console.log('Webpack Not Ready:', webpackPending, functionDirs);
-                    return;
-                }
+            keepAlive();
+            pending--;
+            if (pending > 0) {
+                // console.log('Webpack Not Ready:', webpackPending, functionDirs);
+                return;
+            }
 
-                // console.log('Webpack Ready:', webpackPending, functionDirs);
-                // Wait a sec
+            (async () => {
+                // Create Test Main
+                await new Promise((resolve, reject) => {
+                    console.log('Create Test Main');
+                    try {
+                        // Function Runner
+                        let functionNames = functionDirsOrFiles
+                            .filter(x => x.length > 0 && x.indexOf('.js') < 0)
+                            .map(x => x.replace('./deployment/', ''));
+
+                        let functions = functionNames
+                            .map(x => `{name: '${x}', main: require('${'./../lib/src-server/' + x}').main }`)
+                            .join(',\n\t');
+
+                        console.log('Create Test Main');
+                        fs.createReadStream(getBoilerplatePath('/resources/test-main-RESOURCES/test-main.js'))
+                            .on('end', () => resolve())
+                            .pipe(replaceStream(afsLibPath, targetAfsLibPath.replace('./../../lib', './../lib')))
+                            .pipe(replaceStream('FUNCTION_MODULES', functions))
+                            .pipe(fs.createWriteStream('./deployment/test-main.source.js'));
+
+                        functionDirsOrFiles.push('./deployment/test-main.source.js');
+
+                        // Index
+                        let functionsLinks = functionNames
+                            .map(x => `<a href='/${x}'>${x}</a><br>`)
+                            .join('\n\t');
+
+                        console.log('Create Test Main index.html');
+                        fs.createReadStream(getBoilerplatePath('/resources/test-main-RESOURCES/index.html'))
+                            .on('end', () => resolve())
+                            .pipe(replaceStream('FUNCTION_LINKS', functionsLinks))
+                            .pipe(fs.createWriteStream('./deployment/resources/test-main.html'));
+                    } catch (err) {
+                        console.error(err);
+                        resolve();
+                    }
+                });
+
+                // Wabpack
+                console.log('Webpack');
                 await runWebpackAzureFunction(functionDirsOrFiles);
                 await runWebpackClient(entrySourceFiles);
             })().then();
@@ -123,17 +161,6 @@ async function createDeployment() {
         } catch (err) {
             console.log('LOCAL RUN');
             targetAfsLibPath = './../../lib';
-        }
-
-        // Create Test Main
-        try {
-            console.log('Create Test Main');
-            fs.createReadStream(getBoilerplatePath('/resources/test-main-RESOURCES/test-main.js'))
-                .pipe(replaceStream(afsLibPath, targetAfsLibPath.replace('./../../lib', './../lib')))
-                .pipe(fs.createWriteStream('./deployment/test-main.source.js'));
-            functionDirsOrFiles.push('./deployment/test-main.source.js');
-        } catch (err) {
-            console.error(err);
         }
 
         // TEST
@@ -297,13 +324,14 @@ function runWhenReady() {
 
     clearInterval(timerId);
     timerId = setInterval(() => {
-        console.log('.nr.');
         if (!isRunning) {
+            clearInterval(timerId);
             console.log('---');
             createDeployment().then();
-            clearInterval(timerId);
+        } else {
+            console.log('.nr.');
         }
-    }, 500);
+    }, 5000);
 }
 
 if (process.argv.filter(x => x === '-w').length > 0) {
