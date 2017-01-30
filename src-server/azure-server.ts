@@ -1,4 +1,12 @@
+import * as path from 'path';
+
 import * as T from './../src';
+import { dir } from './../src/root-dir';
+
+export function setDirName(dirName: string) {
+    dir.rootDir = path.resolve(dirName, '..');
+    return this;
+}
 
 export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery, TBody>): T.MainEntryPoint_Sync<TData, TQuery, TBody> {
     return (context: T.Context<TData>, request: T.Request<TQuery, TBody>) => {

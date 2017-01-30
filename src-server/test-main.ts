@@ -1,16 +1,23 @@
 import * as http from 'http';
 import * as url from 'url';
 import * as querystring from 'querystring';
+import * as path from 'path';
 
 import * as T from './../src';
-import { main as resourceMain } from './example-function-resource';
+import { main as resourceMain } from './resource';
+import { dir } from './../src/root-dir';
+
+export function setDirName(dirName: string) {
+    dir.rootDir = path.resolve(dirName, '..');
+    return this;
+}
 
 export function serve<T, TQuery, TBody>(functions: { name: string, main: T.MainEntryPoint<any, any, any> }[], port = 8765) {
     console.log('Server Started at http://localhost:' + port);
 
     http.createServer((req: any, res: any) => {
 
-        console.log('__dirname=', __dirname);
+        console.log('rootDir=', dir.rootDir, '__dirname=', __dirname);
 
         let uri = url.parse(req.url);
         let query = querystring.parse(uri.query);

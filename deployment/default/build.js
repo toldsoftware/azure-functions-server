@@ -63,18 +63,18 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 257);
+/******/ 	return __webpack_require__(__webpack_require__.s = 259);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 117:
+/***/ 119:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var tslib_1 = __webpack_require__(13);
-var R = __webpack_require__(52);
+var R = __webpack_require__(53);
 function main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         return tslib_1.__generator(this, function (_a) {
@@ -82,7 +82,7 @@ function main(context, request) {
                 case 0:
                     // Serve index.html as the default file
                     request.query.name = 'index.html';
-                    return [4 /*yield*/, R.main(context, request)];
+                    return [4 /*yield*/, R.main(context, request, 0)];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
@@ -202,32 +202,49 @@ function __generator(thisArg, body) {
 /***/ 15:
 /***/ (function(module, exports) {
 
-module.exports = require("fs");
-
-/***/ }),
-
-/***/ 25:
-/***/ (function(module, exports) {
-
 module.exports = require("path");
 
 /***/ }),
 
-/***/ 257:
+/***/ 16:
+/***/ (function(module, exports) {
+
+module.exports = require("fs");
+
+/***/ }),
+
+/***/ 259:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Intentionally global
-___export = __webpack_require__(40).serve(__webpack_require__(117).main);
+___export = __webpack_require__(41).setDirName(__dirname).serve(__webpack_require__(119).main);
 module.exports = ___export;
 
 /***/ }),
 
-/***/ 40:
+/***/ 32:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.dir = { rootDir: '' };
+
+
+/***/ }),
+
+/***/ 41:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var tslib_1 = __webpack_require__(13);
+var path = __webpack_require__(15);
+var root_dir_1 = __webpack_require__(32);
+function setDirName(dirName) {
+    root_dir_1.dir.rootDir = path.resolve(dirName, '..');
+    return this;
+}
+exports.setDirName = setDirName;
 function serve(main) {
     return function (context, request) {
         var req = tslib_1.__assign({}, request);
@@ -264,20 +281,27 @@ exports.serve = serve;
 
 /***/ }),
 
-/***/ 52:
+/***/ 53:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var tslib_1 = __webpack_require__(13);
-var fs = __webpack_require__(15);
-var Path = __webpack_require__(25);
-function main(context, request) {
+var fs = __webpack_require__(16);
+var Path = __webpack_require__(15);
+var resolve_url_1 = __webpack_require__(74);
+var root_dir_1 = __webpack_require__(32);
+function main(context, request, pathDepthFromApiRoot) {
+    if (pathDepthFromApiRoot === void 0) { pathDepthFromApiRoot = 1; }
     return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var filePath, path;
+        var pathOrig, filePath, path;
         return tslib_1.__generator(this, function (_a) {
-            filePath = request.query.name || request.pathName.replace(/\/$/, '').replace(/\/(file)$/, '');
-            path = Path.resolve(__dirname, '..', 'resources', filePath.replace(/^\//, ''));
+            pathOrig = request.query.name || request.pathName;
+            filePath = pathOrig
+                .replace(/\/$/, '')
+                .replace(/\/(file)$/, '')
+                .replace(/\/([^\/]+\.js\.map)$/, '.map');
+            path = Path.resolve(root_dir_1.dir.rootDir, resolve_url_1.getPathDepthPrefix(pathDepthFromApiRoot - 1), 'resources', filePath.replace(/^\//, ''));
             context.log('filePath=' + filePath + ' path=' + path + ' __dirname=' + __dirname + ' request.query.name=' + request.query.name + ' request.pathName=' + request.pathName);
             fs.readFile(path, function (err, data) {
                 context.log('path=' + path);
@@ -292,7 +316,6 @@ function main(context, request) {
                     });
                     return;
                 }
-                var body = data;
                 var type = 'text/plain';
                 if (path.match('\.html$')) {
                     type = 'text/html';
@@ -318,6 +341,12 @@ function main(context, request) {
                 if (path.match('\.ico$')) {
                     type = 'image/x-icon';
                 }
+                // Auto Resolve Resource Urls?
+                var body = data;
+                if (type === 'text/html') {
+                    body = data.toString();
+                    body = resolve_url_1.resolveAllUrls(body, pathDepthFromApiRoot);
+                }
                 context.done(null, {
                     headers: {
                         'Content-Type': type,
@@ -330,6 +359,60 @@ function main(context, request) {
     });
 }
 exports.main = main;
+
+
+/***/ }),
+
+/***/ 74:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function resolveUrlClient(url) {
+    if (url.indexOf('./') !== 0) {
+        return url;
+    }
+    var pathname = window.location.pathname;
+    var prefix = '/';
+    if (pathname.match(/^\/api\//)) {
+        prefix = '/api/';
+    }
+    return resolveUrl_inner(url, prefix);
+}
+exports.resolveUrlClient = resolveUrlClient;
+function resolveUrl(url, pathDepthFromApiRoot) {
+    if (pathDepthFromApiRoot === void 0) { pathDepthFromApiRoot = 1; }
+    if (url.indexOf('./') !== 0) {
+        return url;
+    }
+    var depthPrefix = getPathDepthPrefix(pathDepthFromApiRoot);
+    return resolveUrl_inner(url, depthPrefix);
+}
+exports.resolveUrl = resolveUrl;
+function resolveUrl_inner(url, prefix) {
+    url = url.substr(2);
+    // If file extension, make file
+    if (url.match(/[^/]\.[^/]+$/)) {
+        return prefix + "resource/" + url + "/file";
+    }
+    else {
+        return "" + prefix + url + "?q";
+    }
+}
+function resolveAllUrls(content, pathDepthFromApiRoot) {
+    return content
+        .replace(/"(\.\/[^"]+)"/g, function (x) { return '"' + resolveUrl(x.substr(1, x.length - 2), pathDepthFromApiRoot) + '"'; })
+        .replace(/'(\.\/[^']+)'/g, function (x) { return '\'' + resolveUrl(x.substr(1, x.length - 2), pathDepthFromApiRoot) + '\''; });
+}
+exports.resolveAllUrls = resolveAllUrls;
+function getPathDepthPrefix(pathDepthFromApiRoot) {
+    var depthPrefix = '';
+    for (var i = 0; i < pathDepthFromApiRoot; i++) {
+        depthPrefix += '../';
+    }
+    return depthPrefix;
+}
+exports.getPathDepthPrefix = getPathDepthPrefix;
 
 
 /***/ })

@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as process from 'process';
 import * as rimraf from 'rimraf';
 import { ncp } from 'ncp';
 import * as replaceStream from 'replacestream';
@@ -50,6 +51,9 @@ async function createDeployment() {
     keepAlive();
     try {
 
+        let isProduction = process.argv.some(x => x.match(/--prod/) != null);
+        let isClient = process.argv.some(x => x.match(/--client/) != null);
+
         let functionDirsOrFiles: string[] = [];
         let entrySourceFiles: string[] = [];
 
@@ -80,7 +84,7 @@ async function createDeployment() {
 
                         console.log('Create Test Main');
                         fs.mkdirSync('deployment/test-main');
-                        
+
                         fs.createReadStream(getBoilerplatePath('/resources/test-main-RESOURCES/test-main.js'))
                             .on('end', () => resolve())
                             .pipe(replaceStream(afsLibPath, targetAfsLibPath))
@@ -105,10 +109,15 @@ async function createDeployment() {
                     }
                 });
 
-                // Wabpack
-                console.log('Webpack');
-                await runWebpackClient(entrySourceFiles);
-                await runWebpackAzureFunction(functionDirsOrFiles);
+                if (isProduction || isClient) {
+                    // Wabpack
+                    console.log('Webpack');
+                    await runWebpackClient(entrySourceFiles);
+                    if (isProduction) {
+                        await runWebpackAzureFunction(functionDirsOrFiles);
+                    }
+                }
+                console.log('DONE');
             })().then();
         };
 
@@ -335,7 +344,7 @@ function runWhenReady() {
         } else {
             console.log('.nr.');
         }
-    }, 5000);
+    }, 1000);
 }
 
 if (process.argv.filter(x => x === '-w').length > 0) {

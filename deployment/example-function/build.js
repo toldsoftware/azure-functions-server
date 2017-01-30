@@ -63,12 +63,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 260);
+/******/ 	return __webpack_require__(__webpack_require__.s = 261);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 119:
+/***/ 121:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -206,21 +206,45 @@ function __generator(thisArg, body) {
 
 /***/ }),
 
-/***/ 260:
+/***/ 15:
+/***/ (function(module, exports) {
+
+module.exports = require("path");
+
+/***/ }),
+
+/***/ 261:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Intentionally global
-___export = __webpack_require__(40).serve(__webpack_require__(119).main);
+___export = __webpack_require__(41).setDirName(__dirname).serve(__webpack_require__(121).main);
 module.exports = ___export;
 
 /***/ }),
 
-/***/ 40:
+/***/ 32:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.dir = { rootDir: '' };
+
+
+/***/ }),
+
+/***/ 41:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var tslib_1 = __webpack_require__(13);
+var path = __webpack_require__(15);
+var root_dir_1 = __webpack_require__(32);
+function setDirName(dirName) {
+    root_dir_1.dir.rootDir = path.resolve(dirName, '..');
+    return this;
+}
+exports.setDirName = setDirName;
 function serve(main) {
     return function (context, request) {
         var req = tslib_1.__assign({}, request);

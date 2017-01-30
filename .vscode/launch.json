@@ -3,23 +3,27 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "node2",
-            "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceRoot}\\deployment\\test-main\\test-main.js",
-            "cwd": "${workspaceRoot}",
-            "outFiles": [],
-            "sourceMaps": true
-        },
-        {
-            "type": "node",
-            "request": "attach",
-            "name": "Attach to Process",
-            "port": 3456,
-            "outFiles": [],
-            "sourceMaps": true
+    "configurations": [{
+        "type": "node2",
+        "request": "launch",
+        "name": "Launch Dev",
+        "program": "${workspaceRoot}\\deployment\\test-main\\test-main.source.js",
+        "cwd": "${workspaceRoot}",
+        "outFiles": [],
+        "sourceMaps": true,
+        "env": {
+            "AZURE_STORAGE_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=toldazureblobaccesstest;AccountKey=q3VWlWlZuxvkcAAQidQvbrzbBLIQyUNg0aQCjEuJGEoQzraUgEHgk1QGt3Ir8SlzJTpQQkbfqdGGrRiCEDzcYQ==;"
         }
-    ]
+    }, {
+        "type": "node2",
+        "request": "launch",
+        "name": "Launch Prod",
+        "program": "${workspaceRoot}\\deployment\\test-main\\test-main.js",
+        "cwd": "${workspaceRoot}",
+        "outFiles": [],
+        "sourceMaps": true,
+        "env": {
+            "AZURE_STORAGE_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=toldazureblobaccesstest;AccountKey=q3VWlWlZuxvkcAAQidQvbrzbBLIQyUNg0aQCjEuJGEoQzraUgEHgk1QGt3Ir8SlzJTpQQkbfqdGGrRiCEDzcYQ==;"
+        }
+    }]
 }

@@ -26,7 +26,6 @@
   },
   "homepage": "https://github.com/toldsoftware/azure-functions-server#readme",
   "devDependencies": {
-    "@told/platform": "^1.0.2",
     "@types/jasmine": "^2.5.35",
     "coveralls": "^2.11.15",
     "jasmine-core": "^2.4.1",
@@ -39,6 +38,7 @@
     "node-uuid": "^1.4.7"
   },
   "dependencies": {
+    "@told/platform": "^1.1.0",
     "@types/ncp": "^2.0.0",
     "@types/node": "^6.0.62",
     "@types/node-uuid": "0.0.28",
