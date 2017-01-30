@@ -3,15 +3,21 @@ import { Platform } from '@told/platform/lib/src';
 let http = Platform.http();
 
 async function GetJsonData(url: string) {
+    let div = document.createElement('div');
+    document.body.appendChild(div);
+    div.innerHTML = 'LOADING';
+
     try {
         let r = await http.request<{ value: boolean }>(url);
+
+
         if (r.data.value === true) {
-            document.body.appendChild(document.createTextNode('\n<br>Json Request SUCCESS url=' + url));
+            div.innerHTML = '\n<br>Json Request SUCCESS url=' + url;
         } else {
-            document.body.appendChild(document.createTextNode('\n<br>Json Request FAILED url=' + url));
+            div.innerHTML = '\n<br>Json Request FAILED url=' + url;
         }
     } catch (err) {
-        document.body.appendChild(document.createTextNode('\n<br>Json Request ERROR url=' + url + ' err=' + err));
+        div.innerHTML = '\n<br>Json Request ERROR url=' + url + ' err=' + err;
     }
 }
 
