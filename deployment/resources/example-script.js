@@ -104,39 +104,55 @@ exports.Platform = Platform;
 var tslib_1 = __webpack_require__(10);
 var src_1 = __webpack_require__(0);
 var http = src_1.Platform.http();
-function setup() {
-    var _this = this;
-    (function () { return tslib_1.__awaiter(_this, void 0, void 0, function () {
-        var r;
+function GetJsonData(url) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+        var r, err_1;
         return tslib_1.__generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, http.request('./data/data.json')];
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, http.request(url)];
                 case 1:
                     r = _a.sent();
                     if (r.data.value === true) {
-                        document.body.appendChild(document.createTextNode('Json Request SUCCESS'));
+                        document.body.appendChild(document.createTextNode('Json Request SUCCESS url=' + url));
                     }
                     else {
-                        document.body.appendChild(document.createTextNode('Json Request FAILED'));
+                        document.body.appendChild(document.createTextNode('Json Request FAILED url=' + url));
                     }
-                    return [4 /*yield*/, http.request('./data/data.json.txt')];
+                    return [3 /*break*/, 3];
                 case 2:
-                    r = _a.sent();
-                    if (r.data.value === true) {
-                        document.body.appendChild(document.createTextNode('Json Request SUCCESS'));
-                    }
-                    else {
-                        document.body.appendChild(document.createTextNode('Json Request FAILED'));
-                    }
-                    return [4 /*yield*/, http.request('./data/example-data.json')];
+                    err_1 = _a.sent();
+                    document.body.appendChild(document.createTextNode('Json Request ERROR url=' + url + ' err=' + err_1));
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+function setup() {
+    var _this = this;
+    (function () { return tslib_1.__awaiter(_this, void 0, void 0, function () {
+        return tslib_1.__generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, GetJsonData('./data/data.json')];
+                case 1:
+                    _a.sent();
+                    return [4 /*yield*/, GetJsonData('./data/data.json.txt')];
+                case 2:
+                    _a.sent();
+                    return [4 /*yield*/, GetJsonData('./data/example-data.json')];
                 case 3:
-                    r = _a.sent();
-                    if (r.data.value === true) {
-                        document.body.appendChild(document.createTextNode('Json Request SUCCESS'));
-                    }
-                    else {
-                        document.body.appendChild(document.createTextNode('Json Request FAILED'));
-                    }
+                    _a.sent();
+                    return [4 /*yield*/, GetJsonData('./data2/data.json')];
+                case 4:
+                    _a.sent();
+                    return [4 /*yield*/, GetJsonData('./data2/data.json.txt')];
+                case 5:
+                    _a.sent();
+                    return [4 /*yield*/, GetJsonData('./data2/example-data.json')];
+                case 6:
+                    _a.sent();
                     return [2 /*return*/];
             }
         });
