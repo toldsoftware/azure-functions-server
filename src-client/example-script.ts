@@ -6,12 +6,12 @@ async function GetJsonData(url: string) {
     try {
         let r = await http.request<{ value: boolean }>(url);
         if (r.data.value === true) {
-            document.body.appendChild(document.createTextNode('Json Request SUCCESS url=' + url));
+            document.body.appendChild(document.createTextNode('\n<br>Json Request SUCCESS url=' + url));
         } else {
-            document.body.appendChild(document.createTextNode('Json Request FAILED url=' + url));
+            document.body.appendChild(document.createTextNode('\n<br>Json Request FAILED url=' + url));
         }
     } catch (err) {
-        document.body.appendChild(document.createTextNode('Json Request ERROR url=' + url + ' err=' + err));
+        document.body.appendChild(document.createTextNode('\n<br>Json Request ERROR url=' + url + ' err=' + err));
     }
 }
 

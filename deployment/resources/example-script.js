@@ -115,15 +115,15 @@ function GetJsonData(url) {
                 case 1:
                     r = _a.sent();
                     if (r.data.value === true) {
-                        document.body.appendChild(document.createTextNode('Json Request SUCCESS url=' + url));
+                        document.body.appendChild(document.createTextNode('\n<br>Json Request SUCCESS url=' + url));
                     }
                     else {
-                        document.body.appendChild(document.createTextNode('Json Request FAILED url=' + url));
+                        document.body.appendChild(document.createTextNode('\n<br>Json Request FAILED url=' + url));
                     }
                     return [3 /*break*/, 3];
                 case 2:
                     err_1 = _a.sent();
-                    document.body.appendChild(document.createTextNode('Json Request ERROR url=' + url + ' err=' + err_1));
+                    document.body.appendChild(document.createTextNode('\n<br>Json Request ERROR url=' + url + ' err=' + err_1));
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
