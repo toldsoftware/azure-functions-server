@@ -62,6 +62,7 @@ export async function main(context: T.RawContext, request: T.Request<{ name: str
         // Prevent Json Curroption
         if (type === 'application/json') {
             body = data.toString();
+            body = JSON.parse(body);
         }
 
         context.done(null, {
