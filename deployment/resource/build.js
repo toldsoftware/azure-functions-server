@@ -322,16 +322,18 @@ function main(context, request, pathDepthFromApiRoot) {
                     body = data.toString();
                     body = resolve_url_1.resolveAllUrls(body, pathDepthFromApiRoot);
                 }
-                // Prevent Json Curroption
-                if (type === 'application/json') {
-                    body = data.toString();
-                    body = JSON.parse(body);
-                }
+                // // Prevent Json Curroption
+                // if (type === 'application/json') {
+                //     body = data.toString();
+                //     body = JSON.parse(body);
+                // }
                 context.done(null, {
                     headers: {
                         'Content-Type': type,
                     },
-                    body: body
+                    body: body,
+                    // Bypass response handling
+                    isRaw: true
                 });
             });
             return [2 /*return*/];
