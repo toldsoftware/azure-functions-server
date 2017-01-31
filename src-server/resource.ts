@@ -59,6 +59,11 @@ export async function main(context: T.RawContext, request: T.Request<{ name: str
             body = resolveAllUrls(body, pathDepthFromApiRoot);
         }
 
+        // Prevent Json Curroption
+        if (type === 'application/json') {
+            body = data.toString();
+        }
+
         context.done(null, {
             headers: {
                 'Content-Type': type,

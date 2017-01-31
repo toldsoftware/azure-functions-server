@@ -347,6 +347,10 @@ function main(context, request, pathDepthFromApiRoot) {
                     body = data.toString();
                     body = resolve_url_1.resolveAllUrls(body, pathDepthFromApiRoot);
                 }
+                // Prevent Json Curroption
+                if (type === 'application/json') {
+                    body = data.toString();
+                }
                 context.done(null, {
                     headers: {
                         'Content-Type': type,
