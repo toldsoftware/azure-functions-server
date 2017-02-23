@@ -371,11 +371,14 @@ function ___serve(main) {
         }
         if (DEBUG) {
             var contextInner_1 = context;
-            context = Object.create(context, {
-                done: function (err, response) {
-                    ___call(contextInner_1.done, 'done', contextInner_1, arguments);
+            context = {
+                done: function () {
+                    return ___call(contextInner_1.done, 'done', contextInner_1, arguments);
+                },
+                log: function () {
+                    return ___call(contextInner_1.log, 'log', contextInner_1, arguments);
                 }
-            });
+            };
         }
         main(context, req)
             .then(function () {

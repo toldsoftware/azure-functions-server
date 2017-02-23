@@ -46,11 +46,14 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
 
         if (DEBUG) {
             const contextInner = context;
-            context = Object.create(context, {
-                done(err: any, response: any) {
-                    ___call(contextInner.done, 'done', contextInner, arguments);
+            context = {
+                done() {
+                    return ___call(contextInner.done, 'done', contextInner, arguments);
+                },
+                log() {
+                    return ___call(contextInner.log, 'log', contextInner, arguments);
                 }
-            });
+            };
         }
 
         main(context, req)
