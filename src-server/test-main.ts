@@ -8,9 +8,9 @@ import { main as resourceMain } from './resource';
 import { dir } from './../src/root-dir';
 
 import { _printCallTree } from '../src-cli/injectors/call-tree';
-import { injectPromiseWrapper } from '../src-cli/injectors/promise-wrapper';
+import { _injectPromiseWrapper } from '../src-cli/injectors/promise-wrapper';
 declare var ___callTree: any;
-injectPromiseWrapper();
+_injectPromiseWrapper();
 
 export function setDirName(dirName: string) {
     dir.rootDir = path.resolve(dirName, '..');

@@ -123,8 +123,8 @@ function ___stringifySafe(obj) {
 
 "use strict";
 
-function run(){ return ___call(___run,'run',this,arguments); }
-function ___run(tick) {
+function run(){ return ___call(_f_run,'run',this,arguments); }
+function _f_run(tick) {
     return function (context, timer) {
         tick(context, timer)
             .then(function () { })
@@ -145,8 +145,8 @@ var tslib_1 = __webpack_require__(13);
 var http = __webpack_require__(20);
 var https = __webpack_require__(30);
 // schedule: 0 0 0 * * *
-function tick(){ return ___call(___tick,'tick',this,arguments); }
-function ___tick(context, timer) {
+function tick(){ return ___call(_f_tick,'tick',this,arguments); }
+function _f_tick(context, timer) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         var urls, doneCount, callDone, _loop_1, _i, urls_1, x, timeStamp;
         return tslib_1.__generator(this, function (_a) {

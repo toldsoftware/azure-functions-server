@@ -12,4 +12,4 @@ export declare class PromiseWrapper<T> {
     then(resolve: (result: T) => void, reject: (err: any) => void): this;
     catch(reject: (err: any) => void): this;
 }
-export declare function injectPromiseWrapper(): void;
+export declare function _injectPromiseWrapper(): void;

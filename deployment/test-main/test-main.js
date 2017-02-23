@@ -7901,8 +7901,8 @@ function onEndNT(self) {
   self.end();
 }
 
-function forEach(){ return ___call(___forEach,'forEach',this,arguments); }
-function ___forEach(xs, f) {
+function forEach(){ return ___call(_f_forEach,'forEach',this,arguments); }
+function _f_forEach(xs, f) {
   for (var i = 0, l = xs.length; i < l; i++) {
     f(xs[i], i);
   }
@@ -8535,15 +8535,14 @@ var PromiseWrapper = (function () {
     return PromiseWrapper;
 }());
 exports.PromiseWrapper = PromiseWrapper;
-function injectPromiseWrapper(){ return ___call(___injectPromiseWrapper,'injectPromiseWrapper',this,arguments); }
-function ___injectPromiseWrapper() {
+function _injectPromiseWrapper() {
     if (typeof global === 'undefined') {
         global = window;
     }
     var originalPromise = global.Promise;
     global.Promise = PromiseWrapper;
 }
-exports.injectPromiseWrapper = injectPromiseWrapper;
+exports._injectPromiseWrapper = _injectPromiseWrapper;
 // Replace Original Promise
 // Promise['constructor'] = PromiseWrapper['constructor'];
 // export const PromiseWrapper;
@@ -10963,7 +10962,8 @@ exports.parseRequest = function (req, options) {
 };
 
 
-exports.now = function (localtimeOffsetMsec) {
+exports.now = function(){ return ___call(_f_now,'now',this,arguments); }
+function _f_now(localtimeOffsetMsec) {
 
     return Sntp.now() + (localtimeOffsetMsec || 0);
 };
@@ -12027,7 +12027,8 @@ exports.uniqueFilename = function (path, extension) {
 };
 
 
-exports.stringify = function () {
+exports.stringify = function(){ return ___call(_f_stringify,'stringify',this,arguments); }
+function _f_stringify() {
 
     try {
         return JSON.stringify.apply(null, arguments);
@@ -13294,8 +13295,8 @@ var fs = __webpack_require__(16);
 var Path = __webpack_require__(14);
 var resolve_url_1 = __webpack_require__(76);
 var root_dir_1 = __webpack_require__(29);
-function main(){ return ___call(___main,'main',this,arguments); }
-function ___main(context, request, pathDepthFromApiRoot) {
+function main(){ return ___call(_f_main,'main',this,arguments); }
+function _f_main(context, request, pathDepthFromApiRoot) {
     if (pathDepthFromApiRoot === void 0) { pathDepthFromApiRoot = 1; }
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         var pathOrig, filePath, path;
@@ -18195,8 +18196,7 @@ function cswap(p, q, b) {
   }
 }
 
-function pack(){ return ___call(___pack,'pack',this,arguments); }
-function ___pack(r, p) {
+function pack(r, p) {
   var tx = gf(), ty = gf(), zi = gf();
   inv25519(zi, p[2]);
   M(tx, p[0], zi);
@@ -18736,8 +18736,8 @@ module.exports = require("net");
 
 "use strict";
 
-function resolveUrlClient(){ return ___call(___resolveUrlClient,'resolveUrlClient',this,arguments); }
-function ___resolveUrlClient(url) {
+function resolveUrlClient(){ return ___call(_f_resolveUrlClient,'resolveUrlClient',this,arguments); }
+function _f_resolveUrlClient(url) {
     if (url.indexOf('./') !== 0) {
         return url;
     }
@@ -18749,8 +18749,8 @@ function ___resolveUrlClient(url) {
     return resolveUrl_inner(url, prefix);
 }
 exports.resolveUrlClient = resolveUrlClient;
-function resolveUrl(){ return ___call(___resolveUrl,'resolveUrl',this,arguments); }
-function ___resolveUrl(url, pathDepthFromApiRoot) {
+function resolveUrl(){ return ___call(_f_resolveUrl,'resolveUrl',this,arguments); }
+function _f_resolveUrl(url, pathDepthFromApiRoot) {
     if (pathDepthFromApiRoot === void 0) { pathDepthFromApiRoot = 1; }
     if (url.indexOf('./') !== 0) {
         return url;
@@ -18759,8 +18759,8 @@ function ___resolveUrl(url, pathDepthFromApiRoot) {
     return resolveUrl_inner(url, depthPrefix);
 }
 exports.resolveUrl = resolveUrl;
-function resolveUrl_inner(){ return ___call(___resolveUrl_inner,'resolveUrl_inner',this,arguments); }
-function ___resolveUrl_inner(url, prefix) {
+function resolveUrl_inner(){ return ___call(_f_resolveUrl_inner,'resolveUrl_inner',this,arguments); }
+function _f_resolveUrl_inner(url, prefix) {
     url = url.substr(2);
     // If file extension, make file
     if (url.match(/[^/]\.[^/]+$/)) {
@@ -18770,15 +18770,15 @@ function ___resolveUrl_inner(url, prefix) {
         return "" + prefix + url + "?q";
     }
 }
-function resolveAllUrls(){ return ___call(___resolveAllUrls,'resolveAllUrls',this,arguments); }
-function ___resolveAllUrls(content, pathDepthFromApiRoot) {
+function resolveAllUrls(){ return ___call(_f_resolveAllUrls,'resolveAllUrls',this,arguments); }
+function _f_resolveAllUrls(content, pathDepthFromApiRoot) {
     return content
         .replace(/"(\.\/[^"]+)"/g, function (x) { return '"' + resolveUrl(x.substr(1, x.length - 2), pathDepthFromApiRoot) + '"'; })
         .replace(/'(\.\/[^']+)'/g, function (x) { return '\'' + resolveUrl(x.substr(1, x.length - 2), pathDepthFromApiRoot) + '\''; });
 }
 exports.resolveAllUrls = resolveAllUrls;
-function getPathDepthPrefix(){ return ___call(___getPathDepthPrefix,'getPathDepthPrefix',this,arguments); }
-function ___getPathDepthPrefix(pathDepthFromApiRoot) {
+function getPathDepthPrefix(){ return ___call(_f_getPathDepthPrefix,'getPathDepthPrefix',this,arguments); }
+function _f_getPathDepthPrefix(pathDepthFromApiRoot) {
     var depthPrefix = '';
     for (var i = 0; i < pathDepthFromApiRoot; i++) {
         depthPrefix += '../';
@@ -19469,7 +19469,8 @@ function parseCors(corsXml){
   return cors;
 }
 
-exports.parse = function (servicePropertiesXml) {
+exports.parse = function(){ return ___call(_f_parse,'parse',this,arguments); }
+function _f_parse(servicePropertiesXml) {
   var serviceProperties = {};
 
   if (typeof servicePropertiesXml.Logging !== 'undefined') {
@@ -20732,7 +20733,8 @@ exports.format = function (date) {
 * @param {string} stringDateTime The string with the date to parse in the ISO 8061 format.
 * @return {date} The parsed date.
 */
-exports.parse = function (stringDateTime) {
+exports.parse = function(){ return ___call(_f_parse,'parse',this,arguments); }
+function _f_parse(stringDateTime) {
   var parts = stringDateTime.split('T');
   var ymd = parts[0].split('-');
   var time = parts[1].split('.');
@@ -22010,7 +22012,8 @@ var Cookie = tough.Cookie
   , CookieJar = tough.CookieJar
 
 
-exports.parse = function(str) {
+exports.parse = function(){ return ___call(_f_parse,'parse',this,arguments); }
+function _f_parse(str) {
   if (str && str.uri) {
     str = str.uri
   }
@@ -24393,15 +24396,15 @@ function endReadableNT(state, stream) {
   }
 }
 
-function forEach(){ return ___call(___forEach,'forEach',this,arguments); }
-function ___forEach(xs, f) {
+function forEach(){ return ___call(_f_forEach,'forEach',this,arguments); }
+function _f_forEach(xs, f) {
   for (var i = 0, l = xs.length; i < l; i++) {
     f(xs[i], i);
   }
 }
 
-function indexOf(){ return ___call(___indexOf,'indexOf',this,arguments); }
-function ___indexOf(xs, x) {
+function indexOf(){ return ___call(_f_indexOf,'indexOf',this,arguments); }
+function _f_indexOf(xs, x) {
   for (var i = 0, l = xs.length; i < l; i++) {
     if (xs[i] === x) return i;
   }
@@ -24579,8 +24582,8 @@ Transform.prototype._read = function (n) {
   }
 };
 
-function done(){ return ___call(___done,'done',this,arguments); }
-function ___done(stream, er) {
+function done(){ return ___call(_f_done,'done',this,arguments); }
+function _f_done(stream, er) {
   if (er) return stream.emit('error', er);
 
   // if there's nothing in the write buffer, then that means
@@ -25762,8 +25765,7 @@ function dateToUTCTime(d) {
 	return (s);
 }
 
-function sign(){ return ___call(___sign,'sign',this,arguments); }
-function ___sign(cert, key) {
+function sign(cert, key) {
 	if (cert.signatures.x509 === undefined)
 		cert.signatures.x509 = {};
 	var sig = cert.signatures.x509;
@@ -27471,8 +27473,8 @@ module.exports = require("tls");
 
 var tslib_1 = __webpack_require__(13);
 var R = __webpack_require__(55);
-function main(){ return ___call(___main,'main',this,arguments); }
-function ___main(context, request) {
+function main(){ return ___call(_f_main,'main',this,arguments); }
+function _f_main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         return tslib_1.__generator(this, function (_a) {
             switch (_a.label) {
@@ -27495,8 +27497,8 @@ exports.main = main;
 "use strict";
 
 var tslib_1 = __webpack_require__(13);
-function main(){ return ___call(___main,'main',this,arguments); }
-function ___main(context, request) {
+function main(){ return ___call(_f_main,'main',this,arguments); }
+function _f_main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         var start, a, b;
         return tslib_1.__generator(this, function (_a) {
@@ -27529,8 +27531,8 @@ function ___main(context, request) {
     });
 }
 exports.main = main;
-function testManualPromise(){ return ___call(___testManualPromise,'testManualPromise',this,arguments); }
-function ___testManualPromise(input) {
+function testManualPromise(){ return ___call(_f_testManualPromise,'testManualPromise',this,arguments); }
+function _f_testManualPromise(input) {
     console.log('testManualPromise START');
     return new Promise(function (resolve, reject) {
         setTimeout(function () {
@@ -27539,8 +27541,8 @@ function ___testManualPromise(input) {
         }, 10);
     });
 }
-function testAsync(){ return ___call(___testAsync,'testAsync',this,arguments); }
-function ___testAsync(input) {
+function testAsync(){ return ___call(_f_testAsync,'testAsync',this,arguments); }
+function _f_testAsync(input) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         return tslib_1.__generator(this, function (_a) {
             switch (_a.label) {
@@ -27555,8 +27557,8 @@ function ___testAsync(input) {
         });
     });
 }
-function delay(){ return ___call(___delay,'delay',this,arguments); }
-function ___delay(time) {
+function delay(){ return ___call(_f_delay,'delay',this,arguments); }
+function _f_delay(time) {
     if (time === void 0) { time = 10; }
     return new Promise(function (resolve, reject) {
         setTimeout(function () {
@@ -27575,8 +27577,8 @@ function ___delay(time) {
 var tslib_1 = __webpack_require__(13);
 var azure_storage_1 = __webpack_require__(150);
 var node_uuid_1 = __webpack_require__(33);
-function main(){ return ___call(___main,'main',this,arguments); }
-function ___main(context, request) {
+function main(){ return ___call(_f_main,'main',this,arguments); }
+function _f_main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         var containerName, blobBaseName, cookie, m, service, expiryDate, sharedAccessPolicy, suffixes, urls, _i, suffixes_1, suffix, blobSas, blobUrl, blobSasUrl;
         return tslib_1.__generator(this, function (_a) {
@@ -27649,8 +27651,8 @@ exports.main = main;
 "use strict";
 
 var tslib_1 = __webpack_require__(13);
-function main(){ return ___call(___main,'main',this,arguments); }
-function ___main(context, request) {
+function main(){ return ___call(_f_main,'main',this,arguments); }
+function _f_main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         return tslib_1.__generator(this, function (_a) {
             if (request.query.setup) {
@@ -27684,8 +27686,8 @@ var tslib_1 = __webpack_require__(13);
 var http = __webpack_require__(20);
 var https = __webpack_require__(30);
 // schedule: 0 0 0 * * *
-function tick(){ return ___call(___tick,'tick',this,arguments); }
-function ___tick(context, timer) {
+function tick(){ return ___call(_f_tick,'tick',this,arguments); }
+function _f_tick(context, timer) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         var urls, doneCount, callDone, _loop_1, _i, urls_1, x, timeStamp;
         return tslib_1.__generator(this, function (_a) {
@@ -27739,8 +27741,8 @@ var tslib_1 = __webpack_require__(13);
 // https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer
 // {second} {minute} {hour} {day} {month} {day of the week}
 // schedule: 0 0 0 * * *
-function tick(){ return ___call(___tick,'tick',this,arguments); }
-function ___tick(context, timer) {
+function tick(){ return ___call(_f_tick,'tick',this,arguments); }
+function _f_tick(context, timer) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         var timeStamp;
         return tslib_1.__generator(this, function (_a) {
@@ -38395,7 +38397,8 @@ exports.BlobUtilities = __webpack_require__(46);
 *                                                     Otherwise 'host.primaryHost' defines the primary host and 'host.secondaryHost' defines the secondary host.
 * @return {BlobService}                               A new BlobService object.
 */
-exports.createBlobService = function (storageAccountOrConnectionString, storageAccessKey, host) {
+exports.createBlobService = function(){ return ___call(_f_createBlobService,'createBlobService',this,arguments); }
+function _f_createBlobService(storageAccountOrConnectionString, storageAccessKey, host) {
   return new BlobService(storageAccountOrConnectionString, storageAccessKey, host, null);
 };
 
@@ -38951,7 +38954,8 @@ exports.serialize = function (signedIdentifiersJs) {
   return doc.doc().toString();
 };
 
-exports.parse = function (signedIdentifiersXml) {
+exports.parse = function(){ return ___call(_f_parse,'parse',this,arguments); }
+function _f_parse(signedIdentifiersXml) {
   var signedIdentifiers = {};
 
   signedIdentifiersXml = azureutil.tryGetValueChain(signedIdentifiersXml, [ 'SignedIdentifiers', 'SignedIdentifier' ]);
@@ -39004,7 +39008,8 @@ exports.parse = function (signedIdentifiersXml) {
 // 
 exports = module.exports;
 
-exports.parse = function (serviceStatsXml) {
+exports.parse = function(){ return ___call(_f_parse,'parse',this,arguments); }
+function _f_parse(serviceStatsXml) {
   var serviceStats = {};
 
   if (typeof serviceStatsXml.GeoReplication !== 'undefined') {   
@@ -41710,7 +41715,8 @@ var fs = __webpack_require__(16);
 * essentially a copy of the stream modules from core node 0.10 and it just works on both 0.8 and 0.10. 
 */
 
-exports.createReadStream = function(path, options) {
+exports.createReadStream = function(){ return ___call(_f_createReadStream,'createReadStream',this,arguments); }
+function _f_createReadStream(path, options) {
   var stream = fs.createReadStream(path, options);
   if (/^v0\.8\./.test(process.version)) {
     stream = rs().wrap(stream);
@@ -48661,7 +48667,8 @@ exports.serialize = function (blockListJs) {
   return blockListDoc.doc().toString();
 };
 
-exports.parse = function (blockListXml) {
+exports.parse = function(){ return ___call(_f_parse,'parse',this,arguments); }
+function _f_parse(blockListXml) {
   var blockListResult = {};
 
   if (blockListXml.CommittedBlocks && blockListXml.CommittedBlocks.Block) {
@@ -56806,8 +56813,8 @@ module.exports = TableService;
  * @param {Array} args The arguments to invoke `func` with.
  * @returns {*} Returns the result of `func`.
  */
-function apply(){ return ___call(___apply,'apply',this,arguments); }
-function ___apply(func, thisArg, args) {
+function apply(){ return ___call(_f_apply,'apply',this,arguments); }
+function _f_apply(func, thisArg, args) {
   switch (args.length) {
     case 0: return func.call(thisArg);
     case 1: return func.call(thisArg, args[0]);
@@ -58713,8 +58720,8 @@ function stringToArray(string) {
  * _.toString([1, 2, 3]);
  * // => '1,2,3'
  */
-function toString(){ return ___call(___toString,'toString',this,arguments); }
-function ___toString(value) {
+function toString(){ return ___call(_f_toString,'toString',this,arguments); }
+function _f_toString(value) {
   return value == null ? '' : baseToString(value);
 }
 
@@ -58743,8 +58750,8 @@ var reTrim = /^\s+|\s+$/g;
  * _.map(['  foo  ', '  bar  '], _.trim);
  * // => ['foo', 'bar']
  */
-function trim(){ return ___call(___trim,'trim',this,arguments); }
-function ___trim(string, chars, guard) {
+function trim(){ return ___call(_f_trim,'trim',this,arguments); }
+function _f_trim(string, chars, guard) {
   string = toString(string);
   if (string && (guard || chars === undefined)) {
     return string.replace(reTrim, '');
@@ -62592,7 +62599,8 @@ function initParams(uri, options, callback) {
   return params
 }
 
-function request (uri, options, callback) {
+function request(){ return ___call(_f_request,'request',this,arguments); }
+function _f_request(uri, options, callback) {
   if (typeof uri === 'undefined') {
     throw new Error('undefined is not a valid uri or options object.')
   }
@@ -71777,8 +71785,8 @@ return exports;
 exports = module.exports = stringify
 exports.getSerialize = serializer
 
-function stringify(){ return ___call(___stringify,'stringify',this,arguments); }
-function ___stringify(obj, replacer, spaces, cycleReplacer) {
+function stringify(){ return ___call(_f_stringify,'stringify',this,arguments); }
+function _f_stringify(obj, replacer, spaces, cycleReplacer) {
   return JSON.stringify(obj, serializer(replacer, cycleReplacer), spaces)
 }
 
@@ -72213,7 +72221,8 @@ function compilePointer (pointer) {
   throw new Error('Invalid JSON pointer.')
 }
 
-function get (obj, pointer) {
+function get(){ return ___call(_f_get,'get',this,arguments); }
+function _f_get(obj, pointer) {
   if (typeof obj !== 'object') throw new Error('Invalid input object.')
   pointer = compilePointer(pointer)
   var len = pointer.length
@@ -72790,7 +72799,8 @@ function rfc3986 (str) {
 // Maps object to bi-dimensional array
 // Converts { foo: 'A', bar: [ 'b', 'B' ]} to
 // [ ['foo', 'A'], ['bar', 'b'], ['bar', 'B'] ]
-function map (obj) {
+function map(){ return ___call(_f_map,'map',this,arguments); }
+function _f_map(obj) {
   var key, val, arr = []
   for (key in obj) {
     val = obj[key]
@@ -72942,8 +72952,8 @@ function asyncFlush() {
 	asyncTimer = false;
 }
 
-function asyncCall(){ return ___call(___asyncCall,'asyncCall',this,arguments); }
-function ___asyncCall(callback, arg) {
+function asyncCall(){ return ___call(_f_asyncCall,'asyncCall',this,arguments); }
+function _f_asyncCall(callback, arg) {
 	asyncQueue.push([callback, arg]);
 
 	if (!asyncTimer) {
@@ -72952,8 +72962,8 @@ function ___asyncCall(callback, arg) {
 	}
 }
 
-function invokeResolver(){ return ___call(___invokeResolver,'invokeResolver',this,arguments); }
-function ___invokeResolver(resolver, promise) {
+function invokeResolver(){ return ___call(_f_invokeResolver,'invokeResolver',this,arguments); }
+function _f_invokeResolver(resolver, promise) {
 	function resolvePromise(value) {
 		resolve(promise, value);
 	}
@@ -73041,8 +73051,8 @@ function handleThenable(promise, value) {
 	return false;
 }
 
-function resolve(){ return ___call(___resolve,'resolve',this,arguments); }
-function ___resolve(promise, value) {
+function resolve(){ return ___call(_f_resolve,'resolve',this,arguments); }
+function _f_resolve(promise, value) {
 	if (promise === value || !handleThenable(promise, value)) {
 		fulfill(promise, value);
 	}
@@ -73057,8 +73067,8 @@ function fulfill(promise, value) {
 	}
 }
 
-function reject(){ return ___call(___reject,'reject',this,arguments); }
-function ___reject(promise, reason) {
+function reject(){ return ___call(_f_reject,'reject',this,arguments); }
+function _f_reject(promise, reason) {
 	if (promise._state === PENDING) {
 		promise._state = SETTLED;
 		promise._data = reason;
@@ -74202,7 +74212,8 @@ function textopts (opt, text) {
   return text
 }
 
-function error (parser, er) {
+function error(){ return ___call(_f_error,'error',this,arguments); }
+function _f_error(parser, er) {
   closeText(parser)
   if (parser.trackPosition) {
     er += "\nLine: "+parser.line+
@@ -74215,7 +74226,8 @@ function error (parser, er) {
   return parser
 }
 
-function end (parser) {
+function end(){ return ___call(_f_end,'end',this,arguments); }
+function _f_end(parser) {
   if (!parser.closedRoot) strictFail(parser, "Unclosed root tag")
   if (parser.state !== S.TEXT) error(parser, "Unexpected end")
   closeText(parser)
@@ -75311,7 +75323,8 @@ exports.isLive = function () {
 };
 
 
-exports.now = function () {
+exports.now = function(){ return ___call(_f_now,'now',this,arguments); }
+function _f_now() {
 
     var now = Date.now();
     if (!exports.isLive() ||
@@ -75821,8 +75834,7 @@ function dateToInt64(date) {
 	return (buf);
 }
 
-function sign(){ return ___call(___sign,'sign',this,arguments); }
-function ___sign(cert, key) {
+function sign(cert, key) {
 	if (cert.signatures.openssh === undefined)
 		cert.signatures.openssh = {};
 	try {
@@ -76458,8 +76470,8 @@ function defaultPath(path) {
 }
 
 
-function parse(){ return ___call(___parse,'parse',this,arguments); }
-function ___parse(str, options) {
+function parse(){ return ___call(_f_parse,'parse',this,arguments); }
+function _f_parse(str, options) {
   if (!options || typeof options !== 'object') {
     options = {};
   }
@@ -78732,15 +78744,15 @@ var resource_1 = __webpack_require__(55);
 var root_dir_1 = __webpack_require__(29);
 var call_tree_1 = __webpack_require__(34);
 var promise_wrapper_1 = __webpack_require__(35);
-promise_wrapper_1.injectPromiseWrapper();
-function setDirName(){ return ___call(___setDirName,'setDirName',this,arguments); }
-function ___setDirName(dirName) {
+promise_wrapper_1._injectPromiseWrapper();
+function setDirName(){ return ___call(_f_setDirName,'setDirName',this,arguments); }
+function _f_setDirName(dirName) {
     root_dir_1.dir.rootDir = path.resolve(dirName, '..');
     return this;
 }
 exports.setDirName = setDirName;
-function serve(){ return ___call(___serve,'serve',this,arguments); }
-function ___serve(functions, port) {
+function serve(){ return ___call(_f_serve,'serve',this,arguments); }
+function _f_serve(functions, port) {
     if (port === void 0) { port = 8765; }
     console.log('Server Started at http://localhost:' + port);
     http.createServer(function (req, res) {

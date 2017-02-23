@@ -75,7 +75,7 @@ export class PromiseWrapper<T> {
 
 declare var global: any;
 declare var window: any;
-export function injectPromiseWrapper() {
+export function _injectPromiseWrapper() {
 
     if (typeof global === 'undefined') {
         global = window;

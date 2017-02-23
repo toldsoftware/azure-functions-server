@@ -4,12 +4,12 @@ import * as T from './../src';
 import { dir } from './../src/root-dir';
 
 import { _printCallTree } from '../src-cli/injectors/call-tree';
-import { injectPromiseWrapper } from '../src-cli/injectors/promise-wrapper';
+import { _injectPromiseWrapper } from '../src-cli/injectors/promise-wrapper';
 declare var ___callTree: any;
 declare var ___call: any;
 const DEBUG = typeof ___callTree !== 'undefined';
 if (DEBUG) {
-    injectPromiseWrapper();
+    _injectPromiseWrapper();
 }
 
 export function setDirName(dirName: string) {

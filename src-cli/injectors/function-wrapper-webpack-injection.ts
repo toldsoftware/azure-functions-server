@@ -1,16 +1,33 @@
 export function injectFunctionWrapper(webpackSource: string, ownSourceCode: string) {
-    // Only wrap functions, not constructors
-    return globals +
-        webpackSource.replace(/\nfunction\s+([^_][^\()]+)\(/g,
-            (whole, name) => isClassName(name) || hasPrototype(webpackSource, name) || !isOwnSourceCode(ownSourceCode, name) ? whole : getFunctionWrapper(name));
+    return globals + webpackSource
+        // simple functions at beginning of file (not constructors)
+        // function name(...)
+        .replace(new RegExp(`(\\n)function\\s+(${nameRegex})\\s*\\(`, 'g'), (whole, prefix, name) =>
+            isUtilityName(name) || isClassName(name) || hasPrototype(webpackSource, name) || !isOwnSourceCode(ownSourceCode, name)
+                ? whole
+                : `
+function ${name}(){ return ___call(_f_${name},'${name}',this,arguments); }
+function _f_${name}(`)
+        // exported functions:
+        // exports.createBlobServiceWithSas = function (host, sasToken) {
+        //   return new BlobService(null, null, host, sasToken);
+        // };
+        .replace(new RegExp(`(\\n)exports\\.(${nameRegex})\\s*=\\s*function\\s*\\(`, 'g'), (whole, prefix, name) =>
+            isUtilityName(name) || isClassName(name) || hasPrototype(webpackSource, name) || !isOwnSourceCode(ownSourceCode, name)
+                ? whole
+                : `
+exports.${name} = function(){ return ___call(_f_${name},'${name}',this,arguments); }
+function _f_${name}(`);
 }
+
+const nameRegex = '[a-zA-Z_][a-zA-Z_0-9]*';
 
 function isOwnSourceCode(ownSourceCode: string, name: string) {
     // is declared in own source code
     // return ownSourceCode.indexOf('function ' + name) >= 0;
 
     // is called in own source code
-    return ownSourceCode.indexOf(name + '(') >= 0;
+    return ownSourceCode.match(new RegExp(`[^a-zA-Z_0-9]${name}\\s*\\(`));
 }
 
 function hasPrototype(webpackSource: string, name: string) {
@@ -21,8 +38,8 @@ function isClassName(name: string) {
     return name[0] === name[0].toUpperCase();
 }
 
-function getFunctionWrapper(name: string) {
-    return functionWrapper.replace(/\$1/g, name);
+function isUtilityName(name: string) {
+    return name[0] === '_';
 }
 
 const globals = `
@@ -77,6 +94,3 @@ function ___stringifySafe(obj) {
 }
 `;
 
-const functionWrapper = `
-function $1(){ return ___call(___$1,'$1',this,arguments); }
-function ___$1(`;

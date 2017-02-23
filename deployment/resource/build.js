@@ -269,16 +269,16 @@ var call_tree_1 = __webpack_require__(34);
 var promise_wrapper_1 = __webpack_require__(35);
 var DEBUG = typeof ___callTree !== 'undefined';
 if (DEBUG) {
-    promise_wrapper_1.injectPromiseWrapper();
+    promise_wrapper_1._injectPromiseWrapper();
 }
-function setDirName(){ return ___call(___setDirName,'setDirName',this,arguments); }
-function ___setDirName(dirName) {
+function setDirName(){ return ___call(_f_setDirName,'setDirName',this,arguments); }
+function _f_setDirName(dirName) {
     root_dir_1.dir.rootDir = path.resolve(dirName, '..');
     return this;
 }
 exports.setDirName = setDirName;
-function serve(){ return ___call(___serve,'serve',this,arguments); }
-function ___serve(main) {
+function serve(){ return ___call(_f_serve,'serve',this,arguments); }
+function _f_serve(main) {
     var runner = function (context, request) {
         var ___callTree_runnerRoot = DEBUG ? ___callTree : null;
         var req = tslib_1.__assign({}, request);
@@ -438,15 +438,14 @@ var PromiseWrapper = (function () {
     return PromiseWrapper;
 }());
 exports.PromiseWrapper = PromiseWrapper;
-function injectPromiseWrapper(){ return ___call(___injectPromiseWrapper,'injectPromiseWrapper',this,arguments); }
-function ___injectPromiseWrapper() {
+function _injectPromiseWrapper() {
     if (typeof global === 'undefined') {
         global = window;
     }
     var originalPromise = global.Promise;
     global.Promise = PromiseWrapper;
 }
-exports.injectPromiseWrapper = injectPromiseWrapper;
+exports._injectPromiseWrapper = _injectPromiseWrapper;
 // Replace Original Promise
 // Promise['constructor'] = PromiseWrapper['constructor'];
 // export const PromiseWrapper;
@@ -562,8 +561,8 @@ var fs = __webpack_require__(16);
 var Path = __webpack_require__(14);
 var resolve_url_1 = __webpack_require__(76);
 var root_dir_1 = __webpack_require__(29);
-function main(){ return ___call(___main,'main',this,arguments); }
-function ___main(context, request, pathDepthFromApiRoot) {
+function main(){ return ___call(_f_main,'main',this,arguments); }
+function _f_main(context, request, pathDepthFromApiRoot) {
     if (pathDepthFromApiRoot === void 0) { pathDepthFromApiRoot = 1; }
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         var pathOrig, filePath, path;
@@ -647,8 +646,8 @@ exports.main = main;
 
 "use strict";
 
-function resolveUrlClient(){ return ___call(___resolveUrlClient,'resolveUrlClient',this,arguments); }
-function ___resolveUrlClient(url) {
+function resolveUrlClient(){ return ___call(_f_resolveUrlClient,'resolveUrlClient',this,arguments); }
+function _f_resolveUrlClient(url) {
     if (url.indexOf('./') !== 0) {
         return url;
     }
@@ -660,8 +659,8 @@ function ___resolveUrlClient(url) {
     return resolveUrl_inner(url, prefix);
 }
 exports.resolveUrlClient = resolveUrlClient;
-function resolveUrl(){ return ___call(___resolveUrl,'resolveUrl',this,arguments); }
-function ___resolveUrl(url, pathDepthFromApiRoot) {
+function resolveUrl(){ return ___call(_f_resolveUrl,'resolveUrl',this,arguments); }
+function _f_resolveUrl(url, pathDepthFromApiRoot) {
     if (pathDepthFromApiRoot === void 0) { pathDepthFromApiRoot = 1; }
     if (url.indexOf('./') !== 0) {
         return url;
@@ -670,8 +669,8 @@ function ___resolveUrl(url, pathDepthFromApiRoot) {
     return resolveUrl_inner(url, depthPrefix);
 }
 exports.resolveUrl = resolveUrl;
-function resolveUrl_inner(){ return ___call(___resolveUrl_inner,'resolveUrl_inner',this,arguments); }
-function ___resolveUrl_inner(url, prefix) {
+function resolveUrl_inner(){ return ___call(_f_resolveUrl_inner,'resolveUrl_inner',this,arguments); }
+function _f_resolveUrl_inner(url, prefix) {
     url = url.substr(2);
     // If file extension, make file
     if (url.match(/[^/]\.[^/]+$/)) {
@@ -681,15 +680,15 @@ function ___resolveUrl_inner(url, prefix) {
         return "" + prefix + url + "?q";
     }
 }
-function resolveAllUrls(){ return ___call(___resolveAllUrls,'resolveAllUrls',this,arguments); }
-function ___resolveAllUrls(content, pathDepthFromApiRoot) {
+function resolveAllUrls(){ return ___call(_f_resolveAllUrls,'resolveAllUrls',this,arguments); }
+function _f_resolveAllUrls(content, pathDepthFromApiRoot) {
     return content
         .replace(/"(\.\/[^"]+)"/g, function (x) { return '"' + resolveUrl(x.substr(1, x.length - 2), pathDepthFromApiRoot) + '"'; })
         .replace(/'(\.\/[^']+)'/g, function (x) { return '\'' + resolveUrl(x.substr(1, x.length - 2), pathDepthFromApiRoot) + '\''; });
 }
 exports.resolveAllUrls = resolveAllUrls;
-function getPathDepthPrefix(){ return ___call(___getPathDepthPrefix,'getPathDepthPrefix',this,arguments); }
-function ___getPathDepthPrefix(pathDepthFromApiRoot) {
+function getPathDepthPrefix(){ return ___call(_f_getPathDepthPrefix,'getPathDepthPrefix',this,arguments); }
+function _f_getPathDepthPrefix(pathDepthFromApiRoot) {
     var depthPrefix = '';
     for (var i = 0; i < pathDepthFromApiRoot; i++) {
         depthPrefix += '../';

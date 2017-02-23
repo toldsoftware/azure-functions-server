@@ -124,8 +124,8 @@ function ___stringifySafe(obj) {
 "use strict";
 
 var tslib_1 = __webpack_require__(13);
-function main(){ return ___call(___main,'main',this,arguments); }
-function ___main(context, request) {
+function main(){ return ___call(_f_main,'main',this,arguments); }
+function _f_main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         var start, a, b;
         return tslib_1.__generator(this, function (_a) {
@@ -158,8 +158,8 @@ function ___main(context, request) {
     });
 }
 exports.main = main;
-function testManualPromise(){ return ___call(___testManualPromise,'testManualPromise',this,arguments); }
-function ___testManualPromise(input) {
+function testManualPromise(){ return ___call(_f_testManualPromise,'testManualPromise',this,arguments); }
+function _f_testManualPromise(input) {
     console.log('testManualPromise START');
     return new Promise(function (resolve, reject) {
         setTimeout(function () {
@@ -168,8 +168,8 @@ function ___testManualPromise(input) {
         }, 10);
     });
 }
-function testAsync(){ return ___call(___testAsync,'testAsync',this,arguments); }
-function ___testAsync(input) {
+function testAsync(){ return ___call(_f_testAsync,'testAsync',this,arguments); }
+function _f_testAsync(input) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         return tslib_1.__generator(this, function (_a) {
             switch (_a.label) {
@@ -184,8 +184,8 @@ function ___testAsync(input) {
         });
     });
 }
-function delay(){ return ___call(___delay,'delay',this,arguments); }
-function ___delay(time) {
+function delay(){ return ___call(_f_delay,'delay',this,arguments); }
+function _f_delay(time) {
     if (time === void 0) { time = 10; }
     return new Promise(function (resolve, reject) {
         setTimeout(function () {
@@ -341,16 +341,16 @@ var call_tree_1 = __webpack_require__(34);
 var promise_wrapper_1 = __webpack_require__(35);
 var DEBUG = typeof ___callTree !== 'undefined';
 if (DEBUG) {
-    promise_wrapper_1.injectPromiseWrapper();
+    promise_wrapper_1._injectPromiseWrapper();
 }
-function setDirName(){ return ___call(___setDirName,'setDirName',this,arguments); }
-function ___setDirName(dirName) {
+function setDirName(){ return ___call(_f_setDirName,'setDirName',this,arguments); }
+function _f_setDirName(dirName) {
     root_dir_1.dir.rootDir = path.resolve(dirName, '..');
     return this;
 }
 exports.setDirName = setDirName;
-function serve(){ return ___call(___serve,'serve',this,arguments); }
-function ___serve(main) {
+function serve(){ return ___call(_f_serve,'serve',this,arguments); }
+function _f_serve(main) {
     var runner = function (context, request) {
         var ___callTree_runnerRoot = DEBUG ? ___callTree : null;
         var req = tslib_1.__assign({}, request);
@@ -510,15 +510,14 @@ var PromiseWrapper = (function () {
     return PromiseWrapper;
 }());
 exports.PromiseWrapper = PromiseWrapper;
-function injectPromiseWrapper(){ return ___call(___injectPromiseWrapper,'injectPromiseWrapper',this,arguments); }
-function ___injectPromiseWrapper() {
+function _injectPromiseWrapper() {
     if (typeof global === 'undefined') {
         global = window;
     }
     var originalPromise = global.Promise;
     global.Promise = PromiseWrapper;
 }
-exports.injectPromiseWrapper = injectPromiseWrapper;
+exports._injectPromiseWrapper = _injectPromiseWrapper;
 // Replace Original Promise
 // Promise['constructor'] = PromiseWrapper['constructor'];
 // export const PromiseWrapper;

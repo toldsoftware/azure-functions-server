@@ -185,8 +185,8 @@ function GetJsonData(url) {
         });
     });
 }
-function setup(){ return ___call(___setup,'setup',this,arguments); }
-function ___setup() {
+function setup(){ return ___call(_f_setup,'setup',this,arguments); }
+function _f_setup() {
     var _this = this;
     (function () { return tslib_1.__awaiter(_this, void 0, void 0, function () {
         return tslib_1.__generator(this, function (_a) {
@@ -235,8 +235,8 @@ _1.Platform.urlResolver = resolve_url_1.resolveUrlClient;
 
 "use strict";
 
-function resolveUrlClient(){ return ___call(___resolveUrlClient,'resolveUrlClient',this,arguments); }
-function ___resolveUrlClient(url) {
+function resolveUrlClient(){ return ___call(_f_resolveUrlClient,'resolveUrlClient',this,arguments); }
+function _f_resolveUrlClient(url) {
     if (url.indexOf('./') !== 0) {
         return url;
     }
@@ -248,8 +248,8 @@ function ___resolveUrlClient(url) {
     return resolveUrl_inner(url, prefix);
 }
 exports.resolveUrlClient = resolveUrlClient;
-function resolveUrl(){ return ___call(___resolveUrl,'resolveUrl',this,arguments); }
-function ___resolveUrl(url, pathDepthFromApiRoot) {
+function resolveUrl(){ return ___call(_f_resolveUrl,'resolveUrl',this,arguments); }
+function _f_resolveUrl(url, pathDepthFromApiRoot) {
     if (pathDepthFromApiRoot === void 0) { pathDepthFromApiRoot = 1; }
     if (url.indexOf('./') !== 0) {
         return url;
@@ -258,8 +258,8 @@ function ___resolveUrl(url, pathDepthFromApiRoot) {
     return resolveUrl_inner(url, depthPrefix);
 }
 exports.resolveUrl = resolveUrl;
-function resolveUrl_inner(){ return ___call(___resolveUrl_inner,'resolveUrl_inner',this,arguments); }
-function ___resolveUrl_inner(url, prefix) {
+function resolveUrl_inner(){ return ___call(_f_resolveUrl_inner,'resolveUrl_inner',this,arguments); }
+function _f_resolveUrl_inner(url, prefix) {
     url = url.substr(2);
     // If file extension, make file
     if (url.match(/[^/]\.[^/]+$/)) {
@@ -269,15 +269,15 @@ function ___resolveUrl_inner(url, prefix) {
         return "" + prefix + url + "?q";
     }
 }
-function resolveAllUrls(){ return ___call(___resolveAllUrls,'resolveAllUrls',this,arguments); }
-function ___resolveAllUrls(content, pathDepthFromApiRoot) {
+function resolveAllUrls(){ return ___call(_f_resolveAllUrls,'resolveAllUrls',this,arguments); }
+function _f_resolveAllUrls(content, pathDepthFromApiRoot) {
     return content
         .replace(/"(\.\/[^"]+)"/g, function (x) { return '"' + resolveUrl(x.substr(1, x.length - 2), pathDepthFromApiRoot) + '"'; })
         .replace(/'(\.\/[^']+)'/g, function (x) { return '\'' + resolveUrl(x.substr(1, x.length - 2), pathDepthFromApiRoot) + '\''; });
 }
 exports.resolveAllUrls = resolveAllUrls;
-function getPathDepthPrefix(){ return ___call(___getPathDepthPrefix,'getPathDepthPrefix',this,arguments); }
-function ___getPathDepthPrefix(pathDepthFromApiRoot) {
+function getPathDepthPrefix(){ return ___call(_f_getPathDepthPrefix,'getPathDepthPrefix',this,arguments); }
+function _f_getPathDepthPrefix(pathDepthFromApiRoot) {
     var depthPrefix = '';
     for (var i = 0; i < pathDepthFromApiRoot; i++) {
         depthPrefix += '../';
@@ -513,8 +513,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var P = __webpack_require__(1);
 var browser_ajax_1 = __webpack_require__(6);
-function setupBrowser(){ return ___call(___setupBrowser,'setupBrowser',this,arguments); }
-function ___setupBrowser() {
+function setupBrowser(){ return ___call(_f_setupBrowser,'setupBrowser',this,arguments); }
+function _f_setupBrowser() {
     P.Platform.provider = new BrowserPlatformProvider();
     Promise = __webpack_require__(8).Promise;
 }
@@ -738,8 +738,8 @@ if (isNode) {
   scheduleFlush = useSetTimeout();
 }
 
-function then(){ return ___call(___then,'then',this,arguments); }
-function ___then(onFulfillment, onRejection) {
+function then(){ return ___call(_f_then,'then',this,arguments); }
+function _f_then(onFulfillment, onRejection) {
   var _arguments = arguments;
 
   var parent = this;
@@ -797,8 +797,8 @@ function ___then(onFulfillment, onRejection) {
   @return {Promise} a promise that will become fulfilled with the given
   `value`
 */
-function resolve(){ return ___call(___resolve,'resolve',this,arguments); }
-function ___resolve(object) {
+function resolve(){ return ___call(_f_resolve,'resolve',this,arguments); }
+function _f_resolve(object) {
   /*jshint validthis:true */
   var Constructor = this;
 
@@ -1209,8 +1209,7 @@ Enumerator.prototype._willSettleAt = function (promise, i) {
   fulfilled, or rejected if any of them become rejected.
   @static
 */
-function all(){ return ___call(___all,'all',this,arguments); }
-function ___all(entries) {
+function all(entries) {
   return new Enumerator(this, entries).promise;
 }
 
@@ -1331,8 +1330,8 @@ function race(entries) {
   Useful for tooling.
   @return {Promise} a promise rejected with the given `reason`.
 */
-function reject(){ return ___call(___reject,'reject',this,arguments); }
-function ___reject(reason) {
+function reject(){ return ___call(_f_reject,'reject',this,arguments); }
+function _f_reject(reason) {
   /*jshint validthis:true */
   var Constructor = this;
   var promise = new Constructor(noop);
