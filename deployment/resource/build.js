@@ -1,6 +1,6 @@
 
 
-var ___threadId = Math.random() % 9999;
+var ___threadId = Math.floor(Math.random() * 10000);
 var ___nextId = 0;
 function ___getNextId(){
     return ___threadId + '_' + ___nextId++;
