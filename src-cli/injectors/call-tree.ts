@@ -29,22 +29,3 @@ export function _printCallTree(callTree: CallTreeNode, depth = 0): string {
 
     return text;
 }
-
-export function _stringifySafe(obj: any) {
-    let seen: any[] = [];
-    return JSON.stringify(obj, function (key, val) {
-        if (val != null && typeof val === 'object') {
-            if (seen.indexOf(val) >= 0
-                || key === 'parent'
-                || key === 'context'
-            ) {
-                return;
-            }
-            seen.push(val);
-        } else if (val != null && typeof val === 'string' && val.length > 40) {
-            return val.substr(0, 40) + '...';
-        }
-
-        return val;
-    });
-}

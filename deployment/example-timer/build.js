@@ -1,10 +1,15 @@
 
 
-var ___callTree = {calls:[]};
+var ___threadId = Math.random() % 9999;
+var ___nextId = 0;
+function ___getNextId(){
+    return ___threadId + '_' + ___nextId++;
+}
+var ___callTree = { name: '_root', id: ___getNextId(), args: '', parent: null, calls: [] };
 var ___callTreeRoot = ___callTree;
 var ___log = [];
 var ___beforeFunctionCallback = function (name, args) {
-    ___callTree = {name: name, args: ___stringifySafe(args), parent: ___callTree, calls:[]};
+    ___callTree = { name: name, id: ___getNextId(), args: ___stringifySafe(args), parent: ___callTree, calls: [] };
     ___callTree.parent.calls.push(___callTree);
     return -1 + ___log.push(___callTree);
 }

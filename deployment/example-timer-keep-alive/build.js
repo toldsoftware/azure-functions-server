@@ -1,10 +1,15 @@
 
 
-var ___callTree = {calls:[]};
+var ___threadId = Math.random() % 9999;
+var ___nextId = 0;
+function ___getNextId(){
+    return ___threadId + '_' + ___nextId++;
+}
+var ___callTree = { name: '_root', id: ___getNextId(), args: '', parent: null, calls: [] };
 var ___callTreeRoot = ___callTree;
 var ___log = [];
 var ___beforeFunctionCallback = function (name, args) {
-    ___callTree = {name: name, args: ___stringifySafe(args), parent: ___callTree, calls:[]};
+    ___callTree = { name: name, id: ___getNextId(), args: ___stringifySafe(args), parent: ___callTree, calls: [] };
     ___callTree.parent.calls.push(___callTree);
     return -1 + ___log.push(___callTree);
 }
@@ -138,7 +143,7 @@ exports.run = run;
 
 var tslib_1 = __webpack_require__(13);
 var http = __webpack_require__(20);
-var https = __webpack_require__(31);
+var https = __webpack_require__(30);
 // schedule: 0 0 0 * * *
 function tick(){ return ___call(___tick,'tick',this,arguments); }
 function ___tick(context, timer) {
@@ -309,7 +314,7 @@ module.exports = ___export;
 
 /***/ }),
 
-/***/ 31:
+/***/ 30:
 /***/ (function(module, exports) {
 
 module.exports = require("https");

@@ -1,10 +1,15 @@
 
 
-var ___callTree = {calls:[]};
+var ___threadId = Math.random() % 9999;
+var ___nextId = 0;
+function ___getNextId(){
+    return ___threadId + '_' + ___nextId++;
+}
+var ___callTree = { name: '_root', id: ___getNextId(), args: '', parent: null, calls: [] };
 var ___callTreeRoot = ___callTree;
 var ___log = [];
 var ___beforeFunctionCallback = function (name, args) {
-    ___callTree = {name: name, args: ___stringifySafe(args), parent: ___callTree, calls:[]};
+    ___callTree = { name: name, id: ___getNextId(), args: ___stringifySafe(args), parent: ___callTree, calls: [] };
     ___callTree.parent.calls.push(___callTree);
     return -1 + ___log.push(___callTree);
 }
@@ -305,63 +310,16 @@ module.exports = require("path");
 
 /***/ }),
 
-/***/ 22:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-function _printCallTree(callTree, depth) {
-    if (depth === void 0) { depth = 0; }
-    var text = '';
-    for (var d = 0; d < depth; d++) {
-        text += '-';
-    }
-    if (!callTree.err) {
-        text += callTree.name + " " + callTree.id + ": " + (callTree.args || '{}') + " => " + (callTree.result || '{}');
-    }
-    else {
-        text += "ERROR " + callTree.name + " " + callTree.id + ": " + callTree.args + " => " + callTree.err;
-    }
-    text += '\r\n';
-    for (var _i = 0, _a = callTree.calls; _i < _a.length; _i++) {
-        var c = _a[_i];
-        text += _printCallTree(c, depth + 1);
-    }
-    return text;
-}
-exports._printCallTree = _printCallTree;
-function _stringifySafe(obj) {
-    var seen = [];
-    return JSON.stringify(obj, function (key, val) {
-        if (val != null && typeof val === 'object') {
-            if (seen.indexOf(val) >= 0
-                || key === 'parent'
-                || key === 'context') {
-                return;
-            }
-            seen.push(val);
-        }
-        else if (val != null && typeof val === 'string' && val.length > 40) {
-            return val.substr(0, 40) + '...';
-        }
-        return val;
-    });
-}
-exports._stringifySafe = _stringifySafe;
-
-
-/***/ }),
-
 /***/ 263:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Intentionally global
-___export = __webpack_require__(32).setDirName(__dirname).serve(__webpack_require__(122).main);
+___export = __webpack_require__(31).setDirName(__dirname).serve(__webpack_require__(122).main);
 module.exports = ___export;
 
 /***/ }),
 
-/***/ 30:
+/***/ 29:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -371,15 +329,15 @@ exports.dir = { rootDir: '' };
 
 /***/ }),
 
-/***/ 32:
+/***/ 31:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var tslib_1 = __webpack_require__(13);
 var path = __webpack_require__(14);
-var root_dir_1 = __webpack_require__(30);
-var call_tree_1 = __webpack_require__(22);
+var root_dir_1 = __webpack_require__(29);
+var call_tree_1 = __webpack_require__(34);
 var promise_wrapper_1 = __webpack_require__(35);
 var DEBUG = typeof ___callTree !== 'undefined';
 if (DEBUG) {
@@ -456,32 +414,64 @@ exports.serve = serve;
 
 /***/ }),
 
+/***/ 34:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function _printCallTree(callTree, depth) {
+    if (depth === void 0) { depth = 0; }
+    var text = '';
+    for (var d = 0; d < depth; d++) {
+        text += '-';
+    }
+    if (!callTree.err) {
+        text += callTree.name + " " + callTree.id + ": " + (callTree.args || '{}') + " => " + (callTree.result || '{}');
+    }
+    else {
+        text += "ERROR " + callTree.name + " " + callTree.id + ": " + callTree.args + " => " + callTree.err;
+    }
+    text += '\r\n';
+    for (var _i = 0, _a = callTree.calls; _i < _a.length; _i++) {
+        var c = _a[_i];
+        text += _printCallTree(c, depth + 1);
+    }
+    return text;
+}
+exports._printCallTree = _printCallTree;
+
+
+/***/ }),
+
 /***/ 35:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var call_tree_1 = __webpack_require__(22);
 var Promise_Original = Promise;
 if (typeof ___callTree === 'undefined') {
     ___callTree = { calls: [] };
 }
+if (typeof ___getNextId === 'undefined') {
+    ___getNextId = function () { return '-1'; };
+}
+if (typeof ___stringifySafe === 'undefined') {
+    ___stringifySafe = function () { return '___undefined___stringifySafe'; };
+}
 exports.PromiseInjection = {
     beforeConstructorCallback: function (id) {
-        var node = { name: 'PROMISE', args: '', calls: [], parent: ___callTree, err: null, result: null };
+        var node = { name: 'PROMISE', id: id, args: '', calls: [], parent: ___callTree, err: null, result: null };
         ___callTree.calls.push(node);
         return node;
     },
-    beforeResolveCallback: function (context, id, value) { context.result = call_tree_1._stringifySafe(value); },
-    beforeRejectCallback: function (context, id, reason) { context.err = call_tree_1._stringifySafe(reason); },
+    beforeResolveCallback: function (context, id, value) { context.result = ___stringifySafe(value); },
+    beforeRejectCallback: function (context, id, reason) { context.err = ___stringifySafe(reason); },
 };
-var _threadId = Math.random() % 9999;
-var _nextPromiseId = 0;
 var PromiseWrapper = (function () {
     function PromiseWrapper(resolver) {
         var _this = this;
         this.id = '';
-        this.id = _threadId + '_' + _nextPromiseId++;
+        this.id = ___getNextId();
         this.context = exports.PromiseInjection.beforeConstructorCallback(this.id);
         this.promiseInner = new Promise_Original(function (resolveInner, rejectInner) {
             var resolveOuter = function (value) {

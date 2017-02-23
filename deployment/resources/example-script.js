@@ -1,10 +1,15 @@
 
 
-var ___callTree = {calls:[]};
+var ___threadId = Math.random() % 9999;
+var ___nextId = 0;
+function ___getNextId(){
+    return ___threadId + '_' + ___nextId++;
+}
+var ___callTree = { name: '_root', id: ___getNextId(), args: '', parent: null, calls: [] };
 var ___callTreeRoot = ___callTree;
 var ___log = [];
 var ___beforeFunctionCallback = function (name, args) {
-    ___callTree = {name: name, args: ___stringifySafe(args), parent: ___callTree, calls:[]};
+    ___callTree = { name: name, id: ___getNextId(), args: ___stringifySafe(args), parent: ___callTree, calls: [] };
     ___callTree.parent.calls.push(___callTree);
     return -1 + ___log.push(___callTree);
 }
@@ -508,7 +513,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var P = __webpack_require__(1);
 var browser_ajax_1 = __webpack_require__(6);
-function setupBrowser() {
+function setupBrowser(){ return ___call(___setupBrowser,'setupBrowser',this,arguments); }
+function ___setupBrowser() {
     P.Platform.provider = new BrowserPlatformProvider();
     Promise = __webpack_require__(8).Promise;
 }
@@ -732,7 +738,8 @@ if (isNode) {
   scheduleFlush = useSetTimeout();
 }
 
-function then(onFulfillment, onRejection) {
+function then(){ return ___call(___then,'then',this,arguments); }
+function ___then(onFulfillment, onRejection) {
   var _arguments = arguments;
 
   var parent = this;
@@ -1202,7 +1209,8 @@ Enumerator.prototype._willSettleAt = function (promise, i) {
   fulfilled, or rejected if any of them become rejected.
   @static
 */
-function all(entries) {
+function all(){ return ___call(___all,'all',this,arguments); }
+function ___all(entries) {
   return new Enumerator(this, entries).promise;
 }
 

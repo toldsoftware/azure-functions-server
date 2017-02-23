@@ -8,4 +8,3 @@ export interface CallTreeNode {
     err: string;
 }
 export declare function _printCallTree(callTree: CallTreeNode, depth?: number): string;
-export declare function _stringifySafe(obj: any): string;

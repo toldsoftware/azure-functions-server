@@ -1,4 +1,4 @@
-import { _stringifySafe, CallTreeNode } from './call-tree';
+import { CallTreeNode } from './call-tree';
 
 type PromiseType<T> = Promise<T>;
 let Promise_Original = Promise;
@@ -6,18 +6,22 @@ let Promise_Original = Promise;
 declare var ___callTree: CallTreeNode;
 if (typeof ___callTree === 'undefined') { ___callTree = { calls: [] } as CallTreeNode; }
 
+declare var ___getNextId: () => string;
+if (typeof ___getNextId === 'undefined') { ___getNextId = () => '-1'; }
+
+declare var ___stringifySafe: (obj: any) => string;
+if (typeof ___stringifySafe === 'undefined') { ___stringifySafe = () => '___undefined___stringifySafe'; }
+
 export const PromiseInjection = {
     beforeConstructorCallback: (id: string) => {
-        const node: CallTreeNode = { name: 'PROMISE', args: '', calls: [], parent: ___callTree, err: null, result: null };
+        const node: CallTreeNode = { name: 'PROMISE', id, args: '', calls: [], parent: ___callTree, err: null, result: null };
         ___callTree.calls.push(node);
         return node;
     },
-    beforeResolveCallback: (context: CallTreeNode, id: string, value: any) => { context.result = _stringifySafe(value); },
-    beforeRejectCallback: (context: CallTreeNode, id: string, reason: any) => { context.err = _stringifySafe(reason); },
+    beforeResolveCallback: (context: CallTreeNode, id: string, value: any) => { context.result = ___stringifySafe(value); },
+    beforeRejectCallback: (context: CallTreeNode, id: string, reason: any) => { context.err = ___stringifySafe(reason); },
 };
 
-let _threadId = Math.random() % 9999;
-let _nextPromiseId = 0;
 export class PromiseWrapper<T> {
 
     private id = '';
@@ -25,7 +29,7 @@ export class PromiseWrapper<T> {
     private promiseInner: PromiseType<T>;
 
     constructor(resolver: (resolve: (value: T) => void, reject: (reason: string) => void) => void) {
-        this.id = _threadId + '_' + _nextPromiseId++;
+        this.id = ___getNextId();
         this.context = PromiseInjection.beforeConstructorCallback(this.id);
 
         this.promiseInner = new Promise_Original((resolveInner, rejectInner) => {
