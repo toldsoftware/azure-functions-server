@@ -1,1 +1,1 @@
-export declare function injectFunctionWrapper(webpackSource: string): string;
+export declare function injectFunctionWrapper(webpackSource: string, ownSourceCode: string): string;

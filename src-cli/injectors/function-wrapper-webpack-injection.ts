@@ -1,8 +1,12 @@
-export function injectFunctionWrapper(webpackSource: string) {
+export function injectFunctionWrapper(webpackSource: string, ownSourceCode: string) {
     // Only wrap functions, not constructors
     return globals +
         webpackSource.replace(/\nfunction\s+([^_][^\()]+)\(/g,
-            (whole, name) => isClassName(name) || hasPrototype(webpackSource, name) ? whole : getFunctionWrapper(name));
+            (whole, name) => isClassName(name) || hasPrototype(webpackSource, name) || !isOwnSourceCode(ownSourceCode, name) ? whole : getFunctionWrapper(name));
+}
+
+function isOwnSourceCode(ownSourceCode: string, name: string) {
+    return ownSourceCode.indexOf('function ' + name) >= 0;
 }
 
 function hasPrototype(webpackSource: string, name: string) {

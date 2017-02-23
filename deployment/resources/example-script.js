@@ -508,8 +508,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var P = __webpack_require__(1);
 var browser_ajax_1 = __webpack_require__(6);
-function setupBrowser(){ return ___call(___setupBrowser,'setupBrowser',this,arguments); }
-function ___setupBrowser() {
+function setupBrowser() {
     P.Platform.provider = new BrowserPlatformProvider();
     Promise = __webpack_require__(8).Promise;
 }
@@ -589,13 +588,11 @@ var BrowserHttpClient = (function () {
     (global.ES6Promise = factory());
 }(this, (function () { 'use strict';
 
-function objectOrFunction(){ return ___call(___objectOrFunction,'objectOrFunction',this,arguments); }
-function ___objectOrFunction(x) {
+function objectOrFunction(x) {
   return typeof x === 'function' || typeof x === 'object' && x !== null;
 }
 
-function isFunction(){ return ___call(___isFunction,'isFunction',this,arguments); }
-function ___isFunction(x) {
+function isFunction(x) {
   return typeof x === 'function';
 }
 
@@ -630,13 +627,11 @@ var asap = function asap(callback, arg) {
   }
 };
 
-function setScheduler(){ return ___call(___setScheduler,'setScheduler',this,arguments); }
-function ___setScheduler(scheduleFn) {
+function setScheduler(scheduleFn) {
   customSchedulerFn = scheduleFn;
 }
 
-function setAsap(){ return ___call(___setAsap,'setAsap',this,arguments); }
-function ___setAsap(asapFn) {
+function setAsap(asapFn) {
   asap = asapFn;
 }
 
@@ -649,8 +644,7 @@ var isNode = typeof self === 'undefined' && typeof process !== 'undefined' && ({
 var isWorker = typeof Uint8ClampedArray !== 'undefined' && typeof importScripts !== 'undefined' && typeof MessageChannel !== 'undefined';
 
 // node
-function useNextTick(){ return ___call(___useNextTick,'useNextTick',this,arguments); }
-function ___useNextTick() {
+function useNextTick() {
   // node version 0.10.x displays a deprecation warning when nextTick is used recursively
   // see https://github.com/cujojs/when/issues/410 for details
   return function () {
@@ -659,8 +653,7 @@ function ___useNextTick() {
 }
 
 // vertx
-function useVertxTimer(){ return ___call(___useVertxTimer,'useVertxTimer',this,arguments); }
-function ___useVertxTimer() {
+function useVertxTimer() {
   if (typeof vertxNext !== 'undefined') {
     return function () {
       vertxNext(flush);
@@ -670,8 +663,7 @@ function ___useVertxTimer() {
   return useSetTimeout();
 }
 
-function useMutationObserver(){ return ___call(___useMutationObserver,'useMutationObserver',this,arguments); }
-function ___useMutationObserver() {
+function useMutationObserver() {
   var iterations = 0;
   var observer = new BrowserMutationObserver(flush);
   var node = document.createTextNode('');
@@ -683,8 +675,7 @@ function ___useMutationObserver() {
 }
 
 // web worker
-function useMessageChannel(){ return ___call(___useMessageChannel,'useMessageChannel',this,arguments); }
-function ___useMessageChannel() {
+function useMessageChannel() {
   var channel = new MessageChannel();
   channel.port1.onmessage = flush;
   return function () {
@@ -692,8 +683,7 @@ function ___useMessageChannel() {
   };
 }
 
-function useSetTimeout(){ return ___call(___useSetTimeout,'useSetTimeout',this,arguments); }
-function ___useSetTimeout() {
+function useSetTimeout() {
   // Store setTimeout reference so es6-promise will be unaffected by
   // other code modifying setTimeout (like sinon.useFakeTimers())
   var globalSetTimeout = setTimeout;
@@ -703,8 +693,7 @@ function ___useSetTimeout() {
 }
 
 var queue = new Array(1000);
-function flush(){ return ___call(___flush,'flush',this,arguments); }
-function ___flush() {
+function flush() {
   for (var i = 0; i < len; i += 2) {
     var callback = queue[i];
     var arg = queue[i + 1];
@@ -718,8 +707,7 @@ function ___flush() {
   len = 0;
 }
 
-function attemptVertx(){ return ___call(___attemptVertx,'attemptVertx',this,arguments); }
-function ___attemptVertx() {
+function attemptVertx() {
   try {
     var r = require;
     var vertx = __webpack_require__(12);
@@ -744,8 +732,7 @@ if (isNode) {
   scheduleFlush = useSetTimeout();
 }
 
-function then(){ return ___call(___then,'then',this,arguments); }
-function ___then(onFulfillment, onRejection) {
+function then(onFulfillment, onRejection) {
   var _arguments = arguments;
 
   var parent = this;
@@ -819,8 +806,7 @@ function ___resolve(object) {
 
 var PROMISE_ID = Math.random().toString(36).substring(16);
 
-function noop(){ return ___call(___noop,'noop',this,arguments); }
-function ___noop() {}
+function noop() {}
 
 var PENDING = void 0;
 var FULFILLED = 1;
@@ -828,18 +814,15 @@ var REJECTED = 2;
 
 var GET_THEN_ERROR = new ErrorObject();
 
-function selfFulfillment(){ return ___call(___selfFulfillment,'selfFulfillment',this,arguments); }
-function ___selfFulfillment() {
+function selfFulfillment() {
   return new TypeError("You cannot resolve a promise with itself");
 }
 
-function cannotReturnOwn(){ return ___call(___cannotReturnOwn,'cannotReturnOwn',this,arguments); }
-function ___cannotReturnOwn() {
+function cannotReturnOwn() {
   return new TypeError('A promises callback cannot return that same promise.');
 }
 
-function getThen(){ return ___call(___getThen,'getThen',this,arguments); }
-function ___getThen(promise) {
+function getThen(promise) {
   try {
     return promise.then;
   } catch (error) {
@@ -848,8 +831,7 @@ function ___getThen(promise) {
   }
 }
 
-function tryThen(){ return ___call(___tryThen,'tryThen',this,arguments); }
-function ___tryThen(then, value, fulfillmentHandler, rejectionHandler) {
+function tryThen(then, value, fulfillmentHandler, rejectionHandler) {
   try {
     then.call(value, fulfillmentHandler, rejectionHandler);
   } catch (e) {
@@ -857,8 +839,7 @@ function ___tryThen(then, value, fulfillmentHandler, rejectionHandler) {
   }
 }
 
-function handleForeignThenable(){ return ___call(___handleForeignThenable,'handleForeignThenable',this,arguments); }
-function ___handleForeignThenable(promise, thenable, then) {
+function handleForeignThenable(promise, thenable, then) {
   asap(function (promise) {
     var sealed = false;
     var error = tryThen(then, thenable, function (value) {
@@ -887,8 +868,7 @@ function ___handleForeignThenable(promise, thenable, then) {
   }, promise);
 }
 
-function handleOwnThenable(){ return ___call(___handleOwnThenable,'handleOwnThenable',this,arguments); }
-function ___handleOwnThenable(promise, thenable) {
+function handleOwnThenable(promise, thenable) {
   if (thenable._state === FULFILLED) {
     fulfill(promise, thenable._result);
   } else if (thenable._state === REJECTED) {
@@ -902,8 +882,7 @@ function ___handleOwnThenable(promise, thenable) {
   }
 }
 
-function handleMaybeThenable(){ return ___call(___handleMaybeThenable,'handleMaybeThenable',this,arguments); }
-function ___handleMaybeThenable(promise, maybeThenable, then$$) {
+function handleMaybeThenable(promise, maybeThenable, then$$) {
   if (maybeThenable.constructor === promise.constructor && then$$ === then && maybeThenable.constructor.resolve === resolve) {
     handleOwnThenable(promise, maybeThenable);
   } else {
@@ -929,8 +908,7 @@ function _resolve(promise, value) {
   }
 }
 
-function publishRejection(){ return ___call(___publishRejection,'publishRejection',this,arguments); }
-function ___publishRejection(promise) {
+function publishRejection(promise) {
   if (promise._onerror) {
     promise._onerror(promise._result);
   }
@@ -938,8 +916,7 @@ function ___publishRejection(promise) {
   publish(promise);
 }
 
-function fulfill(){ return ___call(___fulfill,'fulfill',this,arguments); }
-function ___fulfill(promise, value) {
+function fulfill(promise, value) {
   if (promise._state !== PENDING) {
     return;
   }
@@ -962,8 +939,7 @@ function _reject(promise, reason) {
   asap(publishRejection, promise);
 }
 
-function subscribe(){ return ___call(___subscribe,'subscribe',this,arguments); }
-function ___subscribe(parent, child, onFulfillment, onRejection) {
+function subscribe(parent, child, onFulfillment, onRejection) {
   var _subscribers = parent._subscribers;
   var length = _subscribers.length;
 
@@ -978,8 +954,7 @@ function ___subscribe(parent, child, onFulfillment, onRejection) {
   }
 }
 
-function publish(){ return ___call(___publish,'publish',this,arguments); }
-function ___publish(promise) {
+function publish(promise) {
   var subscribers = promise._subscribers;
   var settled = promise._state;
 
@@ -1011,8 +986,7 @@ function ErrorObject() {
 
 var TRY_CATCH_ERROR = new ErrorObject();
 
-function tryCatch(){ return ___call(___tryCatch,'tryCatch',this,arguments); }
-function ___tryCatch(callback, detail) {
+function tryCatch(callback, detail) {
   try {
     return callback(detail);
   } catch (e) {
@@ -1021,8 +995,7 @@ function ___tryCatch(callback, detail) {
   }
 }
 
-function invokeCallback(){ return ___call(___invokeCallback,'invokeCallback',this,arguments); }
-function ___invokeCallback(settled, promise, callback, detail) {
+function invokeCallback(settled, promise, callback, detail) {
   var hasCallback = isFunction(callback),
       value = undefined,
       error = undefined,
@@ -1062,8 +1035,7 @@ function ___invokeCallback(settled, promise, callback, detail) {
     }
 }
 
-function initializePromise(){ return ___call(___initializePromise,'initializePromise',this,arguments); }
-function ___initializePromise(promise, resolver) {
+function initializePromise(promise, resolver) {
   try {
     resolver(function resolvePromise(value) {
       _resolve(promise, value);
@@ -1076,13 +1048,11 @@ function ___initializePromise(promise, resolver) {
 }
 
 var id = 0;
-function nextId(){ return ___call(___nextId,'nextId',this,arguments); }
-function ___nextId() {
+function nextId() {
   return id++;
 }
 
-function makePromise(){ return ___call(___makePromise,'makePromise',this,arguments); }
-function ___makePromise(promise) {
+function makePromise(promise) {
   promise[PROMISE_ID] = id++;
   promise._state = undefined;
   promise._result = undefined;
@@ -1118,8 +1088,7 @@ function Enumerator(Constructor, input) {
   }
 }
 
-function validationError(){ return ___call(___validationError,'validationError',this,arguments); }
-function ___validationError() {
+function validationError() {
   return new Error('Array Methods must be provided an Array');
 };
 
@@ -1233,8 +1202,7 @@ Enumerator.prototype._willSettleAt = function (promise, i) {
   fulfilled, or rejected if any of them become rejected.
   @static
 */
-function all(){ return ___call(___all,'all',this,arguments); }
-function ___all(entries) {
+function all(entries) {
   return new Enumerator(this, entries).promise;
 }
 
@@ -1303,8 +1271,7 @@ function ___all(entries) {
   @return {Promise} a promise which settles in the same way as the first passed
   promise to settle.
 */
-function race(){ return ___call(___race,'race',this,arguments); }
-function ___race(entries) {
+function race(entries) {
   /*jshint validthis:true */
   var Constructor = this;
 
@@ -1365,13 +1332,11 @@ function ___reject(reason) {
   return promise;
 }
 
-function needsResolver(){ return ___call(___needsResolver,'needsResolver',this,arguments); }
-function ___needsResolver() {
+function needsResolver() {
   throw new TypeError('You must pass a resolver function as the first argument to the promise constructor');
 }
 
-function needsNew(){ return ___call(___needsNew,'needsNew',this,arguments); }
-function ___needsNew() {
+function needsNew() {
   throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.");
 }
 
@@ -1727,8 +1692,7 @@ Promise.prototype = {
   }
 };
 
-function polyfill(){ return ___call(___polyfill,'polyfill',this,arguments); }
-function ___polyfill() {
+function polyfill() {
     var local = undefined;
 
     if (typeof global !== 'undefined') {
@@ -1786,12 +1750,10 @@ var process = module.exports = {};
 var cachedSetTimeout;
 var cachedClearTimeout;
 
-function defaultSetTimout(){ return ___call(___defaultSetTimout,'defaultSetTimout',this,arguments); }
-function ___defaultSetTimout() {
+function defaultSetTimout() {
     throw new Error('setTimeout has not been defined');
 }
-function defaultClearTimeout (){ return ___call(___defaultClearTimeout ,'defaultClearTimeout ',this,arguments); }
-function ___defaultClearTimeout () {
+function defaultClearTimeout () {
     throw new Error('clearTimeout has not been defined');
 }
 (function () {
@@ -1814,8 +1776,7 @@ function ___defaultClearTimeout () {
         cachedClearTimeout = defaultClearTimeout;
     }
 } ())
-function runTimeout(){ return ___call(___runTimeout,'runTimeout',this,arguments); }
-function ___runTimeout(fun) {
+function runTimeout(fun) {
     if (cachedSetTimeout === setTimeout) {
         //normal enviroments in sane situations
         return setTimeout(fun, 0);
@@ -1840,8 +1801,7 @@ function ___runTimeout(fun) {
 
 
 }
-function runClearTimeout(){ return ___call(___runClearTimeout,'runClearTimeout',this,arguments); }
-function ___runClearTimeout(marker) {
+function runClearTimeout(marker) {
     if (cachedClearTimeout === clearTimeout) {
         //normal enviroments in sane situations
         return clearTimeout(marker);
@@ -1873,8 +1833,7 @@ var draining = false;
 var currentQueue;
 var queueIndex = -1;
 
-function cleanUpNextTick(){ return ___call(___cleanUpNextTick,'cleanUpNextTick',this,arguments); }
-function ___cleanUpNextTick() {
+function cleanUpNextTick() {
     if (!draining || !currentQueue) {
         return;
     }
@@ -1889,8 +1848,7 @@ function ___cleanUpNextTick() {
     }
 }
 
-function drainQueue(){ return ___call(___drainQueue,'drainQueue',this,arguments); }
-function ___drainQueue() {
+function drainQueue() {
     if (draining) {
         return;
     }
@@ -1942,8 +1900,7 @@ process.argv = [];
 process.version = ''; // empty string to avoid regexp issues
 process.versions = {};
 
-function noop(){ return ___call(___noop,'noop',this,arguments); }
-function ___noop() {}
+function noop() {}
 
 process.on = noop;
 process.addListener = noop;

@@ -1,1 +1,1 @@
-export declare function injectWebpack(text: string): string;
+export declare function injectWebpack(text: string, ownSourceCode: string): string;

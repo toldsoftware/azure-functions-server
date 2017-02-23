@@ -1,1 +1,1 @@
-{"version":3,"file":"webpack-injection.js","sourceRoot":"","sources":["../../src-cli/webpack-injection.ts"],"names":[],"mappings":";AAAA,qGAAuF;AAEvF,uBAA8B,IAAY;IACtC,IAAI,GAAG,0DAAqB,CAAC,IAAI,CAAC,CAAC;IACnC,MAAM,CAAC,IAAI,CAAC;AAChB,CAAC;AAHD,sCAGC"}
+{"version":3,"file":"webpack-injection.js","sourceRoot":"","sources":["../../src-cli/webpack-injection.ts"],"names":[],"mappings":";AAAA,qGAAuF;AAEvF,uBAA8B,IAAY,EAAE,aAAqB;IAE7D,gCAAgC;IAChC,6BAA6B;IAC7B,qCAAqC;IAErC,IAAI,GAAG,0DAAqB,CAAC,IAAI,EAAE,aAAa,CAAC,CAAC;IAClD,MAAM,CAAC,IAAI,CAAC;AAChB,CAAC;AARD,sCAQC"}

@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as path from 'path';
 import { injectWebpack } from './webpack-injection';
 
 declare var require: any;
@@ -50,7 +51,7 @@ export function runWebpackAzureFunction(functionDirsOrFiles: string[], shouldInj
 
             if (shouldInject) {
                 (async () => {
-                    await inject(entries);
+                    await inject(entries, await getOwnSourceCode());
                     resolve();
                 })();
             } else {
@@ -120,7 +121,7 @@ export function runWebpackClient(entrySourceFiles: string[], shouldInject = fals
 
             if (shouldInject) {
                 (async () => {
-                    await inject(entries);
+                    await inject(entries, await getOwnSourceCode());
                     resolve();
                 })();
             } else {
@@ -131,21 +132,68 @@ export function runWebpackClient(entrySourceFiles: string[], shouldInject = fals
     });
 }
 
-function inject(files: { [name: string]: string }) {
+let _ownSourceCode: string;
+function getOwnSourceCode() {
+    return new Promise<string>((resolve, reject) => {
+        if (_ownSourceCode) { resolve(_ownSourceCode); }
+        (async () => {
+            let files = await walkDir('./lib/');
+            let pending = files.length;
+            for (let f of files) {
+                fs.readFile(f, 'utf8', function (err, data) {
+                    _ownSourceCode += data + '\r\n';
+                    pending--;
+                    if (!pending) {
+                        resolve(_ownSourceCode);
+                    }
+                });
+            }
+        })().then();
+    });
+}
+
+// From: http://stackoverflow.com/questions/5827612/node-js-fs-readdir-recursive-directory-search
+function walkDir(dir: string) {
+    return new Promise<string[]>((resolve, reject) => {
+        let results: string[] = [];
+        fs.readdir(dir, function (err, list) {
+            if (err) return reject(err);
+            let pending = list.length;
+            if (!pending) return resolve(results);
+            list.forEach(function (file) {
+                file = path.resolve(dir, file);
+                fs.stat(file, function (err, stat) {
+                    if (stat && stat.isDirectory()) {
+                        walkDir(file).then(innerResults => {
+                            results = results.concat(innerResults);
+                            if (!--pending) resolve(results);
+                        });
+                    } else {
+                        results.push(file);
+                        if (!--pending) resolve(results);
+                    }
+                });
+            });
+        });
+    });
+}
+
+function inject(files: { [name: string]: string }, ownSourceCode: string) {
     return new Promise((resolve, reject) => {
         console.log('Inject START');
 
-        let waitCount = 0;
+        let pending = 0;
         let resolveTimeoutId: any = null;
         let resolveIfDone = () => {
             clearTimeout(resolveTimeoutId);
             resolveTimeoutId = setTimeout(() => {
-                if (waitCount > 0) { return; }
+                if (pending > 0) { return; }
                 console.log('Inject END');
                 resolve();
             });
         };
 
+        // Process Files
         let destFiles: string[] = [];
 
         for (let key in files) {
@@ -155,19 +203,19 @@ function inject(files: { [name: string]: string }) {
         }
 
         for (let f of destFiles) {
-            waitCount++;
+            pending++;
             fs.readFile(f, 'utf8', function (err, data) {
                 if (err) {
-                    waitCount--;
+                    pending--;
                     resolveIfDone();
                     return console.log(err);
                 }
 
                 console.log('Inject file=' + f);
-                let result = injectWebpack(data);
+                let result = injectWebpack(data, ownSourceCode);
 
                 fs.writeFile(f, result, 'utf8', function (err) {
-                    waitCount--;
+                    pending--;
                     resolveIfDone();
                     if (err) { return console.log(err); }
                 });
