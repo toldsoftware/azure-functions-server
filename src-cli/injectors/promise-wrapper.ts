@@ -6,7 +6,7 @@ let Promise_Original = Promise;
 declare var ___callTree: CallTreeNode;
 if (typeof ___callTree === 'undefined') { ___callTree = { calls: [] } as CallTreeNode; }
 
-declare var ___getNextId: () => string;
+declare var ___getNextId: (threadId: string) => string;
 if (typeof ___getNextId === 'undefined') { ___getNextId = () => '-1'; }
 
 declare var ___stringifySafe: (obj: any) => string;
@@ -14,7 +14,7 @@ if (typeof ___stringifySafe === 'undefined') { ___stringifySafe = () => '___unde
 
 export const PromiseInjection = {
     beforeConstructorCallback: (id: string) => {
-        const node: CallTreeNode = { name: 'PROMISE', id, args: '', calls: [], parent: ___callTree, err: null, result: null };
+        const node: CallTreeNode = { name: 'PROMISE', id, threadId: ___callTree.threadId, args: '', calls: [], parent: ___callTree, err: null, result: null };
         ___callTree.calls.push(node);
         return node;
     },
@@ -29,7 +29,7 @@ export class PromiseWrapper<T> {
     private promiseInner: PromiseType<T>;
 
     constructor(resolver: (resolve: (value: T) => void, reject: (reason: string) => void) => void) {
-        this.id = ___getNextId();
+        this.id = ___getNextId(___callTree.threadId);
         this.context = PromiseInjection.beforeConstructorCallback(this.id);
 
         this.promiseInner = new Promise_Original((resolveInner, rejectInner) => {

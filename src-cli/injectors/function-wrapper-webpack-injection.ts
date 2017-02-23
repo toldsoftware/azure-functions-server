@@ -26,17 +26,15 @@ function getFunctionWrapper(name: string) {
 }
 
 const globals = `
-
-var ___threadId = Math.floor(Math.random() * 10000);
-var ___nextId = 0;
-function ___getNextId(){
-    return ___threadId + '_' + ___nextId++;
+var ___nextId = ___nextId || 0;
+function ___getNextId(threadId: number) {
+    return threadId + '_' + ___nextId++;
 }
-var ___callTree = { name: '_root', id: ___getNextId(), args: '', parent: null, calls: [] };
-var ___callTreeRoot = ___callTree;
+var ___tempThreadId = '' + Math.floor(Math.random() * 10000);
+var ___callTree = { name: '_root', id: ___getNextId(___tempThreadId), threadId: ___tempThreadId, args: '', parent: null, calls: [] };
 var ___log = [];
 var ___beforeFunctionCallback = function (name, args) {
-    ___callTree = { name: name, id: ___getNextId(), args: ___stringifySafe(args), parent: ___callTree, calls: [] };
+    ___callTree = { name: name, id: ___getNextId(___callTree.threadId), threadId: ___callTree.threadId, args: ___stringifySafe(args), parent: ___callTree, calls: [] };
     ___callTree.parent.calls.push(___callTree);
     return -1 + ___log.push(___callTree);
 }

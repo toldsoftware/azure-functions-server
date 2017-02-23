@@ -1,15 +1,13 @@
 
-
-var ___threadId = Math.floor(Math.random() * 10000);
-var ___nextId = 0;
-function ___getNextId(){
-    return ___threadId + '_' + ___nextId++;
+var ___nextId = ___nextId || 0;
+function ___getNextId(threadId: number) {
+    return threadId + '_' + ___nextId++;
 }
-var ___callTree = { name: '_root', id: ___getNextId(), args: '', parent: null, calls: [] };
-var ___callTreeRoot = ___callTree;
+var ___tempThreadId = '' + Math.floor(Math.random() * 10000);
+var ___callTree = { name: '_root', id: ___getNextId(___tempThreadId), threadId: ___tempThreadId, args: '', parent: null, calls: [] };
 var ___log = [];
 var ___beforeFunctionCallback = function (name, args) {
-    ___callTree = { name: name, id: ___getNextId(), args: ___stringifySafe(args), parent: ___callTree, calls: [] };
+    ___callTree = { name: name, id: ___getNextId(___callTree.threadId), threadId: ___callTree.threadId, args: ___stringifySafe(args), parent: ___callTree, calls: [] };
     ___callTree.parent.calls.push(___callTree);
     return -1 + ___log.push(___callTree);
 }
@@ -8485,7 +8483,7 @@ if (typeof ___stringifySafe === 'undefined') {
 }
 exports.PromiseInjection = {
     beforeConstructorCallback: function (id) {
-        var node = { name: 'PROMISE', id: id, args: '', calls: [], parent: ___callTree, err: null, result: null };
+        var node = { name: 'PROMISE', id: id, threadId: ___callTree.threadId, args: '', calls: [], parent: ___callTree, err: null, result: null };
         ___callTree.calls.push(node);
         return node;
     },
@@ -8496,7 +8494,7 @@ var PromiseWrapper = (function () {
     function PromiseWrapper(resolver) {
         var _this = this;
         this.id = '';
-        this.id = ___getNextId();
+        this.id = ___getNextId(___callTree.threadId);
         this.context = exports.PromiseInjection.beforeConstructorCallback(this.id);
         this.promiseInner = new Promise_Original(function (resolveInner, rejectInner) {
             var resolveOuter = function (value) {

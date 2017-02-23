@@ -1,6 +1,7 @@
 export interface CallTreeNode {
     name: string;
     id: string;
+    threadId: string;
     args: string;
     parent: CallTreeNode;
     calls: CallTreeNode[];
