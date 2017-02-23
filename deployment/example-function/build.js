@@ -57,7 +57,9 @@ function ___wrapConstructor(constructorInner, name) {
 
         for (var key in proto) {
             if (proto.hasOwnProperty(key) && typeof proto[key] === 'function') {
-                this[key] = function () { return ___call(proto[key], name + '.' + key, this, arguments); }
+                this[key] = function () { 
+                    return ___call(proto[key], name + '.' + key, this, arguments); 
+                }
             }
         }
     }
@@ -417,7 +419,7 @@ function _printCallTree(callTree, depth) {
         text += '-';
     }
     if (!callTree.err) {
-        text += callTree.name + " " + callTree.id + ": " + (callTree.args || '{}') + " => " + (callTree.result || '{}');
+        text += callTree.name + " " + callTree.id + ": " + (callTree.args || '{}').substr(0, 80) + " => " + (callTree.result || '{}').substr(0, 80);
     }
     else {
         text += "ERROR " + callTree.name + " " + callTree.id + ": " + callTree.args + " => " + callTree.err;

@@ -17,7 +17,7 @@ export function _printCallTree(callTree: CallTreeNode, depth = 0): string {
     }
 
     if (!callTree.err) {
-        text += `${callTree.name} ${callTree.id}: ${callTree.args || '{}'} => ${callTree.result || '{}'}`;
+        text += `${callTree.name} ${callTree.id}: ${(callTree.args || '{}').substr(0,80)} => ${(callTree.result || '{}').substr(0,80)}`;
     } else {
         text += `ERROR ${callTree.name} ${callTree.id}: ${callTree.args} => ${callTree.err}`;
     }
