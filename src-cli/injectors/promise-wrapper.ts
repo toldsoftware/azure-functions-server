@@ -21,14 +21,14 @@ export const PromiseInjection = {
     beforeResolveCallback: (context: CallTreeNode, id: string, value: any) => {
         context.result = ___stringifySafe(value);
 
-        // Restore the original call context (the calling thread has already exited by now)
-        ___callTree = context.parent;
+        // Next the continuation under the promise
+        ___callTree = context;
     },
     beforeRejectCallback: (context: CallTreeNode, id: string, reason: any) => {
         context.err = ___stringifySafe(reason);
-        
-        // Restore the original call context
-        ___callTree = context.parent;
+
+        // Next the continuation under the promise
+        ___callTree = context;
     },
 };
 

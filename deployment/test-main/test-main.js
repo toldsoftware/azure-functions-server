@@ -8128,7 +8128,7 @@ function _printCallTree(callTree, depth) {
         text += '-';
     }
     if (!callTree.err) {
-        text += callTree.name + " " + callTree.id + ": " + abbreviate(callTree.args || '{}') + " => " + abbreviate(callTree.result || '{}');
+        text += callTree.name + " " + callTree.id + ": " + _abbreviate(callTree.args || '{}') + " => " + _abbreviate(callTree.result || '{}');
     }
     else {
         text += "ERROR " + callTree.name + " " + callTree.id + ": " + callTree.args + " => " + callTree.err;
@@ -8141,8 +8141,7 @@ function _printCallTree(callTree, depth) {
     return text;
 }
 exports._printCallTree = _printCallTree;
-function abbreviate(){ return ___call(_f_abbreviate,'abbreviate',this,arguments); }
-function _f_abbreviate(text, maxLength) {
+function _abbreviate(text, maxLength) {
     if (maxLength === void 0) { maxLength = 80; }
     if (text.length <= maxLength) {
         return text;
@@ -8175,13 +8174,13 @@ exports.PromiseInjection = {
     },
     beforeResolveCallback: function (context, id, value) {
         context.result = ___stringifySafe(value);
-        // Restore the original call context (the calling thread has already exited by now)
-        ___callTree = context.parent;
+        // Next the continuation under the promise
+        ___callTree = context;
     },
     beforeRejectCallback: function (context, id, reason) {
         context.err = ___stringifySafe(reason);
-        // Restore the original call context
-        ___callTree = context.parent;
+        // Next the continuation under the promise
+        ___callTree = context;
     },
 };
 // tslint:disable-next-line:class-name
@@ -78845,7 +78844,12 @@ var resource_1 = __webpack_require__(55);
 var root_dir_1 = __webpack_require__(27);
 var call_tree_1 = __webpack_require__(32);
 var promise_wrapper_1 = __webpack_require__(33);
-promise_wrapper_1._injectPromiseWrapper();
+var DEBUG = typeof ___callTree !== 'undefined';
+var _callTreeRoot = null;
+if (DEBUG) {
+    promise_wrapper_1._injectPromiseWrapper();
+    _callTreeRoot = ___callTree;
+}
 function setDirName(){ return ___call(_f_setDirName,'setDirName',this,arguments); }
 function _f_setDirName(dirName) {
     root_dir_1.dir.rootDir = path.resolve(dirName, '..');
@@ -78916,10 +78920,12 @@ function _f_serve(functions, port) {
                 request.pathName = request.pathName.replace("/" + f.name + "/", '/').replace(f.name + "/", '').replace("" + f.name, '');
                 request.pathParts.splice(0, 1);
                 try {
+                    var _callTree_requestRoot_1 = _callTreeRoot;
+                    ___callTree = _callTree_requestRoot_1;
                     f.main(context, request)
                         .then(function () {
-                        if (typeof ___callTree !== 'undefined') {
-                            console.log(call_tree_1._printCallTree(___callTree));
+                        if (_callTree_requestRoot_1) {
+                            console.log(call_tree_1._printCallTree(_callTree_requestRoot_1));
                         }
                     })
                         .catch(function (err) { return console.error(err); });

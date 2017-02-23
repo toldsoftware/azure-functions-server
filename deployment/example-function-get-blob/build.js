@@ -6515,8 +6515,10 @@ var promise_wrapper_1 = __webpack_require__(33);
 // declare var ___beforeFunctionCallback: BeforeFunctionCallback;
 // declare var ___afterFunctionCallback: AfterFunctionCallback;
 var DEBUG = typeof ___callTree !== 'undefined';
+var _callTreeRoot = null;
 if (DEBUG) {
     promise_wrapper_1._injectPromiseWrapper();
+    _callTreeRoot = ___callTree;
 }
 function setDirName(){ return ___call(_f_setDirName,'setDirName',this,arguments); }
 function _f_setDirName(dirName) {
@@ -6526,7 +6528,7 @@ function _f_setDirName(dirName) {
 exports.setDirName = setDirName;
 function serve(){ return ___call(_f_serve,'serve',this,arguments); }
 function _f_serve(main) {
-    var ___callTree_runnerRoot = null;
+    var _callTree_runnerRoot = null;
     var runner = function (context, request) {
         var req = tslib_1.__assign({}, request);
         req.pathName = req.pathName || context.bindingData.pathName || '';
@@ -6564,20 +6566,21 @@ function _f_serve(main) {
         main(context, req)
             .then(function () {
             if (DEBUG) {
-                context.log(call_tree_1._printCallTree(___callTree_runnerRoot));
+                context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
             }
         })
             .catch(function (err) {
             context.log('Uncaught Error:', err);
             if (DEBUG) {
-                context.log(call_tree_1._printCallTree(___callTree_runnerRoot));
+                context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
             }
             context.done(err, null);
         });
     };
     if (DEBUG) {
         var innerIsolate_1 = function () {
-            ___callTree_runnerRoot = DEBUG ? ___callTree : null;
+            _callTree_runnerRoot = _callTreeRoot;
+            ___callTree = _callTree_runnerRoot;
             return ___call(runner, 'serve', this, arguments);
         };
         return function () {
@@ -8217,7 +8220,7 @@ function _printCallTree(callTree, depth) {
         text += '-';
     }
     if (!callTree.err) {
-        text += callTree.name + " " + callTree.id + ": " + abbreviate(callTree.args || '{}') + " => " + abbreviate(callTree.result || '{}');
+        text += callTree.name + " " + callTree.id + ": " + _abbreviate(callTree.args || '{}') + " => " + _abbreviate(callTree.result || '{}');
     }
     else {
         text += "ERROR " + callTree.name + " " + callTree.id + ": " + callTree.args + " => " + callTree.err;
@@ -8230,8 +8233,7 @@ function _printCallTree(callTree, depth) {
     return text;
 }
 exports._printCallTree = _printCallTree;
-function abbreviate(){ return ___call(_f_abbreviate,'abbreviate',this,arguments); }
-function _f_abbreviate(text, maxLength) {
+function _abbreviate(text, maxLength) {
     if (maxLength === void 0) { maxLength = 80; }
     if (text.length <= maxLength) {
         return text;
@@ -8264,13 +8266,13 @@ exports.PromiseInjection = {
     },
     beforeResolveCallback: function (context, id, value) {
         context.result = ___stringifySafe(value);
-        // Restore the original call context (the calling thread has already exited by now)
-        ___callTree = context.parent;
+        // Next the continuation under the promise
+        ___callTree = context;
     },
     beforeRejectCallback: function (context, id, reason) {
         context.err = ___stringifySafe(reason);
-        // Restore the original call context
-        ___callTree = context.parent;
+        // Next the continuation under the promise
+        ___callTree = context;
     },
 };
 // tslint:disable-next-line:class-name

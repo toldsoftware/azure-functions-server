@@ -10,8 +10,10 @@ declare var ___call: Call;
 // declare var ___beforeFunctionCallback: BeforeFunctionCallback;
 // declare var ___afterFunctionCallback: AfterFunctionCallback;
 const DEBUG = typeof ___callTree !== 'undefined';
+let _callTreeRoot: CallTreeNode = null;
 if (DEBUG) {
     _injectPromiseWrapper();
+    _callTreeRoot = ___callTree;
 }
 
 export function setDirName(dirName: string) {
@@ -20,7 +22,7 @@ export function setDirName(dirName: string) {
 }
 
 export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery, TBody>): T.MainEntryPoint_Sync<TData, TQuery, TBody> {
-    let ___callTree_runnerRoot: CallTreeNode = null;
+    let _callTree_runnerRoot: CallTreeNode = null;
 
     let runner = (context: T.Context<TData>, request: T.Request<TQuery, TBody>) => {
 
@@ -64,13 +66,13 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
         main(context, req)
             .then(() => {
                 if (DEBUG) {
-                    context.log(_printCallTree(___callTree_runnerRoot));
+                    context.log(_printCallTree(_callTree_runnerRoot));
                 }
             })
             .catch(err => {
                 context.log('Uncaught Error:', err);
                 if (DEBUG) {
-                    context.log(_printCallTree(___callTree_runnerRoot));
+                    context.log(_printCallTree(_callTree_runnerRoot));
                 }
                 context.done(err, null);
             });
@@ -78,7 +80,8 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
 
     if (DEBUG) {
         const innerIsolate = function () {
-            ___callTree_runnerRoot = DEBUG ? ___callTree : null;
+            _callTree_runnerRoot = _callTreeRoot;
+            ___callTree = _callTree_runnerRoot;
             return ___call(runner, 'serve', this, arguments);
         };
 

@@ -17,7 +17,7 @@ export function _printCallTree(callTree: CallTreeNode, depth = 0): string {
     }
 
     if (!callTree.err) {
-        text += `${callTree.name} ${callTree.id}: ${abbreviate(callTree.args || '{}')} => ${abbreviate(callTree.result || '{}')}`;
+        text += `${callTree.name} ${callTree.id}: ${_abbreviate(callTree.args || '{}')} => ${_abbreviate(callTree.result || '{}')}`;
     } else {
         text += `ERROR ${callTree.name} ${callTree.id}: ${callTree.args} => ${callTree.err}`;
     }
@@ -31,7 +31,7 @@ export function _printCallTree(callTree: CallTreeNode, depth = 0): string {
     return text;
 }
 
-function abbreviate(text: string, maxLength = 80) {
+function _abbreviate(text: string, maxLength = 80) {
     if (text.length <= maxLength) { return text; }
 
     return text.substr(0, maxLength) + '...';

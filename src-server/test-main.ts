@@ -7,10 +7,17 @@ import * as T from './../src';
 import { main as resourceMain } from './resource';
 import { dir } from './../src/root-dir';
 
-import { _printCallTree } from '../src-cli/injectors/call-tree';
+import { _printCallTree, CallTreeNode } from '../src-cli/injectors/call-tree';
 import { _injectPromiseWrapper } from '../src-cli/injectors/promise-wrapper';
-declare var ___callTree: any;
-_injectPromiseWrapper();
+declare var ___callTree: CallTreeNode;
+const DEBUG = typeof ___callTree !== 'undefined';
+
+let _callTreeRoot: CallTreeNode = null;
+
+if (DEBUG) {
+    _injectPromiseWrapper();
+    _callTreeRoot = ___callTree;
+}
 
 export function setDirName(dirName: string) {
     dir.rootDir = path.resolve(dirName, '..');
@@ -85,10 +92,13 @@ export function serve<T, TQuery, TBody>(functions: { name: string, main: T.MainE
                 request.pathName = request.pathName.replace(`/${f.name}/`, '/').replace(`${f.name}/`, '').replace(`${f.name}`, '');
                 request.pathParts.splice(0, 1);
                 try {
+                    let _callTree_requestRoot = _callTreeRoot;
+                    ___callTree = _callTree_requestRoot;
+
                     f.main(context, request)
                         .then(() => {
-                            if (typeof ___callTree !== 'undefined') {
-                                console.log(_printCallTree(___callTree));
+                            if (_callTree_requestRoot) {
+                                console.log(_printCallTree(_callTree_requestRoot));
                             }
                         })
                         .catch((err: any) => console.error(err));
