@@ -1,11 +1,12 @@
 
 var ___nextId = ___nextId || 0;
 var ___process = process || '_NO_PROCESS_';
-function ___getNextId(threadId) {
-    return ___process.pid + '_' + threadId + '_' + ___nextId++;
+var ___threadId = '' + Math.floor(Math.random() * 10000);
+
+function ___getNextId(parentThreadId) {
+    return ___process.pid + '_' + ___threadId + '_' + parentThreadId + '_' + ___nextId++;
 }
-var ___tempThreadId = '' + Math.floor(Math.random() * 10000);
-var ___callTree = { name: '_root', id: ___getNextId(___tempThreadId), threadId: ___tempThreadId, args: '', parent: null, calls: [] };
+var ___callTree = { name: '_root', id: ___getNextId(___threadId), threadId: ___threadId, args: '', parent: null, calls: [] };
 var ___log = [];
 var ___beforeFunctionCallback = function (name, args) {
     ___callTree = { name: name, id: ___getNextId(___callTree.threadId), threadId: ___callTree.threadId, args: ___stringifySafe(args), parent: ___callTree, calls: [] };
