@@ -57,13 +57,12 @@ function ___wrapConstructor(constructorInner, name) {
 
         for (var key in proto) {
             if (proto.hasOwnProperty(key) && typeof proto[key] === 'function') {
-                this[key] = function () { return ___call(proto[key], name + '.' + key, inner, arguments); }
+                this[key] = function () { return ___call(proto[key], name + '.' + key, this, arguments); }
             }
         }
     }
 
     Outer.prototype = inner;
-
     return Outer;
 };
 

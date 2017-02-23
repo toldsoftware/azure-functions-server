@@ -5,5 +5,5 @@ export declare class TestClass {
     private c;
     private val;
     constructor(a: number, b: number, c: number);
-    testMethod(): number;
+    testMethod(): string;
 }

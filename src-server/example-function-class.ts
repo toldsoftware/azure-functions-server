@@ -4,7 +4,7 @@ import { ExampleFunctionRequest, ExampleFunctionResponseData } from '../src/exam
 
 export async function main(context: T.Context<ExampleFunctionResponseData>, request: ExampleFunctionRequest) {
 
-    let obj = new TestClass(1, 2, 3);
+    let obj = new TestClass(1, 2, 7);
     let val = obj.testMethod()
 
     context.done(null, {
@@ -28,6 +28,6 @@ export class TestClass {
     }
 
     testMethod() {
-        return this.val;
+        return `a+b=${this.val}; this.c=${this.c}`;
     }
 }

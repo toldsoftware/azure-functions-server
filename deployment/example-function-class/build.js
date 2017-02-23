@@ -57,13 +57,12 @@ function ___wrapConstructor(constructorInner, name) {
 
         for (var key in proto) {
             if (proto.hasOwnProperty(key) && typeof proto[key] === 'function') {
-                this[key] = function () { return ___call(proto[key], name + '.' + key, inner, arguments); }
+                this[key] = function () { return ___call(proto[key], name + '.' + key, this, arguments); }
             }
         }
     }
 
     Outer.prototype = inner;
-
     return Outer;
 };
 
@@ -273,7 +272,7 @@ function _f_main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         var obj, val;
         return tslib_1.__generator(this, function (_a) {
-            obj = new TestClass(1, 2, 3);
+            obj = new TestClass(1, 2, 7);
             val = obj.testMethod();
             context.done(null, {
                 headers: {
@@ -298,7 +297,7 @@ var TestClass = (function () {
         this.val = a + b;
     }
     TestClass.prototype.testMethod = function () {
-        return this.val;
+        return "a+b=" + this.val + "; this.c=" + this.c;
     };
 return ___wrapConstructor(TestClass, 'TestClass');
 }());
