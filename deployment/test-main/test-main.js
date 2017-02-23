@@ -6173,10 +6173,10 @@ function _printCallTree(callTree, depth) {
         text += '-';
     }
     if (!callTree.err) {
-        text += callTree.name + ": " + (callTree.args || '{}') + " => " + (callTree.result || '{}');
+        text += callTree.name + " " + callTree.id + ": " + (callTree.args || '{}') + " => " + (callTree.result || '{}');
     }
     else {
-        text += "ERROR " + callTree.name + ": " + callTree.args + " => " + callTree.err;
+        text += "ERROR " + callTree.name + " " + callTree.id + ": " + callTree.args + " => " + callTree.err;
     }
     text += '\r\n';
     for (var _i = 0, _a = callTree.calls; _i < _a.length; _i++) {
@@ -8492,19 +8492,20 @@ if (typeof ___callTree === 'undefined') {
 }
 exports.PromiseInjection = {
     beforeConstructorCallback: function (id) {
-        var node = { name: 'PROMISE ' + id, args: '', calls: [], parent: ___callTree, err: null, result: null };
+        var node = { name: 'PROMISE', args: '', calls: [], parent: ___callTree, err: null, result: null };
         ___callTree.calls.push(node);
         return node;
     },
     beforeResolveCallback: function (context, id, value) { context.result = call_tree_1._stringifySafe(value); },
     beforeRejectCallback: function (context, id, reason) { context.err = call_tree_1._stringifySafe(reason); },
 };
+var _threadId = Math.random() % 9999;
 var _nextPromiseId = 0;
 var PromiseWrapper = (function () {
     function PromiseWrapper(resolver) {
         var _this = this;
         this.id = '';
-        this.id = '' + _nextPromiseId++;
+        this.id = _threadId + '_' + _nextPromiseId++;
         this.context = exports.PromiseInjection.beforeConstructorCallback(this.id);
         this.promiseInner = new Promise_Original(function (resolveInner, rejectInner) {
             var resolveOuter = function (value) {

@@ -25,39 +25,18 @@ function getFunctionWrapper(name: string) {
     return functionWrapper.replace(/\$1/g, name);
 }
 
-// var ___callTree = {name:'_root', args:'', parent:null, calls:[]};
-// var ___callTreeRoot = ___callTree;
-// var ___log = [];
-// var ___beforeFunctionCallback = function (name, args) {
-//     ___callTree = {name: name, args: ___stringifySafe(args), parent: ___callTree, calls:[]};
-//     ___callTree.parent.calls.push(___callTree);
-//     return -1 + ___log.push(___callTree);
-// }
-// var ___afterFunctionCallback = function (iLog, name, result, err) {
-//     ___log[iLog].result = ___stringifySafe(result);
-//     ___log[iLog].err = ___stringifySafe(err);
-//     ___callTree = ___callTree.parent;
-// }
-// function ___call(fun, name, that, args) {
-//     var iLog = ___beforeFunctionCallback(name, args);
-//     try {
-//         var result = fun.apply(that, args);
-//         ___afterFunctionCallback(iLog, name, result);
-//         return result;
-//     } catch (err) {
-//         ___afterFunctionCallback(iLog, name, null, err);
-//         throw err;
-//     }
-// }
-
-
 const globals = `
 
-var ___callTree = {name:'_root', args:'', parent:null, calls:[]};
+var ___threadId = Math.random() % 9999;
+var ___nextId = 0;
+function ___getNextId(){
+    return ___threadId + '_' + ___nextId++;
+}
+var ___callTree = { name: '_root', id : ___getNextId(), args: '', parent: null, calls: [] };
 var ___callTreeRoot = ___callTree;
 var ___log = [];
 var ___beforeFunctionCallback = function (name, args) {
-    ___callTree = {name: name, args: ___stringifySafe(args), parent: ___callTree, calls:[]};
+    ___callTree = { name: name, id : ___getNextId(), args: ___stringifySafe(args), parent: ___callTree, calls: [] };
     ___callTree.parent.calls.push(___callTree);
     return -1 + ___log.push(___callTree);
 }
