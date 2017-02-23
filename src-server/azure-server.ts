@@ -3,9 +3,9 @@ import * as path from 'path';
 import * as T from './../src';
 import { dir } from './../src/root-dir';
 
-import { _printCallTree } from '../src-cli/injectors/call-tree';
+import { _printCallTree, CallTreeNode } from '../src-cli/injectors/call-tree';
 import { _injectPromiseWrapper } from '../src-cli/injectors/promise-wrapper';
-declare var ___callTree: any;
+declare var ___callTree: CallTreeNode;
 declare var ___call: any;
 const DEBUG = typeof ___callTree !== 'undefined';
 if (DEBUG) {
@@ -18,8 +18,9 @@ export function setDirName(dirName: string) {
 }
 
 export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery, TBody>): T.MainEntryPoint_Sync<TData, TQuery, TBody> {
+    let ___callTree_runnerRoot: CallTreeNode = null;
+
     let runner = (context: T.Context<TData>, request: T.Request<TQuery, TBody>) => {
-        let ___callTree_runnerRoot = DEBUG ? ___callTree : null;
 
         let req = { ...request };
         req.pathName = req.pathName || (context as any).bindingData.pathName || '';
@@ -74,8 +75,13 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
     };
 
     if (DEBUG) {
-        return function () {
+        const innerIsolate = function () {
+            ___callTree_runnerRoot = DEBUG ? ___callTree : null;
             return ___call(runner, 'serve', this, arguments);
+        };
+
+        return function () {
+            return ___call(innerIsolate, 'request', this, arguments);
         };
     } else {
         return runner;

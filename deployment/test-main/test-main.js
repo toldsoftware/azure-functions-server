@@ -8128,7 +8128,7 @@ function _printCallTree(callTree, depth) {
         text += '-';
     }
     if (!callTree.err) {
-        text += callTree.name + " " + callTree.id + ": " + (callTree.args || '{}').substr(0, 80) + " => " + (callTree.result || '{}').substr(0, 80);
+        text += callTree.name + " " + callTree.id + ": " + abbreviate(callTree.args || '{}') + " => " + abbreviate(callTree.result || '{}');
     }
     else {
         text += "ERROR " + callTree.name + " " + callTree.id + ": " + callTree.args + " => " + callTree.err;
@@ -8141,6 +8141,14 @@ function _printCallTree(callTree, depth) {
     return text;
 }
 exports._printCallTree = _printCallTree;
+function abbreviate(){ return ___call(_f_abbreviate,'abbreviate',this,arguments); }
+function _f_abbreviate(text, maxLength) {
+    if (maxLength === void 0) { maxLength = 80; }
+    if (text.length <= maxLength) {
+        return text;
+    }
+    return text.substr(0, maxLength) + '...';
+}
 
 
 /***/ }),

@@ -337,8 +337,8 @@ function _f_setDirName(dirName) {
 exports.setDirName = setDirName;
 function serve(){ return ___call(_f_serve,'serve',this,arguments); }
 function _f_serve(main) {
+    var ___callTree_runnerRoot = null;
     var runner = function (context, request) {
-        var ___callTree_runnerRoot = DEBUG ? ___callTree : null;
         var req = tslib_1.__assign({}, request);
         req.pathName = req.pathName || context.bindingData.pathName || '';
         req.pathParts = req.pathName.split('/').filter(function (x) { return x.length > 0; });
@@ -387,8 +387,12 @@ function _f_serve(main) {
         });
     };
     if (DEBUG) {
-        return function () {
+        var innerIsolate_1 = function () {
+            ___callTree_runnerRoot = DEBUG ? ___callTree : null;
             return ___call(runner, 'serve', this, arguments);
+        };
+        return function () {
+            return ___call(innerIsolate_1, 'request', this, arguments);
         };
     }
     else {
@@ -431,7 +435,7 @@ function _printCallTree(callTree, depth) {
         text += '-';
     }
     if (!callTree.err) {
-        text += callTree.name + " " + callTree.id + ": " + (callTree.args || '{}').substr(0, 80) + " => " + (callTree.result || '{}').substr(0, 80);
+        text += callTree.name + " " + callTree.id + ": " + abbreviate(callTree.args || '{}') + " => " + abbreviate(callTree.result || '{}');
     }
     else {
         text += "ERROR " + callTree.name + " " + callTree.id + ": " + callTree.args + " => " + callTree.err;
@@ -444,6 +448,14 @@ function _printCallTree(callTree, depth) {
     return text;
 }
 exports._printCallTree = _printCallTree;
+function abbreviate(){ return ___call(_f_abbreviate,'abbreviate',this,arguments); }
+function _f_abbreviate(text, maxLength) {
+    if (maxLength === void 0) { maxLength = 80; }
+    if (text.length <= maxLength) {
+        return text;
+    }
+    return text.substr(0, maxLength) + '...';
+}
 
 
 /***/ }),
