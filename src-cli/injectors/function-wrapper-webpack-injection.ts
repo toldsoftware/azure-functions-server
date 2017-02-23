@@ -71,7 +71,7 @@ var ___process = process || '_NO_PROCESS_';
 var ___threadId = '' + Math.floor(Math.random() * 10000);
 
 function ___getNextId(parentThreadId) {
-    return ___process.pid + '_' + ___threadId + '_' + parentThreadId + '_' + ___nextId++;
+    return ___process.pid + '_' + ___threadId + '_' + ___nextId++;
 }
 var ___callTree = { name: '_root', id: ___getNextId(___threadId), threadId: ___threadId, args: '', parent: null, calls: [] };
 var ___log = [];
