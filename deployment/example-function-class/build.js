@@ -392,11 +392,11 @@ function _f_serve(main) {
     };
     if (DEBUG) {
         var innerIsolate_1 = function () {
-            _callTree_runnerRoot = _callTreeRoot;
-            ___callTree = _callTree_runnerRoot;
+            _callTree_runnerRoot = ___callTree;
             return ___call(runner, 'serve', this, arguments);
         };
         return function () {
+            ___callTree = _callTreeRoot;
             return ___call(innerIsolate_1, 'request', this, arguments);
         };
     }

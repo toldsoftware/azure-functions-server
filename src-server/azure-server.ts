@@ -80,12 +80,12 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
 
     if (DEBUG) {
         const innerIsolate = function () {
-            _callTree_runnerRoot = _callTreeRoot;
-            ___callTree = _callTree_runnerRoot;
+            _callTree_runnerRoot = ___callTree;
             return ___call(runner, 'serve', this, arguments);
         };
 
         return function () {
+            ___callTree = _callTreeRoot;
             return ___call(innerIsolate, 'request', this, arguments);
         };
     } else {
