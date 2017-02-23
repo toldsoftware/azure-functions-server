@@ -22,13 +22,19 @@ export const PromiseInjection = {
         context.result = ___stringifySafe(value);
 
         // Next the continuation under the promise
-        ___callTree = context;
+        // ___callTree = context;
+
+        // Restore to parent context
+        ___callTree = context.parent;
     },
     beforeRejectCallback: (context: CallTreeNode, id: string, reason: any) => {
         context.err = ___stringifySafe(reason);
 
         // Next the continuation under the promise
-        ___callTree = context;
+        // ___callTree = context;
+
+        // Restore to parent context
+        ___callTree = context.parent;
     },
 };
 

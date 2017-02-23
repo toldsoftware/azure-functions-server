@@ -450,12 +450,16 @@ exports.PromiseInjection = {
     beforeResolveCallback: function (context, id, value) {
         context.result = ___stringifySafe(value);
         // Next the continuation under the promise
-        ___callTree = context;
+        // ___callTree = context;
+        // Restore to parent context
+        ___callTree = context.parent;
     },
     beforeRejectCallback: function (context, id, reason) {
         context.err = ___stringifySafe(reason);
         // Next the continuation under the promise
-        ___callTree = context;
+        // ___callTree = context;
+        // Restore to parent context
+        ___callTree = context.parent;
     },
 };
 // tslint:disable-next-line:class-name
