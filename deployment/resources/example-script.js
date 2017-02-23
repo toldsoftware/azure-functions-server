@@ -2,7 +2,7 @@
 var ___nextId = ___nextId || 0;
 var ___process = process || '_NO_PROCESS_';
 function ___getNextId(threadId) {
-    return ___process + '_' + ___process.pid + '_' + threadId + '_' + ___nextId++;
+    return ___process.pid + '_' + threadId + '_' + ___nextId++;
 }
 var ___tempThreadId = '' + Math.floor(Math.random() * 10000);
 var ___callTree = { name: '_root', id: ___getNextId(___tempThreadId), threadId: ___tempThreadId, args: '', parent: null, calls: [] };
