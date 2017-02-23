@@ -19,20 +19,18 @@ function _f_${name}(`)
 exports.${name} = function(){ return ___call(_f_${name},'${name}',this,arguments); }
 function _f_${name}(`)
         // constructors:
-        // var ShopifyApiAccess = (function () {
-        //     function ShopifyApiAccess(shopAccess, writeLog) {
-        //         this.products = new Products(shopAccess);
-        //         if (writeLog) {
-        //             log = writeLog;
-        //         }
+        // var TestClass = (function () {
+        //     function TestClass(a, b, c) {
+        //         this.c = c;
+        //         this.val = 0;
+        //         this.val = a + b;
         //     }
-        //     ShopifyApiAccess.prototype.getProducts = function (updateAfterUtc, page) {
-        //         if (page === void 0) { page = 1; }
-        //         return this.products.list({ updated_at_min: updateAfterUtc ? updateAfterUtc.toISOString() : '', page: page });
+        //     TestClass.prototype.testMethod = function () {
+        //         return this.val;
         //     };
-        //     return ShopifyApiAccess;
+        //     return TestClass;
         // }());
-//         .replace(new RegExp(`(\\n)\s*return\\s+(${nameRegex})\\s*;\\s*}\\(\\)\\);`, 'g'), (whole, prefix, name) =>
+//         .replace(new RegExp(`(\\n\\s*)return\\s+(${nameRegex})\\s*;\\s*}\\(\\)\\);`, 'g'), (whole, prefix, name) =>
 //             !isClassName(name) || !hasPrototype(webpackSource, name) || !isOwnSourceCode(ownSourceCode, name)
 //                 ? whole
 //                 : `

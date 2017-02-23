@@ -22,7 +22,8 @@ export const PromiseInjection = {
     beforeRejectCallback: (context: CallTreeNode, id: string, reason: any) => { context.err = ___stringifySafe(reason); },
 };
 
-export class PromiseWrapper<T> {
+// tslint:disable-next-line:class-name
+export class _PromiseWrapper<T> {
 
     private id = '';
     private context: any;
@@ -82,7 +83,7 @@ export function _injectPromiseWrapper() {
     }
 
     let originalPromise = global.Promise;
-    global.Promise = PromiseWrapper;
+    global.Promise = _PromiseWrapper;
 }
 
 // Replace Original Promise

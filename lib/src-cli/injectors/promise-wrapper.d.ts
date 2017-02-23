@@ -4,7 +4,7 @@ export declare const PromiseInjection: {
     beforeResolveCallback: (context: CallTreeNode, id: string, value: any) => void;
     beforeRejectCallback: (context: CallTreeNode, id: string, reason: any) => void;
 };
-export declare class PromiseWrapper<T> {
+export declare class _PromiseWrapper<T> {
     private id;
     private context;
     private promiseInner;

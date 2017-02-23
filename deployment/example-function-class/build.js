@@ -446,8 +446,9 @@ exports.PromiseInjection = {
     beforeResolveCallback: function (context, id, value) { context.result = ___stringifySafe(value); },
     beforeRejectCallback: function (context, id, reason) { context.err = ___stringifySafe(reason); },
 };
-var PromiseWrapper = (function () {
-    function PromiseWrapper(resolver) {
+// tslint:disable-next-line:class-name
+var _PromiseWrapper = (function () {
+    function _PromiseWrapper(resolver) {
         var _this = this;
         this.id = '';
         this.id = ___getNextId(___callTree.threadId);
@@ -464,7 +465,7 @@ var PromiseWrapper = (function () {
             resolver(resolveOuter, rejectOuter);
         });
     }
-    PromiseWrapper.prototype.then = function (resolve, reject) {
+    _PromiseWrapper.prototype.then = function (resolve, reject) {
         var _this = this;
         var resolveOuter = function (value) {
             exports.PromiseInjection.beforeResolveCallback(_this.context, _this.id, value);
@@ -477,7 +478,7 @@ var PromiseWrapper = (function () {
         this.promiseInner.then(resolveOuter, rejectOuter);
         return this;
     };
-    PromiseWrapper.prototype.catch = function (reject) {
+    _PromiseWrapper.prototype.catch = function (reject) {
         var _this = this;
         var rejectOuter = function (reason) {
             exports.PromiseInjection.beforeRejectCallback(_this.context, _this.id, reason);
@@ -486,15 +487,15 @@ var PromiseWrapper = (function () {
         this.promiseInner.catch(rejectOuter);
         return this;
     };
-    return PromiseWrapper;
+    return _PromiseWrapper;
 }());
-exports.PromiseWrapper = PromiseWrapper;
+exports._PromiseWrapper = _PromiseWrapper;
 function _injectPromiseWrapper() {
     if (typeof global === 'undefined') {
         global = window;
     }
     var originalPromise = global.Promise;
-    global.Promise = PromiseWrapper;
+    global.Promise = _PromiseWrapper;
 }
 exports._injectPromiseWrapper = _injectPromiseWrapper;
 // Replace Original Promise
