@@ -275,7 +275,7 @@ var TestClass = (function () {
     TestClass.prototype.testMethod = function () {
         return this.val;
     };
-return function(){ return ___wrapMethods(TestClass(arguments)); };
+return function(){ return ___wrapMethods(TestClass.apply(this,arguments)); };
 }());
 exports.TestClass = TestClass;
 

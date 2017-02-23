@@ -34,7 +34,7 @@ function _f_${name}(`)
             isUtilityName(name) || !isClassName(name) || !hasPrototype(webpackSource, name) || !isOwnSourceCode(ownSourceCode, name)
                 ? whole
                 : `
-return function(){ return ___wrapMethods(${name}(arguments)); };
+return function(){ return ___wrapMethods(${name}.apply(this,arguments)); };
 }());`);
     ;
 }
