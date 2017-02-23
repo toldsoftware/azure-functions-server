@@ -31,8 +31,12 @@ export function _printCallTree(callTree: CallTreeNode, depth = 0): string {
     return text;
 }
 
-function abbreviate(text:string, maxLength=80){
-    if(text.length<=maxLength){return text;}
+function abbreviate(text: string, maxLength = 80) {
+    if (text.length <= maxLength) { return text; }
 
-    return text.substr(0,maxLength) + '...';
+    return text.substr(0, maxLength) + '...';
 }
+
+export type Call = (fun: Function, name: string, that: any, args: any) => any;
+export type BeforeFunctionCallback = (name: string, args: any) => number;
+export type AfterFunctionCallback = (iLog: number, name: string, result: any, err: any) => void;

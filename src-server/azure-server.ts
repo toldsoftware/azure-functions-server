@@ -3,10 +3,12 @@ import * as path from 'path';
 import * as T from './../src';
 import { dir } from './../src/root-dir';
 
-import { _printCallTree, CallTreeNode } from '../src-cli/injectors/call-tree';
+import { _printCallTree, CallTreeNode, AfterFunctionCallback, BeforeFunctionCallback, Call } from '../src-cli/injectors/call-tree';
 import { _injectPromiseWrapper } from '../src-cli/injectors/promise-wrapper';
 declare var ___callTree: CallTreeNode;
-declare var ___call: any;
+declare var ___call: Call;
+// declare var ___beforeFunctionCallback: BeforeFunctionCallback;
+// declare var ___afterFunctionCallback: AfterFunctionCallback;
 const DEBUG = typeof ___callTree !== 'undefined';
 if (DEBUG) {
     _injectPromiseWrapper();

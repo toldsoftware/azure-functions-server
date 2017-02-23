@@ -18,8 +18,18 @@ export const PromiseInjection = {
         ___callTree.calls.push(node);
         return node;
     },
-    beforeResolveCallback: (context: CallTreeNode, id: string, value: any) => { context.result = ___stringifySafe(value); },
-    beforeRejectCallback: (context: CallTreeNode, id: string, reason: any) => { context.err = ___stringifySafe(reason); },
+    beforeResolveCallback: (context: CallTreeNode, id: string, value: any) => {
+        context.result = ___stringifySafe(value);
+
+        // Restore the original call context (the calling thread has already exited by now)
+        ___callTree = context.parent;
+    },
+    beforeRejectCallback: (context: CallTreeNode, id: string, reason: any) => {
+        context.err = ___stringifySafe(reason);
+        
+        // Restore the original call context
+        ___callTree = context.parent;
+    },
 };
 
 // tslint:disable-next-line:class-name

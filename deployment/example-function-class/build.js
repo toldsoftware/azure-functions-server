@@ -325,6 +325,8 @@ var path = __webpack_require__(14);
 var root_dir_1 = __webpack_require__(27);
 var call_tree_1 = __webpack_require__(32);
 var promise_wrapper_1 = __webpack_require__(33);
+// declare var ___beforeFunctionCallback: BeforeFunctionCallback;
+// declare var ___afterFunctionCallback: AfterFunctionCallback;
 var DEBUG = typeof ___callTree !== 'undefined';
 if (DEBUG) {
     promise_wrapper_1._injectPromiseWrapper();
@@ -481,8 +483,16 @@ exports.PromiseInjection = {
         ___callTree.calls.push(node);
         return node;
     },
-    beforeResolveCallback: function (context, id, value) { context.result = ___stringifySafe(value); },
-    beforeRejectCallback: function (context, id, reason) { context.err = ___stringifySafe(reason); },
+    beforeResolveCallback: function (context, id, value) {
+        context.result = ___stringifySafe(value);
+        // Restore the original call context (the calling thread has already exited by now)
+        ___callTree = context.parent;
+    },
+    beforeRejectCallback: function (context, id, reason) {
+        context.err = ___stringifySafe(reason);
+        // Restore the original call context
+        ___callTree = context.parent;
+    },
 };
 // tslint:disable-next-line:class-name
 var _PromiseWrapper = (function () {
