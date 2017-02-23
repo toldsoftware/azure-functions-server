@@ -30,6 +30,18 @@ function ___call(fun, name, that, args) {
     }
 }
 
+function ___wrapMethods(inner) {
+    let outer = Object.create(inner);
+
+    for (var key in inner) {
+        if (inner.hasOwnProperty(key) && typeof inner[key] === 'function') {
+            outer[key] = function () { return ___call(inner[key], key, inner, arguments); }
+        }
+    }
+
+    return outer;
+}
+
 function ___stringifySafe(obj) {
     let seen = [];
     return JSON.stringify(obj, function (key, val) {
@@ -48,6 +60,7 @@ function ___stringifySafe(obj) {
         return val;
     });
 }
+
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -113,86 +126,12 @@ function ___stringifySafe(obj) {
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 266);
+/******/ 	return __webpack_require__(__webpack_require__.s = 268);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 120:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-function run(){ return ___call(_f_run,'run',this,arguments); }
-function _f_run(tick) {
-    return function (context, timer) {
-        tick(context, timer)
-            .then(function () { })
-            .catch(function (err) { return console.error(err); });
-    };
-}
-exports.run = run;
-
-
-/***/ }),
-
-/***/ 125:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var tslib_1 = __webpack_require__(13);
-var http = __webpack_require__(20);
-var https = __webpack_require__(30);
-// schedule: 0 0 0 * * *
-function tick(){ return ___call(_f_tick,'tick',this,arguments); }
-function _f_tick(context, timer) {
-    return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var urls, doneCount, callDone, _loop_1, _i, urls_1, x, timeStamp;
-        return tslib_1.__generator(this, function (_a) {
-            urls = [
-                'https://told-azure-functions-server-test.azurewebsites.net/api/example-function?ping=true',
-                'https://told-azure-functions-server-test.azurewebsites.net/api/example-function-get-blob?ping=true',
-                'https://told-azure-functions-server-test.azurewebsites.net/api/resource?ping=true',
-            ];
-            doneCount = 0;
-            callDone = function (url) {
-                doneCount++;
-                context.log('Keep Alive END: ', url);
-                if (doneCount >= urls.length) {
-                    context.done();
-                }
-            };
-            _loop_1 = function (x) {
-                context.log('Keep Alive START: ', x);
-                var http_s = http;
-                if (x.match(/^https/)) {
-                    http_s = https;
-                }
-                http_s.get(x, function (res) {
-                    console.log('statusCode:', res.statusCode);
-                    callDone(x);
-                });
-            };
-            for (_i = 0, urls_1 = urls; _i < urls_1.length; _i++) {
-                x = urls_1[_i];
-                _loop_1(x);
-            }
-            timeStamp = new Date().toISOString();
-            if (timer.isPastDue) {
-                context.log('Timer is Past Due');
-            }
-            context.log('Timer started!', timeStamp);
-            return [2 /*return*/];
-        });
-    });
-}
-exports.tick = tick;
-
-
-/***/ }),
-
-/***/ 13:
+/***/ 11:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -298,6 +237,80 @@ function __generator(thisArg, body) {
 
 /***/ }),
 
+/***/ 120:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function run(){ return ___call(_f_run,'run',this,arguments); }
+function _f_run(tick) {
+    return function (context, timer) {
+        tick(context, timer)
+            .then(function () { })
+            .catch(function (err) { return console.error(err); });
+    };
+}
+exports.run = run;
+
+
+/***/ }),
+
+/***/ 126:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var tslib_1 = __webpack_require__(11);
+var http = __webpack_require__(20);
+var https = __webpack_require__(31);
+// schedule: 0 0 0 * * *
+function tick(){ return ___call(_f_tick,'tick',this,arguments); }
+function _f_tick(context, timer) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+        var urls, doneCount, callDone, _loop_1, _i, urls_1, x, timeStamp;
+        return tslib_1.__generator(this, function (_a) {
+            urls = [
+                'https://told-azure-functions-server-test.azurewebsites.net/api/example-function?ping=true',
+                'https://told-azure-functions-server-test.azurewebsites.net/api/example-function-get-blob?ping=true',
+                'https://told-azure-functions-server-test.azurewebsites.net/api/resource?ping=true',
+            ];
+            doneCount = 0;
+            callDone = function (url) {
+                doneCount++;
+                context.log('Keep Alive END: ', url);
+                if (doneCount >= urls.length) {
+                    context.done();
+                }
+            };
+            _loop_1 = function (x) {
+                context.log('Keep Alive START: ', x);
+                var http_s = http;
+                if (x.match(/^https/)) {
+                    http_s = https;
+                }
+                http_s.get(x, function (res) {
+                    console.log('statusCode:', res.statusCode);
+                    callDone(x);
+                });
+            };
+            for (_i = 0, urls_1 = urls; _i < urls_1.length; _i++) {
+                x = urls_1[_i];
+                _loop_1(x);
+            }
+            timeStamp = new Date().toISOString();
+            if (timer.isPastDue) {
+                context.log('Timer is Past Due');
+            }
+            context.log('Timer started!', timeStamp);
+            return [2 /*return*/];
+        });
+    });
+}
+exports.tick = tick;
+
+
+/***/ }),
+
 /***/ 20:
 /***/ (function(module, exports) {
 
@@ -305,16 +318,16 @@ module.exports = require("http");
 
 /***/ }),
 
-/***/ 266:
+/***/ 268:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Intentionally global
-___export = __webpack_require__(120).run(__webpack_require__(125).tick);
+___export = __webpack_require__(120).run(__webpack_require__(126).tick);
 module.exports = ___export;
 
 /***/ }),
 
-/***/ 30:
+/***/ 31:
 /***/ (function(module, exports) {
 
 module.exports = require("https");

@@ -30,6 +30,18 @@ function ___call(fun, name, that, args) {
     }
 }
 
+function ___wrapMethods(inner) {
+    let outer = Object.create(inner);
+
+    for (var key in inner) {
+        if (inner.hasOwnProperty(key) && typeof inner[key] === 'function') {
+            outer[key] = function () { return ___call(inner[key], key, inner, arguments); }
+        }
+    }
+
+    return outer;
+}
+
 function ___stringifySafe(obj) {
     let seen = [];
     return JSON.stringify(obj, function (key, val) {
@@ -48,6 +60,7 @@ function ___stringifySafe(obj) {
         return val;
     });
 }
+
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};

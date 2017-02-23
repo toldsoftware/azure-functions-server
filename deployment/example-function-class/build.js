@@ -126,7 +126,7 @@ function ___stringifySafe(obj) {
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 270);
+/******/ 	return __webpack_require__(__webpack_require__.s = 265);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -237,17 +237,55 @@ function __generator(thisArg, body) {
 
 /***/ }),
 
+/***/ 123:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var tslib_1 = __webpack_require__(11);
+function main(){ return ___call(_f_main,'main',this,arguments); }
+function _f_main(context, request) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+        var obj, val;
+        return tslib_1.__generator(this, function (_a) {
+            obj = new TestClass(1, 2, 3);
+            val = obj.testMethod();
+            context.done(null, {
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
+                    'X-Told-Test-Header': 'test-header',
+                },
+                body: {
+                    ok: true,
+                    data: { text: 'Value: ' + val },
+                }
+            });
+            return [2 /*return*/];
+        });
+    });
+}
+exports.main = main;
+var TestClass = (function () {
+    function TestClass(a, b, c) {
+        this.c = c;
+        this.val = 0;
+        this.val = a + b;
+    }
+    TestClass.prototype.testMethod = function () {
+        return this.val;
+    };
+    return TestClass;
+}());
+exports.TestClass = TestClass;
+
+
+/***/ }),
+
 /***/ 14:
 /***/ (function(module, exports) {
 
 module.exports = require("path");
-
-/***/ }),
-
-/***/ 16:
-/***/ (function(module, exports) {
-
-module.exports = require("fs");
 
 /***/ }),
 
@@ -336,6 +374,15 @@ exports.serve = serve;
 
 /***/ }),
 
+/***/ 265:
+/***/ (function(module, exports, __webpack_require__) {
+
+// Intentionally global
+___export = __webpack_require__(26).setDirName(__dirname).serve(__webpack_require__(123).main);
+module.exports = ___export;
+
+/***/ }),
+
 /***/ 27:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -343,15 +390,6 @@ exports.serve = serve;
 
 exports.dir = { rootDir: '' };
 
-
-/***/ }),
-
-/***/ 270:
-/***/ (function(module, exports, __webpack_require__) {
-
-// Intentionally global
-___export = __webpack_require__(26).setDirName(__dirname).serve(__webpack_require__(55).main);
-module.exports = ___export;
 
 /***/ }),
 
@@ -560,155 +598,6 @@ exports._injectPromiseWrapper = _injectPromiseWrapper;
 // 		return this.then(null, onRejection);
 // 	}
 // }; 
-
-
-/***/ }),
-
-/***/ 55:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var tslib_1 = __webpack_require__(11);
-var fs = __webpack_require__(16);
-var Path = __webpack_require__(14);
-var resolve_url_1 = __webpack_require__(76);
-var root_dir_1 = __webpack_require__(27);
-function main(){ return ___call(_f_main,'main',this,arguments); }
-function _f_main(context, request, pathDepthFromApiRoot) {
-    if (pathDepthFromApiRoot === void 0) { pathDepthFromApiRoot = 1; }
-    return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var pathOrig, filePath, path;
-        return tslib_1.__generator(this, function (_a) {
-            pathOrig = request.query.name || request.pathName;
-            filePath = pathOrig
-                .replace(/\/$/, '')
-                .replace(/\/(file)$/, '')
-                .replace(/\/([^\/]+\.js\.map)$/, '.map');
-            path = Path.resolve(root_dir_1.dir.rootDir, resolve_url_1.getPathDepthPrefix(pathDepthFromApiRoot - 1), 'resources', filePath.replace(/^\//, ''));
-            context.log('filePath=' + filePath + ' path=' + path + ' __dirname=' + __dirname + ' request.query.name=' + request.query.name + ' request.pathName=' + request.pathName);
-            fs.readFile(path, function (err, data) {
-                context.log('path=' + path);
-                if (err != null) {
-                    context.log('ERROR: ' + err);
-                    context.done(null, {
-                        status: 404,
-                        headers: {
-                            'Content-Type': 'text/plain',
-                        },
-                        body: ('File Not Found: ' + filePath)
-                    });
-                    return;
-                }
-                var type = 'text/plain';
-                if (path.match('\.html$')) {
-                    type = 'text/html';
-                }
-                if (path.match('\.css$')) {
-                    type = 'text/css';
-                }
-                if (path.match('\.js$')) {
-                    type = 'application/x-javascript';
-                }
-                if (path.match('\.json$')) {
-                    type = 'application/json';
-                }
-                if (path.match('\.jpg$')) {
-                    type = 'image/jpeg';
-                }
-                if (path.match('\.png$')) {
-                    type = 'image/png';
-                }
-                if (path.match('\.gif$')) {
-                    type = 'image/gif';
-                }
-                if (path.match('\.ico$')) {
-                    type = 'image/x-icon';
-                }
-                // Auto Resolve Resource Urls?
-                var body = data;
-                if (type === 'text/html') {
-                    body = data.toString();
-                    body = resolve_url_1.resolveAllUrls(body, pathDepthFromApiRoot);
-                }
-                // // Prevent Json Curroption
-                // if (type === 'application/json') {
-                //     body = data.toString();
-                //     body = JSON.parse(body);
-                // }
-                context.done(null, {
-                    headers: {
-                        'Content-Type': type,
-                    },
-                    body: body,
-                    // Bypass response handling
-                    isRaw: true
-                });
-            });
-            return [2 /*return*/];
-        });
-    });
-}
-exports.main = main;
-
-
-/***/ }),
-
-/***/ 76:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-function resolveUrlClient(){ return ___call(_f_resolveUrlClient,'resolveUrlClient',this,arguments); }
-function _f_resolveUrlClient(url) {
-    if (url.indexOf('./') !== 0) {
-        return url;
-    }
-    var pathname = window.location.pathname;
-    var prefix = '/';
-    if (pathname.match(/^\/api\//)) {
-        prefix = '/api/';
-    }
-    return resolveUrl_inner(url, prefix);
-}
-exports.resolveUrlClient = resolveUrlClient;
-function resolveUrl(){ return ___call(_f_resolveUrl,'resolveUrl',this,arguments); }
-function _f_resolveUrl(url, pathDepthFromApiRoot) {
-    if (pathDepthFromApiRoot === void 0) { pathDepthFromApiRoot = 1; }
-    if (url.indexOf('./') !== 0) {
-        return url;
-    }
-    var depthPrefix = getPathDepthPrefix(pathDepthFromApiRoot);
-    return resolveUrl_inner(url, depthPrefix);
-}
-exports.resolveUrl = resolveUrl;
-function resolveUrl_inner(){ return ___call(_f_resolveUrl_inner,'resolveUrl_inner',this,arguments); }
-function _f_resolveUrl_inner(url, prefix) {
-    url = url.substr(2);
-    // If file extension, make file
-    if (url.match(/[^/]\.[^/]+$/)) {
-        return prefix + "resource/" + url + "/file";
-    }
-    else {
-        return "" + prefix + url + "?q";
-    }
-}
-function resolveAllUrls(){ return ___call(_f_resolveAllUrls,'resolveAllUrls',this,arguments); }
-function _f_resolveAllUrls(content, pathDepthFromApiRoot) {
-    return content
-        .replace(/"(\.\/[^"]+)"/g, function (x) { return '"' + resolveUrl(x.substr(1, x.length - 2), pathDepthFromApiRoot) + '"'; })
-        .replace(/'(\.\/[^']+)'/g, function (x) { return '\'' + resolveUrl(x.substr(1, x.length - 2), pathDepthFromApiRoot) + '\''; });
-}
-exports.resolveAllUrls = resolveAllUrls;
-function getPathDepthPrefix(){ return ___call(_f_getPathDepthPrefix,'getPathDepthPrefix',this,arguments); }
-function _f_getPathDepthPrefix(pathDepthFromApiRoot) {
-    var depthPrefix = '';
-    for (var i = 0; i < pathDepthFromApiRoot; i++) {
-        depthPrefix += '../';
-    }
-    return depthPrefix;
-}
-exports.getPathDepthPrefix = getPathDepthPrefix;
 
 
 /***/ })

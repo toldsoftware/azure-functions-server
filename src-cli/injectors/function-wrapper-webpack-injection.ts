@@ -17,7 +17,28 @@ function _f_${name}(`)
                 ? whole
                 : `
 exports.${name} = function(){ return ___call(_f_${name},'${name}',this,arguments); }
-function _f_${name}(`);
+function _f_${name}(`)
+        // constructors:
+        // var ShopifyApiAccess = (function () {
+        //     function ShopifyApiAccess(shopAccess, writeLog) {
+        //         this.products = new Products(shopAccess);
+        //         if (writeLog) {
+        //             log = writeLog;
+        //         }
+        //     }
+        //     ShopifyApiAccess.prototype.getProducts = function (updateAfterUtc, page) {
+        //         if (page === void 0) { page = 1; }
+        //         return this.products.list({ updated_at_min: updateAfterUtc ? updateAfterUtc.toISOString() : '', page: page });
+        //     };
+        //     return ShopifyApiAccess;
+        // }());
+//         .replace(new RegExp(`(\\n)\s*return\\s+(${nameRegex})\\s*;\\s*}\\(\\)\\);`, 'g'), (whole, prefix, name) =>
+//             !isClassName(name) || !hasPrototype(webpackSource, name) || !isOwnSourceCode(ownSourceCode, name)
+//                 ? whole
+//                 : `
+// return function(){ return ___wrapMethods(${name}(arguments)); };
+// }());`);
+    ;
 }
 
 const nameRegex = '[a-zA-Z_][a-zA-Z_0-9]*';
@@ -74,6 +95,18 @@ function ___call(fun, name, that, args) {
     }
 }
 
+function ___wrapMethods(inner) {
+    let outer = Object.create(inner);
+
+    for (var key in inner) {
+        if (inner.hasOwnProperty(key) && typeof inner[key] === 'function') {
+            outer[key] = function () { return ___call(inner[key], key, inner, arguments); }
+        }
+    }
+
+    return outer;
+}
+
 function ___stringifySafe(obj) {
     let seen = [];
     return JSON.stringify(obj, function (key, val) {
@@ -92,5 +125,5 @@ function ___stringifySafe(obj) {
         return val;
     });
 }
-`;
 
+`;
