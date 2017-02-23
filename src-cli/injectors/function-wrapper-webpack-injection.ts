@@ -30,12 +30,12 @@ function _f_${name}(`)
         //     };
         //     return TestClass;
         // }());
-//         .replace(new RegExp(`(\\n\\s*)return\\s+(${nameRegex})\\s*;\\s*}\\(\\)\\);`, 'g'), (whole, prefix, name) =>
-//             !isClassName(name) || !hasPrototype(webpackSource, name) || !isOwnSourceCode(ownSourceCode, name)
-//                 ? whole
-//                 : `
-// return function(){ return ___wrapMethods(${name}(arguments)); };
-// }());`);
+        .replace(new RegExp(`(\\n\\s*)return\\s+(${nameRegex})\\s*;\\s*}\\(\\)\\);`, 'g'), (whole, prefix, name) =>
+            isUtilityName(name) || !isClassName(name) || !hasPrototype(webpackSource, name) || !isOwnSourceCode(ownSourceCode, name)
+                ? whole
+                : `
+return function(){ return ___wrapMethods(${name}(arguments)); };
+}());`);
     ;
 }
 

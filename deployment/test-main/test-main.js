@@ -27622,7 +27622,7 @@ var TestClass = (function () {
     TestClass.prototype.testMethod = function () {
         return this.val;
     };
-    return TestClass;
+return function(){ return ___wrapMethods(TestClass(arguments)); };
 }());
 exports.TestClass = TestClass;
 
