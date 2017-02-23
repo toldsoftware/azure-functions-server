@@ -6,7 +6,11 @@ export function injectFunctionWrapper(webpackSource: string, ownSourceCode: stri
 }
 
 function isOwnSourceCode(ownSourceCode: string, name: string) {
-    return ownSourceCode.indexOf('function ' + name) >= 0;
+    // is declared in own source code
+    // return ownSourceCode.indexOf('function ' + name) >= 0;
+
+    // is called in own source code
+    return ownSourceCode.indexOf(name + '(') >= 0;
 }
 
 function hasPrototype(webpackSource: string, name: string) {

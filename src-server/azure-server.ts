@@ -51,7 +51,8 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
                     return ___call(contextInner.done, 'done', contextInner, arguments);
                 },
                 log() {
-                    return ___call(contextInner.log, 'log', contextInner, arguments);
+                    // Don't wrap log
+                    return contextInner.log.apply(contextInner, arguments);
                 }
             };
         }
