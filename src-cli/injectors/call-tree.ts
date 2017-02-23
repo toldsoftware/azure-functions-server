@@ -31,7 +31,7 @@ export function _printCallTree(callTree: CallTreeNode, depth = 0): string {
     return text;
 }
 
-function _abbreviate(text: string, maxLength = 80) {
+function _abbreviate(text: string, maxLength = 255) {
     if (text.length <= maxLength) { return text; }
 
     return text.substr(0, maxLength) + '...';

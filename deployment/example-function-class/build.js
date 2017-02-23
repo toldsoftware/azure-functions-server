@@ -454,7 +454,7 @@ function _printCallTree(callTree, depth) {
 }
 exports._printCallTree = _printCallTree;
 function _abbreviate(text, maxLength) {
-    if (maxLength === void 0) { maxLength = 80; }
+    if (maxLength === void 0) { maxLength = 255; }
     if (text.length <= maxLength) {
         return text;
     }
