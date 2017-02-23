@@ -42,6 +42,31 @@ function ___wrapMethods(inner) {
     return outer;
 }
 
+// http://stackoverflow.com/questions/10101508/how-do-i-wrap-a-constructor
+function ___wrapConstructor(constructorInner, name) {
+
+    var proto = constructorInner.prototype;
+    var inner = (function(p) {
+        function f() {};
+        f.prototype = p.prototype;
+        return new f;
+    })(proto);
+
+    function Outer() {
+        constructorInner.apply(this, arguments);
+
+        for (var key in proto) {
+            if (proto.hasOwnProperty(key) && typeof proto[key] === 'function') {
+                this[key] = function () { return ___call(proto[key], name + '.' + key, inner, arguments); }
+            }
+        }
+    }
+
+    Outer.prototype = inner;
+
+    return Outer;
+};
+
 function ___stringifySafe(obj) {
     let seen = [];
     return JSON.stringify(obj, function (key, val) {
@@ -715,4 +740,4 @@ exports.getPathDepthPrefix = getPathDepthPrefix;
 /***/ })
 
 /******/ });
-//# sourceMappingURL=build.js.map
+// DISABLED source Mapping URL=build.js.map

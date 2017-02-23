@@ -30,13 +30,17 @@ function _f_${name}(`)
         //     };
         //     return TestClass;
         // }());
+        // Attempt 1: return function(){ return ___wrapMethods(${name}.apply(this,arguments) || this); };
+        // 
         .replace(new RegExp(`(\\n\\s*)return\\s+(${nameRegex})\\s*;\\s*}\\(\\)\\);`, 'g'), (whole, prefix, name) =>
             isUtilityName(name) || !isClassName(name) || !hasPrototype(webpackSource, name) || !isOwnSourceCode(ownSourceCode, name)
                 ? whole
                 : `
-return function(){ return ___wrapMethods(${name}.apply(this,arguments)); };
-}());`);
-    ;
+return ___wrapConstructor(${name}, '${name}');
+}());`)
+        // Disable Source Map (globals mess it up)
+        .replace('//# sourceMappingURL=', '// DISABLED source Mapping URL=')
+        ;
 }
 
 const nameRegex = '[a-zA-Z_][a-zA-Z_0-9]*';
@@ -104,6 +108,31 @@ function ___wrapMethods(inner) {
 
     return outer;
 }
+
+// http://stackoverflow.com/questions/10101508/how-do-i-wrap-a-constructor
+function ___wrapConstructor(constructorInner, name) {
+
+    var proto = constructorInner.prototype;
+    var inner = (function(p) {
+        function f() {};
+        f.prototype = p.prototype;
+        return new f;
+    })(proto);
+
+    function Outer() {
+        constructorInner.apply(this, arguments);
+
+        for (var key in proto) {
+            if (proto.hasOwnProperty(key) && typeof proto[key] === 'function') {
+                this[key] = function () { return ___call(proto[key], name + '.' + key, inner, arguments); }
+            }
+        }
+    }
+
+    Outer.prototype = inner;
+
+    return Outer;
+};
 
 function ___stringifySafe(obj) {
     let seen = [];
