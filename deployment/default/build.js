@@ -369,6 +369,14 @@ function ___serve(main) {
                 req.body = orig;
             }
         }
+        if (DEBUG) {
+            var contextInner_1 = context;
+            context = Object.create(context, {
+                done: function (err, response) {
+                    ___call(contextInner_1.done, 'done', contextInner_1, arguments);
+                }
+            });
+        }
         main(context, req)
             .then(function () {
             if (DEBUG) {
