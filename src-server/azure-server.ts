@@ -19,6 +19,7 @@ export function setDirName(dirName: string) {
 
 export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery, TBody>): T.MainEntryPoint_Sync<TData, TQuery, TBody> {
     return (context: T.Context<TData>, request: T.Request<TQuery, TBody>) => {
+        let ___callTree_serveRoot = DEBUG ? ___callTree : null;
 
         let req = { ...request };
         req.pathName = req.pathName || (context as any).bindingData.pathName || '';
@@ -60,13 +61,13 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
         main(context, req)
             .then(() => {
                 if (DEBUG) {
-                    context.log(_printCallTree(___callTree));
+                    context.log(_printCallTree(___callTree_serveRoot));
                 }
             })
             .catch(err => {
                 context.log('Uncaught Error:', err);
                 if (DEBUG) {
-                    context.log(_printCallTree(___callTree));
+                    context.log(_printCallTree(___callTree_serveRoot));
                 }
                 context.done(err, null);
             });

@@ -25,7 +25,7 @@ function getFunctionWrapper(name: string) {
     return functionWrapper.replace(/\$1/g, name);
 }
 
-// var ___callTree = {calls:[]};
+// var ___callTree = {name:'_root', args:'', parent:null, calls:[]};
 // var ___callTreeRoot = ___callTree;
 // var ___log = [];
 // var ___beforeFunctionCallback = function (name, args) {
@@ -53,7 +53,7 @@ function getFunctionWrapper(name: string) {
 
 const globals = `
 
-var ___callTree = {calls:[]};
+var ___callTree = {name:'_root', args:'', parent:null, calls:[]};
 var ___callTreeRoot = ___callTree;
 var ___log = [];
 var ___beforeFunctionCallback = function (name, args) {

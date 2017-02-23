@@ -108,17 +108,35 @@ function ___stringifySafe(obj) {
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 266);
+/******/ 	return __webpack_require__(__webpack_require__.s = 267);
 /******/ })
 /************************************************************************/
 /******/ ({
+
+/***/ 120:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function run(){ return ___call(___run,'run',this,arguments); }
+function ___run(tick) {
+    return function (context, timer) {
+        tick(context, timer)
+            .then(function () { })
+            .catch(function (err) { return console.error(err); });
+    };
+}
+exports.run = run;
+
+
+/***/ }),
 
 /***/ 126:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var tslib_1 = __webpack_require__(5);
+var tslib_1 = __webpack_require__(13);
 // https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer
 // {second} {minute} {hour} {day} {month} {day of the week}
 // schedule: 0 0 0 * * *
@@ -142,34 +160,7 @@ exports.tick = tick;
 
 /***/ }),
 
-/***/ 266:
-/***/ (function(module, exports, __webpack_require__) {
-
-// Intentionally global
-___export = __webpack_require__(44).run(__webpack_require__(126).tick);
-module.exports = ___export;
-
-/***/ }),
-
-/***/ 44:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-function run(){ return ___call(___run,'run',this,arguments); }
-function ___run(tick) {
-    return function (context, timer) {
-        tick(context, timer)
-            .then(function () { })
-            .catch(function (err) { return console.error(err); });
-    };
-}
-exports.run = run;
-
-
-/***/ }),
-
-/***/ 5:
+/***/ 13:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -272,6 +263,15 @@ function __generator(thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+
+/***/ }),
+
+/***/ 267:
+/***/ (function(module, exports, __webpack_require__) {
+
+// Intentionally global
+___export = __webpack_require__(120).run(__webpack_require__(126).tick);
+module.exports = ___export;
 
 /***/ })
 
