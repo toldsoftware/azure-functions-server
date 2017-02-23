@@ -53,6 +53,7 @@ async function createDeployment() {
 
         let isProduction = process.argv.some(x => x.match(/--prod/) != null);
         let isClient = process.argv.some(x => x.match(/--client/) != null);
+        let shouldInject = process.argv.some(x => x.match(/--debug/) != null);
 
         let functionDirsOrFiles: string[] = [];
         let entrySourceFiles: string[] = [];
@@ -112,9 +113,9 @@ async function createDeployment() {
                 if (isProduction || isClient) {
                     // Wabpack
                     console.log('Webpack');
-                    await runWebpackClient(entrySourceFiles);
+                    await runWebpackClient(entrySourceFiles, shouldInject);
                     if (isProduction) {
-                        await runWebpackAzureFunction(functionDirsOrFiles);
+                        await runWebpackAzureFunction(functionDirsOrFiles, shouldInject);
                     }
                 }
                 console.log('DONE');

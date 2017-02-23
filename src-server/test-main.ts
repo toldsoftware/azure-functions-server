@@ -7,6 +7,11 @@ import * as T from './../src';
 import { main as resourceMain } from './resource';
 import { dir } from './../src/root-dir';
 
+import { _printCallTree } from '../src-cli/injectors/call-tree';
+import { injectPromiseWrapper } from '../src-cli/injectors/promise-wrapper';
+declare var ___callTree: any;
+injectPromiseWrapper();
+
 export function setDirName(dirName: string) {
     dir.rootDir = path.resolve(dirName, '..');
     return this;
@@ -81,7 +86,11 @@ export function serve<T, TQuery, TBody>(functions: { name: string, main: T.MainE
                 request.pathParts.splice(0, 1);
                 try {
                     f.main(context, request)
-                        .then(() => { })
+                        .then(() => {
+                            if (typeof ___callTree !== 'undefined') {
+                                console.log(_printCallTree(___callTree));
+                            }
+                        })
                         .catch((err: any) => console.error(err));
                 } catch (err) {
                     console.error(err);

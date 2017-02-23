@@ -1,3 +1,48 @@
+
+
+var ___callTree = {calls:[]};
+var ___callTreeRoot = ___callTree;
+var ___log = [];
+var ___beforeFunctionCallback = function (name, args) {
+    ___callTree = {name: name, args: ___stringifySafe(args), parent: ___callTree, calls:[]};
+    ___callTree.parent.calls.push(___callTree);
+    return -1 + ___log.push(___callTree);
+}
+var ___afterFunctionCallback = function (iLog, name, result, err) {
+    ___log[iLog].result = ___stringifySafe(result);
+    ___log[iLog].err = ___stringifySafe(err);
+    ___callTree = ___callTree.parent;
+}
+function ___call(fun, name, that, args) {
+    var iLog = ___beforeFunctionCallback(name, args);
+    try {
+        var result = fun.apply(that, args);
+        ___afterFunctionCallback(iLog, name, result);
+        return result;
+    } catch (err) {
+        ___afterFunctionCallback(iLog, name, null, err);
+        throw err;
+    }
+}
+
+function ___stringifySafe(obj) {
+    let seen = [];
+    return JSON.stringify(obj, function (key, val) {
+        if (val != null && typeof val === 'object') {
+            if (seen.indexOf(val) >= 0
+                || key === 'parent'
+                || key === 'context'
+            ) {
+                return;
+            }
+            seen.push(val);
+        } else if (val != null && typeof val === 'string' && val.length > 40) {
+            return val.substr(0, 40) + '...';
+        }
+
+        return val;
+    });
+}
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -63,7 +108,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 264);
+/******/ 	return __webpack_require__(__webpack_require__.s = 268);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -174,7 +219,7 @@ function __generator(thisArg, body) {
 
 /***/ }),
 
-/***/ 15:
+/***/ 14:
 /***/ (function(module, exports) {
 
 module.exports = require("path");
@@ -188,16 +233,63 @@ module.exports = require("fs");
 
 /***/ }),
 
-/***/ 264:
+/***/ 22:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function _printCallTree(callTree, depth) {
+    if (depth === void 0) { depth = 0; }
+    var text = '';
+    for (var d = 0; d < depth; d++) {
+        text += '-';
+    }
+    if (!callTree.err) {
+        text += callTree.name + ": " + (callTree.args || '{}') + " => " + (callTree.result || '{}');
+    }
+    else {
+        text += "ERROR " + callTree.name + ": " + callTree.args + " => " + callTree.err;
+    }
+    text += '\r\n';
+    for (var _i = 0, _a = callTree.calls; _i < _a.length; _i++) {
+        var c = _a[_i];
+        text += _printCallTree(c, depth + 1);
+    }
+    return text;
+}
+exports._printCallTree = _printCallTree;
+function _stringifySafe(obj) {
+    var seen = [];
+    return JSON.stringify(obj, function (key, val) {
+        if (val != null && typeof val === 'object') {
+            if (seen.indexOf(val) >= 0
+                || key === 'parent'
+                || key === 'context') {
+                return;
+            }
+            seen.push(val);
+        }
+        else if (val != null && typeof val === 'string' && val.length > 40) {
+            return val.substr(0, 40) + '...';
+        }
+        return val;
+    });
+}
+exports._stringifySafe = _stringifySafe;
+
+
+/***/ }),
+
+/***/ 268:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Intentionally global
-___export = __webpack_require__(41).setDirName(__dirname).serve(__webpack_require__(53).main);
+___export = __webpack_require__(32).setDirName(__dirname).serve(__webpack_require__(55).main);
 module.exports = ___export;
 
 /***/ }),
 
-/***/ 32:
+/***/ 30:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -207,20 +299,28 @@ exports.dir = { rootDir: '' };
 
 /***/ }),
 
-/***/ 41:
+/***/ 32:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var tslib_1 = __webpack_require__(13);
-var path = __webpack_require__(15);
-var root_dir_1 = __webpack_require__(32);
-function setDirName(dirName) {
+var path = __webpack_require__(14);
+var root_dir_1 = __webpack_require__(30);
+var call_tree_1 = __webpack_require__(22);
+var promise_wrapper_1 = __webpack_require__(35);
+var DEBUG = typeof ___callTree !== 'undefined';
+if (DEBUG) {
+    promise_wrapper_1.injectPromiseWrapper();
+}
+function setDirName(){ return ___call(___setDirName,'setDirName',this,arguments); }
+function ___setDirName(dirName) {
     root_dir_1.dir.rootDir = path.resolve(dirName, '..');
     return this;
 }
 exports.setDirName = setDirName;
-function serve(main) {
+function serve(){ return ___call(___serve,'serve',this,arguments); }
+function ___serve(main) {
     return function (context, request) {
         var req = tslib_1.__assign({}, request);
         req.pathName = req.pathName || context.bindingData.pathName || '';
@@ -244,9 +344,16 @@ function serve(main) {
             }
         }
         main(context, req)
-            .then(function () { })
+            .then(function () {
+            if (DEBUG) {
+                context.log(call_tree_1._printCallTree(___callTree));
+            }
+        })
             .catch(function (err) {
             context.log('Uncaught Error:', err);
+            if (DEBUG) {
+                context.log(call_tree_1._printCallTree(___callTree));
+            }
             context.done(err, null);
         });
     };
@@ -256,17 +363,193 @@ exports.serve = serve;
 
 /***/ }),
 
-/***/ 53:
+/***/ 35:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var call_tree_1 = __webpack_require__(22);
+var Promise_Original = Promise;
+if (typeof ___callTree === 'undefined') {
+    ___callTree = { calls: [] };
+}
+exports.PromiseInjection = {
+    beforeConstructorCallback: function (id) {
+        var node = { name: 'PROMISE ' + id, args: '', calls: [], parent: ___callTree, err: null, result: null };
+        ___callTree.calls.push(node);
+        return node;
+    },
+    beforeResolveCallback: function (context, id, value) { context.result = call_tree_1._stringifySafe(value); },
+    beforeRejectCallback: function (context, id, reason) { context.err = call_tree_1._stringifySafe(reason); },
+};
+var _nextPromiseId = 0;
+var PromiseWrapper = (function () {
+    function PromiseWrapper(resolver) {
+        var _this = this;
+        this.id = '';
+        this.id = '' + _nextPromiseId++;
+        this.context = exports.PromiseInjection.beforeConstructorCallback(this.id);
+        this.promiseInner = new Promise_Original(function (resolveInner, rejectInner) {
+            var resolveOuter = function (value) {
+                exports.PromiseInjection.beforeResolveCallback(_this.context, _this.id, value);
+                resolveInner(value);
+            };
+            var rejectOuter = function (reason) {
+                exports.PromiseInjection.beforeRejectCallback(_this.context, _this.id, reason);
+                rejectInner(reason);
+            };
+            resolver(resolveOuter, rejectOuter);
+        });
+    }
+    PromiseWrapper.prototype.then = function (resolve, reject) {
+        var _this = this;
+        var resolveOuter = function (value) {
+            exports.PromiseInjection.beforeResolveCallback(_this.context, _this.id, value);
+            resolve(value);
+        };
+        var rejectOuter = function (reason) {
+            exports.PromiseInjection.beforeRejectCallback(_this.context, _this.id, reason);
+            reject(reason);
+        };
+        this.promiseInner.then(resolveOuter, rejectOuter);
+    };
+    PromiseWrapper.prototype.catch = function (reject) {
+        var _this = this;
+        var rejectOuter = function (reason) {
+            exports.PromiseInjection.beforeRejectCallback(_this.context, _this.id, reason);
+            reject(reason);
+        };
+        this.promiseInner.catch(rejectOuter);
+    };
+    return PromiseWrapper;
+}());
+exports.PromiseWrapper = PromiseWrapper;
+function injectPromiseWrapper(){ return ___call(___injectPromiseWrapper,'injectPromiseWrapper',this,arguments); }
+function ___injectPromiseWrapper() {
+    if (typeof global === 'undefined') {
+        global = window;
+    }
+    var originalPromise = global.Promise;
+    global.Promise = PromiseWrapper;
+}
+exports.injectPromiseWrapper = injectPromiseWrapper;
+// Replace Original Promise
+// Promise['constructor'] = PromiseWrapper['constructor'];
+// export const PromiseWrapper;
+// export PromiseInjection;
+// function invokeResolver(resolver, promise) {
+//     function resolvePromise(value) {
+//         resolve(promise, value);
+//     }
+//     function rejectPromise(reason) {
+//         reject(promise, reason);
+//     }
+//     try {
+//         resolver(resolvePromise, rejectPromise);
+//     } catch (e) {
+//         rejectPromise(e);
+//     }
+// }
+// function Promise(resolver) {
+//     if (typeof resolver !== 'function') {
+//         throw new TypeError('Promise resolver ' + resolver + ' is not a function');
+//     }
+//     if (this instanceof Promise === false) {
+//         throw new TypeError('Failed to construct \'Promise\': Please use the \'new\' operator, this object constructor cannot be called as a function.');
+//     }
+//     this._then = [];
+//     invokeResolver(resolver, this);
+// }
+// Promise.prototype = {
+//     constructor: Promise,
+//     _state: PENDING,
+//     _then: null,
+//     _data: undefined,
+//     _handled: false,
+//     then: function (onFulfillment, onRejection) {
+//         var subscriber = {
+//             owner: this,
+//             then: new this.constructor(NOOP),
+//             fulfilled: onFulfillment,
+//             rejected: onRejection
+//         };
+//         if ((onRejection || onFulfillment) && !this._handled) {
+//             this._handled = true;
+//             if (this._state === REJECTED && isNode) {
+//                 asyncCall(notifyRejectionHandled, this);
+//             }
+//         }
+//         if (this._state === FULFILLED || this._state === REJECTED) {
+//             // already resolved, call callback async
+//             asyncCall(invokeCallback, subscriber);
+//         } else {
+//             // subscribe
+//             this._then.push(subscriber);
+//         }
+//         return subscriber.then;
+//     },
+//     catch: function (onRejection) {
+//         return this.then(null, onRejection);
+//     }
+// };
+// function Promise(resolver) {
+// 	if (typeof resolver !== 'function') {
+// 		throw new TypeError('Promise resolver ' + resolver + ' is not a function');
+// 	}
+// 	if (this instanceof Promise === false) {
+// 		throw new TypeError('Failed to construct \'Promise\': Please use the \'new\' operator, this object constructor cannot be called as a function.');
+// 	}
+// 	this._then = [];
+// 	invokeResolver(resolver, this);
+// }
+// Promise.prototype = {
+// 	constructor: Promise,
+// 	_state: PENDING,
+// 	_then: null,
+// 	_data: undefined,
+// 	_handled: false,
+// 	then: function (onFulfillment, onRejection) {
+// 		var subscriber = {
+// 			owner: this,
+// 			then: new this.constructor(NOOP),
+// 			fulfilled: onFulfillment,
+// 			rejected: onRejection
+// 		};
+// 		if ((onRejection || onFulfillment) && !this._handled) {
+// 			this._handled = true;
+// 			if (this._state === REJECTED && isNode) {
+// 				asyncCall(notifyRejectionHandled, this);
+// 			}
+// 		}
+// 		if (this._state === FULFILLED || this._state === REJECTED) {
+// 			// already resolved, call callback async
+// 			asyncCall(invokeCallback, subscriber);
+// 		} else {
+// 			// subscribe
+// 			this._then.push(subscriber);
+// 		}
+// 		return subscriber.then;
+// 	},
+// 	catch: function (onRejection) {
+// 		return this.then(null, onRejection);
+// 	}
+// }; 
+
+
+/***/ }),
+
+/***/ 55:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var tslib_1 = __webpack_require__(13);
 var fs = __webpack_require__(16);
-var Path = __webpack_require__(15);
-var resolve_url_1 = __webpack_require__(74);
-var root_dir_1 = __webpack_require__(32);
-function main(context, request, pathDepthFromApiRoot) {
+var Path = __webpack_require__(14);
+var resolve_url_1 = __webpack_require__(76);
+var root_dir_1 = __webpack_require__(30);
+function main(){ return ___call(___main,'main',this,arguments); }
+function ___main(context, request, pathDepthFromApiRoot) {
     if (pathDepthFromApiRoot === void 0) { pathDepthFromApiRoot = 1; }
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         var pathOrig, filePath, path;
@@ -345,12 +628,13 @@ exports.main = main;
 
 /***/ }),
 
-/***/ 74:
+/***/ 76:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-function resolveUrlClient(url) {
+function resolveUrlClient(){ return ___call(___resolveUrlClient,'resolveUrlClient',this,arguments); }
+function ___resolveUrlClient(url) {
     if (url.indexOf('./') !== 0) {
         return url;
     }
@@ -362,7 +646,8 @@ function resolveUrlClient(url) {
     return resolveUrl_inner(url, prefix);
 }
 exports.resolveUrlClient = resolveUrlClient;
-function resolveUrl(url, pathDepthFromApiRoot) {
+function resolveUrl(){ return ___call(___resolveUrl,'resolveUrl',this,arguments); }
+function ___resolveUrl(url, pathDepthFromApiRoot) {
     if (pathDepthFromApiRoot === void 0) { pathDepthFromApiRoot = 1; }
     if (url.indexOf('./') !== 0) {
         return url;
@@ -371,7 +656,8 @@ function resolveUrl(url, pathDepthFromApiRoot) {
     return resolveUrl_inner(url, depthPrefix);
 }
 exports.resolveUrl = resolveUrl;
-function resolveUrl_inner(url, prefix) {
+function resolveUrl_inner(){ return ___call(___resolveUrl_inner,'resolveUrl_inner',this,arguments); }
+function ___resolveUrl_inner(url, prefix) {
     url = url.substr(2);
     // If file extension, make file
     if (url.match(/[^/]\.[^/]+$/)) {
@@ -381,13 +667,15 @@ function resolveUrl_inner(url, prefix) {
         return "" + prefix + url + "?q";
     }
 }
-function resolveAllUrls(content, pathDepthFromApiRoot) {
+function resolveAllUrls(){ return ___call(___resolveAllUrls,'resolveAllUrls',this,arguments); }
+function ___resolveAllUrls(content, pathDepthFromApiRoot) {
     return content
         .replace(/"(\.\/[^"]+)"/g, function (x) { return '"' + resolveUrl(x.substr(1, x.length - 2), pathDepthFromApiRoot) + '"'; })
         .replace(/'(\.\/[^']+)'/g, function (x) { return '\'' + resolveUrl(x.substr(1, x.length - 2), pathDepthFromApiRoot) + '\''; });
 }
 exports.resolveAllUrls = resolveAllUrls;
-function getPathDepthPrefix(pathDepthFromApiRoot) {
+function getPathDepthPrefix(){ return ___call(___getPathDepthPrefix,'getPathDepthPrefix',this,arguments); }
+function ___getPathDepthPrefix(pathDepthFromApiRoot) {
     var depthPrefix = '';
     for (var i = 0; i < pathDepthFromApiRoot; i++) {
         depthPrefix += '../';

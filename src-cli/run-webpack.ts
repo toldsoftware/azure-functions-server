@@ -1,7 +1,10 @@
+import * as fs from 'fs';
+import { injectWebpack } from './webpack-injection';
+
 declare var require: any;
 const webpack = require('webpack');
 
-export function runWebpackAzureFunction(functionDirsOrFiles: string[]) {
+export function runWebpackAzureFunction(functionDirsOrFiles: string[], shouldInject = false) {
     return new Promise((resolve, reject) => {
         let entries: { [name: string]: string } = {};
         functionDirsOrFiles.filter(x => x.length > 0).forEach(x => {
@@ -45,12 +48,19 @@ export function runWebpackAzureFunction(functionDirsOrFiles: string[]) {
             console.log('Webpack Azure Functions END');
             // console.log(stats);
 
-            resolve();
+            if (shouldInject) {
+                (async () => {
+                    await inject(entries);
+                    resolve();
+                })();
+            } else {
+                resolve();
+            }
         });
     });
 }
 
-export function runWebpackClient(entrySourceFiles: string[]) {
+export function runWebpackClient(entrySourceFiles: string[], shouldInject = false) {
     return new Promise((resolve, reject) => {
         let entries: { [name: string]: string } = {};
         entrySourceFiles.filter(x => x.length > 0).forEach(x => entries[x.replace('.source.js', '.js')] = x);
@@ -107,7 +117,63 @@ export function runWebpackClient(entrySourceFiles: string[]) {
             if (err) { console.error(err); reject(); return; }
             console.log('Webpack Client END');
             // console.log(stats);
-            resolve();
+
+            if (shouldInject) {
+                (async () => {
+                    await inject(entries);
+                    resolve();
+                })();
+            } else {
+                resolve();
+            }
+
         });
+    });
+}
+
+function inject(files: { [name: string]: string }) {
+    return new Promise((resolve, reject) => {
+        console.log('Inject START');
+
+        let waitCount = 0;
+        let resolveTimeoutId: any = null;
+        let resolveIfDone = () => {
+            clearTimeout(resolveTimeoutId);
+            resolveTimeoutId = setTimeout(() => {
+                if (waitCount > 0) { return; }
+                console.log('Inject END');
+                resolve();
+            });
+        };
+
+        let destFiles: string[] = [];
+
+        for (let key in files) {
+            if (files.hasOwnProperty(key)) {
+                destFiles.push(key);
+            }
+        }
+
+        for (let f of destFiles) {
+            waitCount++;
+            fs.readFile(f, 'utf8', function (err, data) {
+                if (err) {
+                    waitCount--;
+                    resolveIfDone();
+                    return console.log(err);
+                }
+
+                console.log('Inject file=' + f);
+                let result = injectWebpack(data);
+
+                fs.writeFile(f, result, 'utf8', function (err) {
+                    waitCount--;
+                    resolveIfDone();
+                    if (err) { return console.log(err); }
+                });
+            });
+        }
+
+        resolveIfDone();
     });
 }

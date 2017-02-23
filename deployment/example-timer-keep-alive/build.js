@@ -1,3 +1,48 @@
+
+
+var ___callTree = {calls:[]};
+var ___callTreeRoot = ___callTree;
+var ___log = [];
+var ___beforeFunctionCallback = function (name, args) {
+    ___callTree = {name: name, args: ___stringifySafe(args), parent: ___callTree, calls:[]};
+    ___callTree.parent.calls.push(___callTree);
+    return -1 + ___log.push(___callTree);
+}
+var ___afterFunctionCallback = function (iLog, name, result, err) {
+    ___log[iLog].result = ___stringifySafe(result);
+    ___log[iLog].err = ___stringifySafe(err);
+    ___callTree = ___callTree.parent;
+}
+function ___call(fun, name, that, args) {
+    var iLog = ___beforeFunctionCallback(name, args);
+    try {
+        var result = fun.apply(that, args);
+        ___afterFunctionCallback(iLog, name, result);
+        return result;
+    } catch (err) {
+        ___afterFunctionCallback(iLog, name, null, err);
+        throw err;
+    }
+}
+
+function ___stringifySafe(obj) {
+    let seen = [];
+    return JSON.stringify(obj, function (key, val) {
+        if (val != null && typeof val === 'object') {
+            if (seen.indexOf(val) >= 0
+                || key === 'parent'
+                || key === 'context'
+            ) {
+                return;
+            }
+            seen.push(val);
+        } else if (val != null && typeof val === 'string' && val.length > 40) {
+            return val.substr(0, 40) + '...';
+        }
+
+        return val;
+    });
+}
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -63,17 +108,18 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 262);
+/******/ 	return __webpack_require__(__webpack_require__.s = 266);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 118:
+/***/ 120:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-function run(tick) {
+function run(){ return ___call(___run,'run',this,arguments); }
+function ___run(tick) {
     return function (context, timer) {
         tick(context, timer)
             .then(function () { })
@@ -85,16 +131,17 @@ exports.run = run;
 
 /***/ }),
 
-/***/ 122:
+/***/ 125:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var tslib_1 = __webpack_require__(13);
 var http = __webpack_require__(20);
-var https = __webpack_require__(29);
+var https = __webpack_require__(31);
 // schedule: 0 0 0 * * *
-function tick(context, timer) {
+function tick(){ return ___call(___tick,'tick',this,arguments); }
+function ___tick(context, timer) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         var urls, doneCount, callDone, _loop_1, _i, urls_1, x, timeStamp;
         return tslib_1.__generator(this, function (_a) {
@@ -253,16 +300,16 @@ module.exports = require("http");
 
 /***/ }),
 
-/***/ 262:
+/***/ 266:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Intentionally global
-___export = __webpack_require__(118).run(__webpack_require__(122).tick);
+___export = __webpack_require__(120).run(__webpack_require__(125).tick);
 module.exports = ___export;
 
 /***/ }),
 
-/***/ 29:
+/***/ 31:
 /***/ (function(module, exports) {
 
 module.exports = require("https");

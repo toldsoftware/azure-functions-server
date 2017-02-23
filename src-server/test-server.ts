@@ -34,7 +34,7 @@ export function serve<T, TQuery, TBody>(main: T.MainEntryPoint<T, TQuery, TBody>
             };
 
             main(context, { query, body: JSON.parse(req.body || '{}'), pathName: uri.pathname || '', pathParts: (uri.pathname as string).split('/').filter(p => p.length > 0), headers: {} })
-                .then(() => { })
+                .then()
                 .catch(err => console.error(err));
         });
 

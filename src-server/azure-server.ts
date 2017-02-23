@@ -3,6 +3,14 @@ import * as path from 'path';
 import * as T from './../src';
 import { dir } from './../src/root-dir';
 
+import { _printCallTree } from '../src-cli/injectors/call-tree';
+import { injectPromiseWrapper } from '../src-cli/injectors/promise-wrapper';
+declare var ___callTree: any;
+const DEBUG = typeof ___callTree !== 'undefined';
+if (DEBUG) {
+    injectPromiseWrapper();
+}
+
 export function setDirName(dirName: string) {
     dir.rootDir = path.resolve(dirName, '..');
     return this;
@@ -36,9 +44,16 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
         }
 
         main(context, req)
-            .then(() => { })
+            .then(() => {
+                if (DEBUG) {
+                    context.log(_printCallTree(___callTree));
+                }
+            })
             .catch(err => {
                 context.log('Uncaught Error:', err);
+                if (DEBUG) {
+                    context.log(_printCallTree(___callTree));
+                }
                 context.done(err, null);
             });
     };

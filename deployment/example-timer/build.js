@@ -1,3 +1,48 @@
+
+
+var ___callTree = {calls:[]};
+var ___callTreeRoot = ___callTree;
+var ___log = [];
+var ___beforeFunctionCallback = function (name, args) {
+    ___callTree = {name: name, args: ___stringifySafe(args), parent: ___callTree, calls:[]};
+    ___callTree.parent.calls.push(___callTree);
+    return -1 + ___log.push(___callTree);
+}
+var ___afterFunctionCallback = function (iLog, name, result, err) {
+    ___log[iLog].result = ___stringifySafe(result);
+    ___log[iLog].err = ___stringifySafe(err);
+    ___callTree = ___callTree.parent;
+}
+function ___call(fun, name, that, args) {
+    var iLog = ___beforeFunctionCallback(name, args);
+    try {
+        var result = fun.apply(that, args);
+        ___afterFunctionCallback(iLog, name, result);
+        return result;
+    } catch (err) {
+        ___afterFunctionCallback(iLog, name, null, err);
+        throw err;
+    }
+}
+
+function ___stringifySafe(obj) {
+    let seen = [];
+    return JSON.stringify(obj, function (key, val) {
+        if (val != null && typeof val === 'object') {
+            if (seen.indexOf(val) >= 0
+                || key === 'parent'
+                || key === 'context'
+            ) {
+                return;
+            }
+            seen.push(val);
+        } else if (val != null && typeof val === 'string' && val.length > 40) {
+            return val.substr(0, 40) + '...';
+        }
+
+        return val;
+    });
+}
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -63,17 +108,18 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 263);
+/******/ 	return __webpack_require__(__webpack_require__.s = 267);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 118:
+/***/ 120:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-function run(tick) {
+function run(){ return ___call(___run,'run',this,arguments); }
+function ___run(tick) {
     return function (context, timer) {
         tick(context, timer)
             .then(function () { })
@@ -85,7 +131,7 @@ exports.run = run;
 
 /***/ }),
 
-/***/ 123:
+/***/ 126:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -94,7 +140,8 @@ var tslib_1 = __webpack_require__(13);
 // https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer
 // {second} {minute} {hour} {day} {month} {day of the week}
 // schedule: 0 0 0 * * *
-function tick(context, timer) {
+function tick(){ return ___call(___tick,'tick',this,arguments); }
+function ___tick(context, timer) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
         var timeStamp;
         return tslib_1.__generator(this, function (_a) {
@@ -219,11 +266,11 @@ function __generator(thisArg, body) {
 
 /***/ }),
 
-/***/ 263:
+/***/ 267:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Intentionally global
-___export = __webpack_require__(118).run(__webpack_require__(123).tick);
+___export = __webpack_require__(120).run(__webpack_require__(126).tick);
 module.exports = ___export;
 
 /***/ })

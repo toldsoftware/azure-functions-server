@@ -1,0 +1,56 @@
+export function injectPromiseLogger(webpackSource: string) {
+    let i = webpackSource.indexOf('module.exports = Promise;');
+    console.log(`injectPromiseLogger @ ${i}`);
+
+    return webpackSource.replace('module.exports = Promise;', `${PromiseWrapper} module.exports = PromiseWrapper;`);
+}
+
+const PromiseWrapper = `
+var Promise_Original = Promise;
+var PromiseInjection = {
+    beforeConstructorCallback: function (id) { console.log('PromiseCreate:', id); },
+    beforeResolveCallback: function (id, value) { console.log('PromiseResolve:', id, value); },
+    beforeRejectCallback: function (id, reason) { console.log('PromiseReject:', id, reason); },
+};
+var _nextPromiseId = 0;
+var PromiseWrapper = (function () {
+    function PromiseWrapper(resolver) {
+        var _this = this;
+        this.id = '';
+        this.id = '' + _nextPromiseId++;
+        PromiseInjection.beforeConstructorCallback(this.id);
+        this.promiseInner = new Promise_Original(function (resolveInner, rejectInner) {
+            var resolveOuter = function (value) {
+                PromiseInjection.beforeResolveCallback(_this.id, value);
+                resolveInner(value);
+            };
+            var rejectOuter = function (reason) {
+                PromiseInjection.beforeRejectCallback(_this.id, reason);
+                rejectInner(reason);
+            };
+            resolver(resolveOuter, rejectOuter);
+        });
+    }
+    PromiseWrapper.prototype.then = function (resolve, reject) {
+        var _this = this;
+        var resolveOuter = function (value) {
+            PromiseInjection.beforeResolveCallback(_this.id, value);
+            resolve(value);
+        };
+        var rejectOuter = function (reason) {
+            PromiseInjection.beforeRejectCallback(_this.id, reason);
+            reject(reason);
+        };
+        this.promiseInner.then(resolveOuter, rejectOuter);
+    };
+    PromiseWrapper.prototype.catch = function (reject) {
+        var _this = this;
+        var rejectOuter = function (reason) {
+            PromiseInjection.beforeRejectCallback(_this.id, reason);
+            reject(reason);
+        };
+        this.promiseInner.catch(rejectOuter);
+    };
+    return PromiseWrapper;
+}());
+`;
