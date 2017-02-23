@@ -53,6 +53,8 @@ export class PromiseWrapper<T> {
             reject(reason);
         };
         this.promiseInner.then(resolveOuter, rejectOuter);
+
+        return this;
     }
 
     catch(reject: (err: any) => void) {
@@ -61,6 +63,8 @@ export class PromiseWrapper<T> {
             reject(reason);
         };
         this.promiseInner.catch(rejectOuter);
+
+        return this;
     }
 }
 

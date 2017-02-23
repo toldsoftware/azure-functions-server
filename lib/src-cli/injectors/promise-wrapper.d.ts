@@ -9,7 +9,7 @@ export declare class PromiseWrapper<T> {
     private context;
     private promiseInner;
     constructor(resolver: (resolve: (value: T) => void, reject: (reason: string) => void) => void);
-    then(resolve: (result: T) => void, reject: (err: any) => void): void;
-    catch(reject: (err: any) => void): void;
+    then(resolve: (result: T) => void, reject: (err: any) => void): this;
+    catch(reject: (err: any) => void): this;
 }
 export declare function injectPromiseWrapper(): void;

@@ -8591,6 +8591,7 @@ var PromiseWrapper = (function () {
             reject(reason);
         };
         this.promiseInner.then(resolveOuter, rejectOuter);
+        return this;
     };
     PromiseWrapper.prototype.catch = function (reject) {
         var _this = this;
@@ -8599,6 +8600,7 @@ var PromiseWrapper = (function () {
             reject(reason);
         };
         this.promiseInner.catch(rejectOuter);
+        return this;
     };
     return PromiseWrapper;
 }());
