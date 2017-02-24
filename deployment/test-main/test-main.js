@@ -27803,7 +27803,7 @@ function _f_main(context, request) {
             switch (_a.label) {
                 case 0:
                     if (false) return [3 /*break*/, 2];
-                    return [4 /*yield*/, delay(10 * 1000)];
+                    return [4 /*yield*/, delay(1000)];
                 case 1:
                     _a.sent();
                     return [3 /*break*/, 0];
@@ -27877,10 +27877,12 @@ var tslib_1 = __webpack_require__(2);
 function main(){ return ___call(_f_main,'main',this,arguments); }
 function _f_main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var recursive;
+        var x, recursive;
         return tslib_1.__generator(this, function (_a) {
+            x = [10];
             recursive = function () {
-                recursive();
+                var y = x = x.concat(10);
+                return y.concat(recursive()).concat(recursive());
             };
             recursive();
             context.done(null, {

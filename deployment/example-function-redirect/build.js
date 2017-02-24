@@ -616,12 +616,14 @@ function _f_serve(main) {
                 }
             };
         }
-        var debugTimeoutId = null;
+        var debugIntervalId = null;
+        var start = Date.now();
         try {
             if (DEBUG) {
-                debugTimeoutId = setTimeout(function () {
+                debugIntervalId = setInterval(function () {
+                    context.log("LONG PROCESS: " + (Date.now() - start) + "ms");
                     if (DEBUG) {
-                        clearTimeout(debugTimeoutId);
+                        clearTimeout(debugIntervalId);
                         context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
                     }
                 }, 10 * 1000);
@@ -630,23 +632,23 @@ function _f_serve(main) {
             main(context, req)
                 .then(function () {
                 if (DEBUG) {
-                    clearTimeout(debugTimeoutId);
+                    clearTimeout(debugIntervalId);
                     context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
                 }
             })
                 .catch(function (err) {
-                context.log('Uncaught Error (Promise):', err);
+                context.log('UNCAUGHT ERROR (Promise):', err);
                 if (DEBUG) {
-                    clearTimeout(debugTimeoutId);
+                    clearTimeout(debugIntervalId);
                     context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
                 }
                 context.done(err, null);
             });
         }
         catch (err) {
-            context.log('Uncaught Error:', err);
+            context.log('UNCAUGHT ERROR:', err);
             if (DEBUG) {
-                clearTimeout(debugTimeoutId);
+                clearTimeout(debugIntervalId);
                 context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
             }
             context.done(err, null);

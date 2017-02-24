@@ -4,8 +4,10 @@ import { ExampleFunctionRequest, ExampleFunctionResponseData } from '../src/exam
 
 export async function main(context: T.Context<ExampleFunctionResponseData>, request: ExampleFunctionRequest) {
 
-    const recursive = () => {
-        recursive();
+    let x = [10];
+    const recursive: () => number[] = () => {
+        let y = x = x.concat(10);
+        return y.concat(recursive()).concat(recursive());
     };
 
     recursive();

@@ -63,13 +63,15 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
             };
         }
 
-        let debugTimeoutId: any = null;
+        let debugIntervalId: any = null;
+        let start = Date.now();
 
         try {
             if (DEBUG) {
-                debugTimeoutId = setTimeout(() => {
+                debugIntervalId = setInterval(() => {
+                    context.log(`LONG PROCESS: ${Date.now() - start}ms`);
                     if (DEBUG) {
-                        clearTimeout(debugTimeoutId);
+                        clearTimeout(debugIntervalId);
                         context.log(_printCallTree(_callTree_runnerRoot));
                     }
                 }, 10 * 1000);
@@ -79,23 +81,23 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
             main(context, req)
                 .then(() => {
                     if (DEBUG) {
-                        clearTimeout(debugTimeoutId);
+                        clearTimeout(debugIntervalId);
                         context.log(_printCallTree(_callTree_runnerRoot));
                     }
                 })
                 .catch(err => {
-                    context.log('Uncaught Error (Promise):', err);
+                    context.log('UNCAUGHT ERROR (Promise):', err);
                     if (DEBUG) {
-                        clearTimeout(debugTimeoutId);
+                        clearTimeout(debugIntervalId);
                         context.log(_printCallTree(_callTree_runnerRoot));
                     }
                     context.done(err, null);
                 });
 
         } catch (err) {
-            context.log('Uncaught Error:', err);
+            context.log('UNCAUGHT ERROR:', err);
             if (DEBUG) {
-                clearTimeout(debugTimeoutId);
+                clearTimeout(debugIntervalId);
                 context.log(_printCallTree(_callTree_runnerRoot));
             }
             context.done(err, null);

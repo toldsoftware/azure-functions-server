@@ -5,7 +5,7 @@ import { ExampleFunctionRequest, ExampleFunctionResponseData } from '../src/exam
 export async function main(context: T.Context<ExampleFunctionResponseData>, request: ExampleFunctionRequest) {
 
     while (!!true) {
-        await delay(10 * 1000);
+        await delay(1000);
     }
 
     context.done(null, {

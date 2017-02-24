@@ -170,7 +170,7 @@ function _f_main(context, request) {
             switch (_a.label) {
                 case 0:
                     if (false) return [3 /*break*/, 2];
-                    return [4 /*yield*/, delay(10 * 1000)];
+                    return [4 /*yield*/, delay(1000)];
                 case 1:
                     _a.sent();
                     return [3 /*break*/, 0];
@@ -635,12 +635,14 @@ function _f_serve(main) {
                 }
             };
         }
-        var debugTimeoutId = null;
+        var debugIntervalId = null;
+        var start = Date.now();
         try {
             if (DEBUG) {
-                debugTimeoutId = setTimeout(function () {
+                debugIntervalId = setInterval(function () {
+                    context.log("LONG PROCESS: " + (Date.now() - start) + "ms");
                     if (DEBUG) {
-                        clearTimeout(debugTimeoutId);
+                        clearTimeout(debugIntervalId);
                         context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
                     }
                 }, 10 * 1000);
@@ -649,23 +651,23 @@ function _f_serve(main) {
             main(context, req)
                 .then(function () {
                 if (DEBUG) {
-                    clearTimeout(debugTimeoutId);
+                    clearTimeout(debugIntervalId);
                     context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
                 }
             })
                 .catch(function (err) {
-                context.log('Uncaught Error (Promise):', err);
+                context.log('UNCAUGHT ERROR (Promise):', err);
                 if (DEBUG) {
-                    clearTimeout(debugTimeoutId);
+                    clearTimeout(debugIntervalId);
                     context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
                 }
                 context.done(err, null);
             });
         }
         catch (err) {
-            context.log('Uncaught Error:', err);
+            context.log('UNCAUGHT ERROR:', err);
             if (DEBUG) {
-                clearTimeout(debugTimeoutId);
+                clearTimeout(debugIntervalId);
                 context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
             }
             context.done(err, null);

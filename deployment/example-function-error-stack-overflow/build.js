@@ -166,10 +166,12 @@ var tslib_1 = __webpack_require__(2);
 function main(){ return ___call(_f_main,'main',this,arguments); }
 function _f_main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var recursive;
+        var x, recursive;
         return tslib_1.__generator(this, function (_a) {
+            x = [10];
             recursive = function () {
-                recursive();
+                var y = x = x.concat(10);
+                return y.concat(recursive()).concat(recursive());
             };
             recursive();
             context.done(null, {
@@ -622,12 +624,14 @@ function _f_serve(main) {
                 }
             };
         }
-        var debugTimeoutId = null;
+        var debugIntervalId = null;
+        var start = Date.now();
         try {
             if (DEBUG) {
-                debugTimeoutId = setTimeout(function () {
+                debugIntervalId = setInterval(function () {
+                    context.log("LONG PROCESS: " + (Date.now() - start) + "ms");
                     if (DEBUG) {
-                        clearTimeout(debugTimeoutId);
+                        clearTimeout(debugIntervalId);
                         context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
                     }
                 }, 10 * 1000);
@@ -636,23 +640,23 @@ function _f_serve(main) {
             main(context, req)
                 .then(function () {
                 if (DEBUG) {
-                    clearTimeout(debugTimeoutId);
+                    clearTimeout(debugIntervalId);
                     context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
                 }
             })
                 .catch(function (err) {
-                context.log('Uncaught Error (Promise):', err);
+                context.log('UNCAUGHT ERROR (Promise):', err);
                 if (DEBUG) {
-                    clearTimeout(debugTimeoutId);
+                    clearTimeout(debugIntervalId);
                     context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
                 }
                 context.done(err, null);
             });
         }
         catch (err) {
-            context.log('Uncaught Error:', err);
+            context.log('UNCAUGHT ERROR:', err);
             if (DEBUG) {
-                clearTimeout(debugTimeoutId);
+                clearTimeout(debugIntervalId);
                 context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
             }
             context.done(err, null);
