@@ -20,10 +20,13 @@ export interface Response<TResponseData> {
     };
     body: ResponseBody<TResponseData>;
 }
-export interface ResponseBody<TResponseData> {
+export interface ResponseBodyBase {
     ok: boolean;
-    data?: TResponseData;
+    data?: any;
     errors?: string[];
+}
+export interface ResponseBody<TResponseData> extends ResponseBodyBase {
+    data?: TResponseData;
 }
 export interface Context<TResponseData> {
     log(...text: any[]): void;
