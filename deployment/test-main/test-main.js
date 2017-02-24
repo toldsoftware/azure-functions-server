@@ -152,7 +152,7 @@ function ___stringifySafe(obj) {
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 266);
+/******/ 	return __webpack_require__(__webpack_require__.s = 271);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -6502,99 +6502,7 @@ function write(key, options, type) {
 module.exports = require("assert");
 
 /***/ }),
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var tslib_1 = __webpack_require__(11);
-var path = __webpack_require__(14);
-var root_dir_1 = __webpack_require__(27);
-var call_tree_1 = __webpack_require__(32);
-var promise_wrapper_1 = __webpack_require__(33);
-// declare var ___beforeFunctionCallback: BeforeFunctionCallback;
-// declare var ___afterFunctionCallback: AfterFunctionCallback;
-var DEBUG = typeof ___callTree !== 'undefined';
-var _callTreeRoot = null;
-if (DEBUG) {
-    promise_wrapper_1._injectPromiseWrapper();
-    _callTreeRoot = ___callTree;
-}
-function setDirName(){ return ___call(_f_setDirName,'setDirName',this,arguments); }
-function _f_setDirName(dirName) {
-    root_dir_1.dir.rootDir = path.resolve(dirName, '..');
-    return this;
-}
-exports.setDirName = setDirName;
-function serve(){ return ___call(_f_serve,'serve',this,arguments); }
-function _f_serve(main) {
-    var _callTree_runnerRoot = null;
-    var runner = function (context, request) {
-        var req = tslib_1.__assign({}, request);
-        req.pathName = req.pathName || context.bindingData.pathName || '';
-        req.pathParts = req.pathName.split('/').filter(function (x) { return x.length > 0; });
-        if (req.query.ping != null) {
-            context.done(null, {
-                status: 200,
-                headers: { 'Content-Type': 'text/plain' },
-                body: 'PONG',
-            });
-            return;
-        }
-        // Auto-Parse Json
-        if (typeof req.body === 'string') {
-            var orig = req.body;
-            try {
-                req.body = JSON.parse(req.body);
-            }
-            catch (err) {
-                req.body = orig;
-            }
-        }
-        if (DEBUG) {
-            var contextInner_1 = context;
-            context = {
-                done: function () {
-                    return ___call(contextInner_1.done, 'done', contextInner_1, arguments);
-                },
-                log: function () {
-                    // Don't wrap log
-                    return contextInner_1.log.apply(contextInner_1, arguments);
-                }
-            };
-        }
-        main(context, req)
-            .then(function () {
-            if (DEBUG) {
-                context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
-            }
-        })
-            .catch(function (err) {
-            context.log('Uncaught Error:', err);
-            if (DEBUG) {
-                context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
-            }
-            context.done(err, null);
-        });
-    };
-    if (DEBUG) {
-        var innerIsolate_1 = function () {
-            _callTree_runnerRoot = ___callTree;
-            return ___call(runner, 'serve', this, arguments);
-        };
-        return function () {
-            ___callTree = _callTreeRoot;
-            return ___call(innerIsolate_1, 'request', this, arguments);
-        };
-    }
-    else {
-        return runner;
-    }
-}
-exports.serve = serve;
-
-
-/***/ }),
+/* 26 */,
 /* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13444,7 +13352,95 @@ SSHBuffer.prototype.write = function (buf) {
 
 
 /***/ }),
-/* 55 */,
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var tslib_1 = __webpack_require__(11);
+var fs = __webpack_require__(16);
+var Path = __webpack_require__(14);
+var resolve_url_1 = __webpack_require__(76);
+var root_dir_1 = __webpack_require__(27);
+function main(){ return ___call(_f_main,'main',this,arguments); }
+function _f_main(context, request, pathDepthFromApiRoot) {
+    if (pathDepthFromApiRoot === void 0) { pathDepthFromApiRoot = 1; }
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+        var pathOrig, filePath, path;
+        return tslib_1.__generator(this, function (_a) {
+            pathOrig = request.query.name || request.pathName;
+            filePath = pathOrig
+                .replace(/\/$/, '')
+                .replace(/\/(file)$/, '')
+                .replace(/\/([^\/]+\.js\.map)$/, '.map');
+            path = Path.resolve(root_dir_1.dir.rootDir, resolve_url_1.getPathDepthPrefix(pathDepthFromApiRoot - 1), 'resources', filePath.replace(/^\//, ''));
+            context.log('filePath=' + filePath + ' path=' + path + ' __dirname=' + __dirname + ' request.query.name=' + request.query.name + ' request.pathName=' + request.pathName);
+            fs.readFile(path, function (err, data) {
+                context.log('path=' + path);
+                if (err != null) {
+                    context.log('ERROR: ' + err);
+                    context.done(null, {
+                        status: 404,
+                        headers: {
+                            'Content-Type': 'text/plain',
+                        },
+                        body: ('File Not Found: ' + filePath)
+                    });
+                    return;
+                }
+                var type = 'text/plain';
+                if (path.match('\.html$')) {
+                    type = 'text/html';
+                }
+                if (path.match('\.css$')) {
+                    type = 'text/css';
+                }
+                if (path.match('\.js$')) {
+                    type = 'application/x-javascript';
+                }
+                if (path.match('\.json$')) {
+                    type = 'application/json';
+                }
+                if (path.match('\.jpg$')) {
+                    type = 'image/jpeg';
+                }
+                if (path.match('\.png$')) {
+                    type = 'image/png';
+                }
+                if (path.match('\.gif$')) {
+                    type = 'image/gif';
+                }
+                if (path.match('\.ico$')) {
+                    type = 'image/x-icon';
+                }
+                // Auto Resolve Resource Urls?
+                var body = data;
+                if (type === 'text/html') {
+                    body = data.toString();
+                    body = resolve_url_1.resolveAllUrls(body, pathDepthFromApiRoot);
+                }
+                // // Prevent Json Curroption
+                // if (type === 'application/json') {
+                //     body = data.toString();
+                //     body = JSON.parse(body);
+                // }
+                context.done(null, {
+                    headers: {
+                        'Content-Type': type,
+                    },
+                    body: body,
+                    // Bypass response handling
+                    isRaw: true
+                });
+            });
+            return [2 /*return*/];
+        });
+    });
+}
+exports.main = main;
+
+
+/***/ }),
 /* 56 */
 /***/ (function(module, exports) {
 
@@ -18802,7 +18798,64 @@ nacl.setPRNG = function(fn) {
 module.exports = require("net");
 
 /***/ }),
-/* 76 */,
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function resolveUrlClient(){ return ___call(_f_resolveUrlClient,'resolveUrlClient',this,arguments); }
+function _f_resolveUrlClient(url) {
+    if (url.indexOf('./') !== 0) {
+        return url;
+    }
+    var pathname = window.location.pathname;
+    var prefix = '/';
+    if (pathname.match(/^\/api\//)) {
+        prefix = '/api/';
+    }
+    return resolveUrl_inner(url, prefix);
+}
+exports.resolveUrlClient = resolveUrlClient;
+function resolveUrl(){ return ___call(_f_resolveUrl,'resolveUrl',this,arguments); }
+function _f_resolveUrl(url, pathDepthFromApiRoot) {
+    if (pathDepthFromApiRoot === void 0) { pathDepthFromApiRoot = 1; }
+    if (url.indexOf('./') !== 0) {
+        return url;
+    }
+    var depthPrefix = getPathDepthPrefix(pathDepthFromApiRoot);
+    return resolveUrl_inner(url, depthPrefix);
+}
+exports.resolveUrl = resolveUrl;
+function resolveUrl_inner(){ return ___call(_f_resolveUrl_inner,'resolveUrl_inner',this,arguments); }
+function _f_resolveUrl_inner(url, prefix) {
+    url = url.substr(2);
+    // If file extension, make file
+    if (url.match(/[^/]\.[^/]+$/)) {
+        return prefix + "resource/" + url + "/file";
+    }
+    else {
+        return "" + prefix + url + "?q";
+    }
+}
+function resolveAllUrls(){ return ___call(_f_resolveAllUrls,'resolveAllUrls',this,arguments); }
+function _f_resolveAllUrls(content, pathDepthFromApiRoot) {
+    return content
+        .replace(/"(\.\/[^"]+)"/g, function (x) { return '"' + resolveUrl(x.substr(1, x.length - 2), pathDepthFromApiRoot) + '"'; })
+        .replace(/'(\.\/[^']+)'/g, function (x) { return '\'' + resolveUrl(x.substr(1, x.length - 2), pathDepthFromApiRoot) + '\''; });
+}
+exports.resolveAllUrls = resolveAllUrls;
+function getPathDepthPrefix(){ return ___call(_f_getPathDepthPrefix,'getPathDepthPrefix',this,arguments); }
+function _f_getPathDepthPrefix(pathDepthFromApiRoot) {
+    var depthPrefix = '';
+    for (var i = 0; i < pathDepthFromApiRoot; i++) {
+        depthPrefix += '../';
+    }
+    return depthPrefix;
+}
+exports.getPathDepthPrefix = getPathDepthPrefix;
+
+
+/***/ }),
 /* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -27480,9 +27533,184 @@ module.exports = require("tls");
 
 /***/ }),
 /* 120 */,
-/* 121 */,
-/* 122 */,
-/* 123 */,
+/* 121 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var tslib_1 = __webpack_require__(11);
+var R = __webpack_require__(55);
+function main(){ return ___call(_f_main,'main',this,arguments); }
+function _f_main(context, request) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return tslib_1.__generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    // Serve index.html as the default file
+                    request.query.name = 'index.html';
+                    return [4 /*yield*/, R.main(context, request, 0)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.main = main;
+
+
+/***/ }),
+/* 122 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var tslib_1 = __webpack_require__(11);
+function main(){ return ___call(_f_main,'main',this,arguments); }
+function _f_main(context, request) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+        var start, a, b, promises;
+        return tslib_1.__generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (request.query.setup) {
+                        console.log('Setup was triggered');
+                    }
+                    start = '42';
+                    return [4 /*yield*/, testManualPromise(start)];
+                case 1:
+                    a = _a.sent();
+                    return [4 /*yield*/, testAsync(a)];
+                case 2:
+                    b = _a.sent();
+                    promises = [testAsync(a), testAsync(a), testAsync(a)];
+                    return [4 /*yield*/, Promise.all(promises)];
+                case 3:
+                    _a.sent();
+                    context.done(null, {
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                            'Content-Type': 'application/json',
+                            'X-Told-Test-Header': 'test-header',
+                        },
+                        body: {
+                            ok: true,
+                            data: { text: 'Example Output' },
+                        }
+                    });
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.main = main;
+function testManualPromise(){ return ___call(_f_testManualPromise,'testManualPromise',this,arguments); }
+function _f_testManualPromise(input) {
+    console.log('testManualPromise START');
+    return new Promise(function (resolve, reject) {
+        setTimeout(function () {
+            console.log('testManualPromise END');
+            resolve(input + 'value_testManualPromise');
+        }, 10);
+    });
+}
+function testAsync(){ return ___call(_f_testAsync,'testAsync',this,arguments); }
+function _f_testAsync(input) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return tslib_1.__generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.log('testAsync START');
+                    return [4 /*yield*/, delay()];
+                case 1:
+                    _a.sent();
+                    console.log('testAsync END');
+                    return [2 /*return*/, input + 'value_testAsync'];
+            }
+        });
+    });
+}
+function delay(){ return ___call(_f_delay,'delay',this,arguments); }
+function _f_delay(time) {
+    if (time === void 0) { time = 10; }
+    return new Promise(function (resolve, reject) {
+        setTimeout(function () {
+            resolve();
+        }, time);
+    });
+}
+
+
+/***/ }),
+/* 123 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var tslib_1 = __webpack_require__(11);
+function main(){ return ___call(_f_main,'main',this,arguments); }
+function _f_main(context, request) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+        var obj, val, sub, stat, result, v;
+        return tslib_1.__generator(this, function (_a) {
+            obj = new TestClass(1, 2, 7);
+            val = obj.testMethod();
+            sub = new TestSubClass(1, 2, 7);
+            sub.testMethod();
+            sub.testMethod2();
+            stat = new TestStaticClass();
+            result = TestStaticClass.method();
+            v = TestStaticClass.val;
+            context.done(null, {
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
+                    'X-Told-Test-Header': 'test-header',
+                },
+                body: {
+                    ok: true,
+                    data: { text: 'Value: ' + val },
+                }
+            });
+            return [2 /*return*/];
+        });
+    });
+}
+exports.main = main;
+var TestClass = (function () {
+    function TestClass(a, b, c) {
+        this.c = c;
+        this.val = 0;
+        this.val = a + b;
+    }
+    TestClass.prototype.testMethod = function () {
+        return "a+b=" + this.val + "; this.c=" + this.c;
+    };
+return ___wrapConstructor(TestClass, 'TestClass');
+}());
+exports.TestClass = TestClass;
+var TestSubClass = (function (_super) {
+    tslib_1.__extends(TestSubClass, _super);
+    function TestSubClass(a, b, c) {
+        return _super.call(this, a, b, c) || this;
+    }
+    TestSubClass.prototype.testMethod2 = function () {
+        return "a+b=" + this.val + "; this.c=" + this.c;
+    };
+return ___wrapConstructor(TestSubClass, 'TestSubClass');
+}(TestClass));
+exports.TestSubClass = TestSubClass;
+var TestStaticClass = (function () {
+    function TestStaticClass() {
+    }
+    TestStaticClass.method = function () {
+        return TestStaticClass.val;
+    };
+    return TestStaticClass;
+}());
+TestStaticClass.val = 0;
+exports.TestStaticClass = TestStaticClass;
+
+
+/***/ }),
 /* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -27559,9 +27787,121 @@ exports.main = main;
 
 
 /***/ }),
-/* 125 */,
-/* 126 */,
-/* 127 */,
+/* 125 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var tslib_1 = __webpack_require__(11);
+function main(){ return ___call(_f_main,'main',this,arguments); }
+function _f_main(context, request) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return tslib_1.__generator(this, function (_a) {
+            if (request.query.setup) {
+                console.log('Setup was triggered');
+            }
+            context.done(null, {
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
+                    'X-Told-Test-Header': 'test-header',
+                },
+                body: {
+                    ok: true,
+                    data: { text: 'Example Output' },
+                }
+            });
+            return [2 /*return*/];
+        });
+    });
+}
+exports.main = main;
+
+
+/***/ }),
+/* 126 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var tslib_1 = __webpack_require__(11);
+var http = __webpack_require__(20);
+var https = __webpack_require__(31);
+// schedule: 0 0 0 * * *
+function tick(){ return ___call(_f_tick,'tick',this,arguments); }
+function _f_tick(context, timer) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+        var urls, doneCount, callDone, _loop_1, _i, urls_1, x, timeStamp;
+        return tslib_1.__generator(this, function (_a) {
+            urls = [
+                'https://told-azure-functions-server-test.azurewebsites.net/api/example-function?ping=true',
+                'https://told-azure-functions-server-test.azurewebsites.net/api/example-function-get-blob?ping=true',
+                'https://told-azure-functions-server-test.azurewebsites.net/api/resource?ping=true',
+            ];
+            doneCount = 0;
+            callDone = function (url) {
+                doneCount++;
+                context.log('Keep Alive END: ', url);
+                if (doneCount >= urls.length) {
+                    context.done();
+                }
+            };
+            _loop_1 = function (x) {
+                context.log('Keep Alive START: ', x);
+                var http_s = http;
+                if (x.match(/^https/)) {
+                    http_s = https;
+                }
+                http_s.get(x, function (res) {
+                    console.log('statusCode:', res.statusCode);
+                    callDone(x);
+                });
+            };
+            for (_i = 0, urls_1 = urls; _i < urls_1.length; _i++) {
+                x = urls_1[_i];
+                _loop_1(x);
+            }
+            timeStamp = new Date().toISOString();
+            if (timer.isPastDue) {
+                context.log('Timer is Past Due');
+            }
+            context.log('Timer started!', timeStamp);
+            return [2 /*return*/];
+        });
+    });
+}
+exports.tick = tick;
+
+
+/***/ }),
+/* 127 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var tslib_1 = __webpack_require__(11);
+// https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer
+// {second} {minute} {hour} {day} {month} {day of the week}
+// schedule: 0 0 0 * * *
+function tick(){ return ___call(_f_tick,'tick',this,arguments); }
+function _f_tick(context, timer) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+        var timeStamp;
+        return tslib_1.__generator(this, function (_a) {
+            timeStamp = new Date().toISOString();
+            if (timer.isPastDue) {
+                context.log('Timer is Past Due');
+            }
+            context.log('Timer ran!', timeStamp);
+            context.done();
+            return [2 /*return*/];
+        });
+    });
+}
+exports.tick = tick;
+
+
+/***/ }),
 /* 128 */
 /***/ (function(module, exports) {
 
@@ -78533,17 +78873,143 @@ module.exports = require("string_decoder");
 module.exports = require("zlib");
 
 /***/ }),
-/* 262 */,
+/* 262 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var http = __webpack_require__(20);
+var url = __webpack_require__(7);
+var querystring = __webpack_require__(21);
+var path = __webpack_require__(14);
+var resource_1 = __webpack_require__(55);
+var root_dir_1 = __webpack_require__(27);
+var call_tree_1 = __webpack_require__(32);
+var promise_wrapper_1 = __webpack_require__(33);
+var DEBUG = typeof ___callTree !== 'undefined';
+var _callTreeRoot = null;
+if (DEBUG) {
+    promise_wrapper_1._injectPromiseWrapper();
+    _callTreeRoot = ___callTree;
+}
+function setDirName(){ return ___call(_f_setDirName,'setDirName',this,arguments); }
+function _f_setDirName(dirName) {
+    root_dir_1.dir.rootDir = path.resolve(dirName, '..');
+    return this;
+}
+exports.setDirName = setDirName;
+function serve(){ return ___call(_f_serve,'serve',this,arguments); }
+function _f_serve(functions, port) {
+    if (port === void 0) { port = 8765; }
+    console.log('Server Started at http://localhost:' + port);
+    http.createServer(function (req, res) {
+        console.log('rootDir=', root_dir_1.dir.rootDir, '__dirname=', __dirname);
+        var uri = url.parse(req.url);
+        var query = querystring.parse(uri.query);
+        var content = '';
+        req.on('data', function (chunk) { return content += chunk; });
+        req.on('end', function () {
+            var body = content;
+            // Auto-Parse Json
+            if (typeof body === 'string') {
+                var orig = body;
+                try {
+                    body = JSON.parse(body);
+                }
+                catch (err) {
+                    body = orig;
+                }
+            }
+            console.log('START Request:', 'query', query, 'body', body);
+            var context = {
+                log: function (m) {
+                    var x = [];
+                    for (var _i = 1; _i < arguments.length; _i++) {
+                        x[_i - 1] = arguments[_i];
+                    }
+                    return console.log.apply(console, [m].concat(x));
+                },
+                done: function (err, r) {
+                    if (err) {
+                        console.error(err);
+                        res.writeHead(500, { 'Content-Type': 'text/plain' });
+                        res.end('ERROR: ' + err);
+                        return;
+                    }
+                    if (typeof r.body === 'object' && !(r.body instanceof Buffer)) {
+                        r.body = JSON.stringify(r.body);
+                    }
+                    res.writeHead(r.status || 200, r.headers || { 'Content-Type': 'text/plain' });
+                    res.end(r.body);
+                    console.log('END Request:', r.body);
+                }
+            };
+            // Process Request
+            var request = { query: query, body: body, pathName: uri.pathname || '', pathParts: uri.pathname.split('/').filter(function (p) { return p.length > 0; }), headers: {} };
+            if (request.pathParts.length === 0) {
+                request.query.name = 'test-main.html';
+                resource_1.main(context, request).then();
+            }
+            else if (request.pathParts[0] === 'resources') {
+                request.pathName = request.pathName
+                    .replace('/resources/', '/')
+                    .replace('resources/', '');
+                request.pathParts.splice(0, 1);
+                resource_1.main(context, request).then();
+            }
+            else if (functions.filter(function (x) { return x.name === request.pathParts[0]; }).length > 0) {
+                var f = functions.filter(function (x) { return x.name === request.pathParts[0]; })[0];
+                request.pathName = request.pathName.replace("/" + f.name + "/", '/').replace(f.name + "/", '').replace("" + f.name, '');
+                request.pathParts.splice(0, 1);
+                try {
+                    var _callTree_requestRoot_1 = _callTreeRoot;
+                    ___callTree = _callTree_requestRoot_1;
+                    f.main(context, request)
+                        .then(function () {
+                        if (_callTree_requestRoot_1) {
+                            console.log(call_tree_1._printCallTree(_callTree_requestRoot_1));
+                        }
+                    })
+                        .catch(function (err) { return console.error(err); });
+                }
+                catch (err) {
+                    console.error(err);
+                }
+            }
+            else {
+                context.done('Unknown Request', null);
+            }
+        });
+    }).listen(port);
+}
+exports.serve = serve;
+
+
+/***/ }),
 /* 263 */,
 /* 264 */,
 /* 265 */,
-/* 266 */
+/* 266 */,
+/* 267 */,
+/* 268 */,
+/* 269 */,
+/* 270 */,
+/* 271 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// Intentionally global
-___export = __webpack_require__(26).setDirName(__dirname).serve(__webpack_require__(124).main);
-module.exports = ___export;
+var functions = [
+    {name: 'default', main: __webpack_require__(121).main },
+	{name: 'example-function', main: __webpack_require__(125).main },
+	{name: 'example-function-async-await', main: __webpack_require__(122).main },
+	{name: 'example-function-class', main: __webpack_require__(123).main },
+	{name: 'example-function-get-blob', main: __webpack_require__(124).main },
+	{name: 'example-timer', main: __webpack_require__(127).main },
+	{name: 'example-timer-keep-alive', main: __webpack_require__(126).main },
+	{name: 'resource', main: __webpack_require__(55).main }
+];
+
+module.exports = __webpack_require__(262).setDirName(__dirname).serve(functions);
 
 /***/ })
 /******/ ]);
-// DISABLED source Mapping URL=build.js.map
+// DISABLED source Mapping URL=test-main.js.map
