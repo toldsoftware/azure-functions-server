@@ -631,7 +631,6 @@ function _f_serve(main) {
                 debugIntervalId = setInterval(function () {
                     context.log("LONG PROCESS: " + (Date.now() - start) + "ms");
                     if (DEBUG) {
-                        clearTimeout(debugIntervalId);
                         context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
                     }
                 }, 10 * 1000);

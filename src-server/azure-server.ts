@@ -71,7 +71,6 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
                 debugIntervalId = setInterval(() => {
                     context.log(`LONG PROCESS: ${Date.now() - start}ms`);
                     if (DEBUG) {
-                        clearTimeout(debugIntervalId);
                         context.log(_printCallTree(_callTree_runnerRoot));
                     }
                 }, 10 * 1000);
