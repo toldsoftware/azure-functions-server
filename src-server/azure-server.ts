@@ -63,19 +63,43 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
             };
         }
 
-        main(context, req)
-            .then(() => {
-                if (DEBUG) {
-                    context.log(_printCallTree(_callTree_runnerRoot));
-                }
-            })
-            .catch(err => {
-                context.log('Uncaught Error:', err);
-                if (DEBUG) {
-                    context.log(_printCallTree(_callTree_runnerRoot));
-                }
-                context.done(err, null);
-            });
+        let debugTimeoutId: any = null;
+
+        try {
+            if (DEBUG) {
+                debugTimeoutId = setTimeout(() => {
+                    if (DEBUG) {
+                        clearTimeout(debugTimeoutId);
+                        context.log(_printCallTree(_callTree_runnerRoot));
+                    }
+                }, 10 * 1000);
+            }
+
+            // Run
+            main(context, req)
+                .then(() => {
+                    if (DEBUG) {
+                        clearTimeout(debugTimeoutId);
+                        context.log(_printCallTree(_callTree_runnerRoot));
+                    }
+                })
+                .catch(err => {
+                    context.log('Uncaught Error (Promise):', err);
+                    if (DEBUG) {
+                        clearTimeout(debugTimeoutId);
+                        context.log(_printCallTree(_callTree_runnerRoot));
+                    }
+                    context.done(err, null);
+                });
+
+        } catch (err) {
+            context.log('Uncaught Error:', err);
+            if (DEBUG) {
+                clearTimeout(debugTimeoutId);
+                context.log(_printCallTree(_callTree_runnerRoot));
+            }
+            context.done(err, null);
+        }
     };
 
     if (DEBUG) {

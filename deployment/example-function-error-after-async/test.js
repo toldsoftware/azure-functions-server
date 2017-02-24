@@ -1,0 +1,1 @@
+module.exports = require('./../../lib/src-server/test-server').serve(require('./../../lib/src-server/example-function-error-after-async').main);
