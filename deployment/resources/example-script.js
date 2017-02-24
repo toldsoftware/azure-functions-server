@@ -1248,7 +1248,8 @@ Enumerator.prototype._willSettleAt = function (promise, i) {
   fulfilled, or rejected if any of them become rejected.
   @static
 */
-function all(entries) {
+function all(){ return ___call(_f_all,'all',this,arguments); }
+function _f_all(entries) {
   return new Enumerator(this, entries).promise;
 }
 

@@ -152,12 +152,50 @@ function ___stringifySafe(obj) {
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 269);
+/******/ 	return __webpack_require__(__webpack_require__.s = 268);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 11:
+/***/ 127:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var tslib_1 = __webpack_require__(3);
+// https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer
+// {second} {minute} {hour} {day} {month} {day of the week}
+// schedule: 0 0 0 * * *
+function tick(){ return ___call(_f_tick,'tick',this,arguments); }
+function _f_tick(context, timer) {
+    return tslib_1.__awaiter(this, void 0, void 0, function () {
+        var timeStamp;
+        return tslib_1.__generator(this, function (_a) {
+            timeStamp = new Date().toISOString();
+            if (timer.isPastDue) {
+                context.log('Timer is Past Due');
+            }
+            context.log('Timer ran!', timeStamp);
+            context.done();
+            return [2 /*return*/];
+        });
+    });
+}
+exports.tick = tick;
+
+
+/***/ }),
+
+/***/ 268:
+/***/ (function(module, exports, __webpack_require__) {
+
+// Intentionally global
+___export = __webpack_require__(44).run(__webpack_require__(127).tick);
+module.exports = ___export;
+
+/***/ }),
+
+/***/ 3:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -263,7 +301,7 @@ function __generator(thisArg, body) {
 
 /***/ }),
 
-/***/ 120:
+/***/ 44:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -278,44 +316,6 @@ function _f_run(tick) {
 }
 exports.run = run;
 
-
-/***/ }),
-
-/***/ 127:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var tslib_1 = __webpack_require__(11);
-// https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer
-// {second} {minute} {hour} {day} {month} {day of the week}
-// schedule: 0 0 0 * * *
-function tick(){ return ___call(_f_tick,'tick',this,arguments); }
-function _f_tick(context, timer) {
-    return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var timeStamp;
-        return tslib_1.__generator(this, function (_a) {
-            timeStamp = new Date().toISOString();
-            if (timer.isPastDue) {
-                context.log('Timer is Past Due');
-            }
-            context.log('Timer ran!', timeStamp);
-            context.done();
-            return [2 /*return*/];
-        });
-    });
-}
-exports.tick = tick;
-
-
-/***/ }),
-
-/***/ 269:
-/***/ (function(module, exports, __webpack_require__) {
-
-// Intentionally global
-___export = __webpack_require__(120).run(__webpack_require__(127).tick);
-module.exports = ___export;
 
 /***/ })
 
