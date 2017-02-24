@@ -578,7 +578,8 @@ function _injectPromiseWrapper() {
     var originalPromise = global.Promise;
     global.Promise = _PromiseWrapper;
     // Promise.All and others
-    for (var key in Object.getOwnPropertyNames(originalPromise)) {
+    for (var _i = 0, _a = Object.getOwnPropertyNames(originalPromise); _i < _a.length; _i++) {
+        var key = _a[_i];
         if (originalPromise.hasOwnProperty(key)
             && !_PromiseWrapper.hasOwnProperty(key)) {
             _PromiseWrapper[key] = originalPromise[key];
