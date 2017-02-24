@@ -538,6 +538,13 @@ function _injectPromiseWrapper() {
     }
     var originalPromise = global.Promise;
     global.Promise = _PromiseWrapper;
+    // Promise.All and others
+    for (var key in originalPromise) {
+        if (originalPromise.hasOwnProperty(key)
+            && !_PromiseWrapper.hasOwnProperty(key)) {
+            _PromiseWrapper[key] = originalPromise[key];
+        }
+    }
 }
 exports._injectPromiseWrapper = _injectPromiseWrapper;
 // Replace Original Promise

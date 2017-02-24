@@ -11,3 +11,7 @@ export declare class TestSubClass extends TestClass {
     constructor(a: number, b: number, c: number);
     testMethod2(): string;
 }
+export declare class TestStaticClass {
+    static val: number;
+    static method(): number;
+}

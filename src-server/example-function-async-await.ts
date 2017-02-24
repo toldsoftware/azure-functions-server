@@ -13,6 +13,9 @@ export async function main(context: T.Context<ExampleFunctionResponseData>, requ
     const a = await testManualPromise(start);
     const b = await testAsync(a);
 
+    let promises = [testAsync(a), testAsync(a), testAsync(a)];
+    await Promise.all(promises);
+
     context.done(null, {
         headers: {
             'Access-Control-Allow-Origin': '*',

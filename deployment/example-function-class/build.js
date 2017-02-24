@@ -272,10 +272,16 @@ var tslib_1 = __webpack_require__(11);
 function main(){ return ___call(_f_main,'main',this,arguments); }
 function _f_main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var obj, val;
+        var obj, val, sub, stat, result, v;
         return tslib_1.__generator(this, function (_a) {
             obj = new TestClass(1, 2, 7);
             val = obj.testMethod();
+            sub = new TestSubClass(1, 2, 7);
+            sub.testMethod();
+            sub.testMethod2();
+            stat = new TestStaticClass();
+            result = TestStaticClass.method();
+            v = TestStaticClass.val;
             context.done(null, {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
@@ -315,6 +321,16 @@ var TestSubClass = (function (_super) {
 return ___wrapConstructor(TestSubClass, 'TestSubClass');
 }(TestClass));
 exports.TestSubClass = TestSubClass;
+var TestStaticClass = (function () {
+    function TestStaticClass() {
+    }
+    TestStaticClass.method = function () {
+        return TestStaticClass.val;
+    };
+    return TestStaticClass;
+}());
+TestStaticClass.val = 0;
+exports.TestStaticClass = TestStaticClass;
 
 
 /***/ }),
@@ -561,6 +577,13 @@ function _injectPromiseWrapper() {
     }
     var originalPromise = global.Promise;
     global.Promise = _PromiseWrapper;
+    // Promise.All and others
+    for (var key in originalPromise) {
+        if (originalPromise.hasOwnProperty(key)
+            && !_PromiseWrapper.hasOwnProperty(key)) {
+            _PromiseWrapper[key] = originalPromise[key];
+        }
+    }
 }
 exports._injectPromiseWrapper = _injectPromiseWrapper;
 // Replace Original Promise

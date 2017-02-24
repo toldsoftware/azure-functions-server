@@ -272,7 +272,7 @@ var tslib_1 = __webpack_require__(11);
 function main(){ return ___call(_f_main,'main',this,arguments); }
 function _f_main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var start, a, b;
+        var start, a, b, promises;
         return tslib_1.__generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -286,6 +286,10 @@ function _f_main(context, request) {
                     return [4 /*yield*/, testAsync(a)];
                 case 2:
                     b = _a.sent();
+                    promises = [testAsync(a), testAsync(a), testAsync(a)];
+                    return [4 /*yield*/, Promise.all(promises)];
+                case 3:
+                    _a.sent();
                     context.done(null, {
                         headers: {
                             'Access-Control-Allow-Origin': '*',
@@ -584,6 +588,13 @@ function _injectPromiseWrapper() {
     }
     var originalPromise = global.Promise;
     global.Promise = _PromiseWrapper;
+    // Promise.All and others
+    for (var key in originalPromise) {
+        if (originalPromise.hasOwnProperty(key)
+            && !_PromiseWrapper.hasOwnProperty(key)) {
+            _PromiseWrapper[key] = originalPromise[key];
+        }
+    }
 }
 exports._injectPromiseWrapper = _injectPromiseWrapper;
 // Replace Original Promise

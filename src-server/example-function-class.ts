@@ -5,7 +5,15 @@ import { ExampleFunctionRequest, ExampleFunctionResponseData } from '../src/exam
 export async function main(context: T.Context<ExampleFunctionResponseData>, request: ExampleFunctionRequest) {
 
     let obj = new TestClass(1, 2, 7);
-    let val = obj.testMethod()
+    let val = obj.testMethod();
+
+    let sub = new TestSubClass(1, 2, 7);
+    sub.testMethod();
+    sub.testMethod2();
+
+    let stat = new TestStaticClass();
+    let result = TestStaticClass.method();
+    let v = TestStaticClass.val;
 
     context.done(null, {
         headers: {
@@ -42,3 +50,11 @@ export class TestSubClass extends TestClass {
         return `a+b=${this.val}; this.c=${this.c}`;
     }
 }
+
+export class TestStaticClass {
+    static val = 0;
+    static method() {
+        return TestStaticClass.val;
+    }
+}
+

@@ -100,6 +100,14 @@ export function _injectPromiseWrapper() {
 
     let originalPromise = global.Promise;
     global.Promise = _PromiseWrapper;
+
+    // Promise.All and others
+    for (let key in originalPromise) {
+        if (originalPromise.hasOwnProperty(key)
+            && !_PromiseWrapper.hasOwnProperty(key)) {
+            (_PromiseWrapper as any)[key] = originalPromise[key];
+        }
+    }
 }
 
 // Replace Original Promise
