@@ -26,18 +26,28 @@ function _f_${name}(`)
         //         this.val = a + b;
         //     }
         //     TestClass.prototype.testMethod = function () {
-        //         return this.val;
+        //         return "a+b=" + this.val + "; this.c=" + this.c;
         //     };
-        //     return TestClass;
+        // return TestClass;
         // }());
-        // Attempt 1: return function(){ return ___wrapMethods(${name}.apply(this,arguments) || this); };
-        // 
-        .replace(new RegExp(`(\\n\\s*)return\\s+(${nameRegex})\\s*;\\s*}\\(\\)\\);`, 'g'), (whole, prefix, name) =>
+        // exports.TestClass = TestClass;
+        // var TestSubClass = (function (_super) {
+        //     tslib_1.__extends(TestSubClass, _super);
+        //     function TestSubClass(a, b, c) {
+        //         return _super.call(this, a, b, c) || this;
+        //     }
+        //     TestSubClass.prototype.testMethod2 = function () {
+        //         return "a+b=" + this.val + "; this.c=" + this.c;
+        //     };
+        //     return TestSubClass;
+        // }(TestClass));
+        // exports.TestSubClass = TestSubClass;
+        .replace(new RegExp(`(\\n\\s*)return\\s+(${nameRegex})\\s*;\\s*}\\(`, 'g'), (whole, prefix, name) =>
             isUtilityName(name) || !isClassName(name) || !hasPrototype(webpackSource, name) || !isOwnSourceCode(ownSourceCode, name)
                 ? whole
                 : `
 return ___wrapConstructor(${name}, '${name}');
-}());`)
+}(`)
         // Disable Source Map (globals mess it up)
         .replace('//# sourceMappingURL=', '// DISABLED source Mapping URL=')
         ;

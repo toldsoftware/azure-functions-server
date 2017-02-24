@@ -27670,6 +27670,17 @@ var TestClass = (function () {
 return ___wrapConstructor(TestClass, 'TestClass');
 }());
 exports.TestClass = TestClass;
+var TestSubClass = (function (_super) {
+    tslib_1.__extends(TestSubClass, _super);
+    function TestSubClass(a, b, c) {
+        return _super.call(this, a, b, c) || this;
+    }
+    TestSubClass.prototype.testMethod2 = function () {
+        return "a+b=" + this.val + "; this.c=" + this.c;
+    };
+return ___wrapConstructor(TestSubClass, 'TestSubClass');
+}(TestClass));
+exports.TestSubClass = TestSubClass;
 
 
 /***/ }),

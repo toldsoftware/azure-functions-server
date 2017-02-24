@@ -22,12 +22,23 @@ export async function main(context: T.Context<ExampleFunctionResponseData>, requ
 
 
 export class TestClass {
-    private val = 0;
-    constructor(a: number, b: number, private c: number) {
+    protected val = 0;
+    constructor(a: number, b: number, protected c: number) {
         this.val = a + b;
     }
 
     testMethod() {
+        return `a+b=${this.val}; this.c=${this.c}`;
+    }
+}
+
+
+export class TestSubClass extends TestClass {
+    constructor(a: number, b: number, c: number) {
+        super(a, b, c);
+    }
+
+    testMethod2() {
         return `a+b=${this.val}; this.c=${this.c}`;
     }
 }
