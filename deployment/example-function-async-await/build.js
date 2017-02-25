@@ -30,22 +30,6 @@ function ___call(fun, name, that, args) {
     }
 }
 
-function ___wrapMethods(inner) {
-    var outer = Object.create(inner);
-
-    var loop = function(key){
-        if (inner.hasOwnProperty(key) && typeof inner[key] === 'function') {
-            outer[key] = function () { return ___call(inner[key], key, inner, arguments); }
-        }
-    };
-
-    for (var key in inner) {
-        loop(key);
-    }
-
-    return outer;
-}
-
 // http://stackoverflow.com/questions/10101508/how-do-i-wrap-a-constructor
 function ___wrapConstructor(constructorInner, name) {
 
@@ -58,11 +42,12 @@ function ___wrapConstructor(constructorInner, name) {
 
     function Outer() {
         constructorInner.apply(this, arguments);
+        let that = this;
 
         var loop = function(key){
             if (proto.hasOwnProperty(key) && typeof proto[key] === 'function') {
-                this[key] = function () { 
-                    return ___call(proto[key], name + '.' + key, this, arguments); 
+                that[key] = function () { 
+                    return ___call(proto[key], name + '.' + key, that, arguments); 
                 }
             }
         };
