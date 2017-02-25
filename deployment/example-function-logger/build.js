@@ -152,28 +152,23 @@ function ___stringifySafe(obj) {
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 279);
+/******/ 	return __webpack_require__(__webpack_require__.s = 281);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 130:
+/***/ 132:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var tslib_1 = __webpack_require__(2);
+var T = __webpack_require__(16);
 function main(){ return ___call(_f_main,'main',this,arguments); }
 function _f_main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
-        var x, recursive;
         return tslib_1.__generator(this, function (_a) {
-            x = [10];
-            recursive = function () {
-                var y = x = x.concat(10);
-                return y.concat(recursive()).concat(recursive());
-            };
-            recursive();
+            T.log('logger called - from MODULE');
             context.done(null, {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
@@ -590,11 +585,11 @@ function __generator(thisArg, body) {
 
 /***/ }),
 
-/***/ 279:
+/***/ 281:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Intentionally global
-___export = __webpack_require__(7).setDirName(__dirname).serve(__webpack_require__(130).main);
+___export = __webpack_require__(7).setDirName(__dirname).serve(__webpack_require__(132).main);
 module.exports = ___export;
 
 /***/ }),

@@ -25,6 +25,7 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
     let _callTree_runnerRoot: CallTreeNode = null;
 
     let runner = (context: T.Context<TData>, request: T.Request<TQuery, TBody>) => {
+        T.setLogger((message, ...args) => context.log(message, ...args));
 
         let req = { ...request };
         req.pathName = req.pathName || (context as any).bindingData.pathName || '';

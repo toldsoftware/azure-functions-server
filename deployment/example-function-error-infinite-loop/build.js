@@ -152,12 +152,12 @@ function ___stringifySafe(obj) {
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 275);
+/******/ 	return __webpack_require__(__webpack_require__.s = 278);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 127:
+/***/ 129:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -195,6 +195,19 @@ exports.main = main;
 "use strict";
 
 exports.dir = { rootDir: '' };
+
+
+/***/ }),
+
+/***/ 16:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+__export(__webpack_require__(19));
 
 
 /***/ }),
@@ -436,6 +449,36 @@ exports._injectPromiseWrapper = _injectPromiseWrapper;
 
 /***/ }),
 
+/***/ 19:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var _logger = function (message) {
+    var args = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args[_i - 1] = arguments[_i];
+    }
+    console.log.apply(console, [message].concat(args));
+};
+function setLogger(){ return ___call(_f_setLogger,'setLogger',this,arguments); }
+function _f_setLogger(logger) {
+    _logger = logger;
+}
+exports.setLogger = setLogger;
+function log(){ return ___call(_f_log,'log',this,arguments); }
+function _f_log(message) {
+    var args = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        args[_i - 1] = arguments[_i];
+    }
+    _logger && _logger.apply(void 0, [message].concat(args));
+}
+exports.log = log;
+
+
+/***/ }),
+
 /***/ 2:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -542,29 +585,30 @@ function __generator(thisArg, body) {
 
 /***/ }),
 
-/***/ 275:
+/***/ 278:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Intentionally global
-___export = __webpack_require__(9).setDirName(__dirname).serve(__webpack_require__(127).main);
+___export = __webpack_require__(7).setDirName(__dirname).serve(__webpack_require__(129).main);
 module.exports = ___export;
 
 /***/ }),
 
-/***/ 6:
+/***/ 5:
 /***/ (function(module, exports) {
 
 module.exports = require("path");
 
 /***/ }),
 
-/***/ 9:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var tslib_1 = __webpack_require__(2);
-var path = __webpack_require__(6);
+var path = __webpack_require__(5);
+var T = __webpack_require__(16);
 var root_dir_1 = __webpack_require__(15);
 var call_tree_1 = __webpack_require__(17);
 var promise_wrapper_1 = __webpack_require__(18);
@@ -586,6 +630,13 @@ function serve(){ return ___call(_f_serve,'serve',this,arguments); }
 function _f_serve(main) {
     var _callTree_runnerRoot = null;
     var runner = function (context, request) {
+        T.setLogger(function (message) {
+            var args = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                args[_i - 1] = arguments[_i];
+            }
+            return context.log.apply(context, [message].concat(args));
+        });
         var req = tslib_1.__assign({}, request);
         req.pathName = req.pathName || context.bindingData.pathName || '';
         req.pathParts = req.pathName.split('/').filter(function (x) { return x.length > 0; });
