@@ -31,12 +31,16 @@ function ___call(fun, name, that, args) {
 }
 
 function ___wrapMethods(inner) {
-    let outer = Object.create(inner);
+    var outer = Object.create(inner);
 
-    for (var key in inner) {
+    var loop = function(key){
         if (inner.hasOwnProperty(key) && typeof inner[key] === 'function') {
             outer[key] = function () { return ___call(inner[key], key, inner, arguments); }
         }
+    };
+
+    for (var key in inner) {
+        loop(key);
     }
 
     return outer;
@@ -55,12 +59,16 @@ function ___wrapConstructor(constructorInner, name) {
     function Outer() {
         constructorInner.apply(this, arguments);
 
-        for (var key in proto) {
+        var loop = function(key){
             if (proto.hasOwnProperty(key) && typeof proto[key] === 'function') {
                 this[key] = function () { 
                     return ___call(proto[key], name + '.' + key, this, arguments); 
                 }
             }
+        };
+
+        for (var key in proto) {
+            loop(key);
         }
     }
 
@@ -69,7 +77,7 @@ function ___wrapConstructor(constructorInner, name) {
 };
 
 function ___stringifySafe(obj) {
-    let seen = [];
+    var seen = [];
     return JSON.stringify(obj, function (key, val) {
         if (val != null && typeof val === 'object') {
             if (seen.indexOf(val) >= 0
