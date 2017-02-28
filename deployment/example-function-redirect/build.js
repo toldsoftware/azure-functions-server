@@ -179,7 +179,7 @@ exports.main = main;
 
 /***/ }),
 
-/***/ 15:
+/***/ 16:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -189,7 +189,7 @@ exports.dir = { rootDir: '' };
 
 /***/ }),
 
-/***/ 16:
+/***/ 17:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -202,128 +202,26 @@ __export(__webpack_require__(19));
 
 /***/ }),
 
-/***/ 17:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-function _printCallTree(callTree, depth) {
-    if (depth === void 0) { depth = 0; }
-    var text = '';
-    for (var d = 0; d < depth; d++) {
-        text += '-';
-    }
-    if (!callTree.err) {
-        text += callTree.name + " " + callTree.id + ": " + _abbreviate(callTree.args || '{}') + " => " + _abbreviate(callTree.result || '{}');
-    }
-    else {
-        text += "ERROR " + callTree.name + " " + callTree.id + ": " + callTree.args + " => " + callTree.err;
-    }
-    text += '\r\n';
-    for (var _i = 0, _a = callTree.calls; _i < _a.length; _i++) {
-        var c = _a[_i];
-        text += _printCallTree(c, depth + 1);
-    }
-    return text;
-}
-exports._printCallTree = _printCallTree;
-function _abbreviate(text, maxLength) {
-    if (maxLength === void 0) { maxLength = 255; }
-    if (text.length <= maxLength) {
-        return text;
-    }
-    return text.substr(0, maxLength) + '...';
-}
-
-
-/***/ }),
-
 /***/ 18:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+var call_tree_1 = __webpack_require__(5);
+function _global() {
+    if (typeof global !== 'undefined') {
+        return global;
+    }
+    else {
+        return window;
+    }
+}
+exports._global = _global;
 var Promise_Original = Promise;
-if (typeof ___callTree === 'undefined') {
-    ___callTree = { calls: [] };
-}
-if (typeof ___getNextId === 'undefined') {
-    ___getNextId = function () { return '-1'; };
-}
-if (typeof ___stringifySafe === 'undefined') {
-    ___stringifySafe = function () { return '___undefined___stringifySafe'; };
-}
-exports.PromiseInjection = {
-    beforeConstructorCallback: function (id) {
-        var node = { name: 'PROMISE', id: id, threadId: ___callTree.threadId, args: '', calls: [], parent: ___callTree, err: null, result: null };
-        ___callTree.calls.push(node);
-        return node;
-    },
-    beforeResolveCallback: function (context, id, value) {
-        context.result = ___stringifySafe(value);
-        // Next the continuation under the promise
-        // ___callTree = context;
-        // Restore to parent context
-        ___callTree = context.parent;
-    },
-    beforeRejectCallback: function (context, id, reason) {
-        context.err = ___stringifySafe(reason);
-        // Next the continuation under the promise
-        // ___callTree = context;
-        // Restore to parent context
-        ___callTree = context.parent;
-    },
-};
-// tslint:disable-next-line:class-name
-var _PromiseWrapper = (function () {
-    function _PromiseWrapper(resolver) {
-        var _this = this;
-        this.id = '';
-        this.id = ___getNextId(___callTree.threadId);
-        this.context = exports.PromiseInjection.beforeConstructorCallback(this.id);
-        this.promiseInner = new Promise_Original(function (resolveInner, rejectInner) {
-            var resolveOuter = function (value) {
-                exports.PromiseInjection.beforeResolveCallback(_this.context, _this.id, value);
-                resolveInner(value);
-            };
-            var rejectOuter = function (reason) {
-                exports.PromiseInjection.beforeRejectCallback(_this.context, _this.id, reason);
-                rejectInner(reason);
-            };
-            resolver(resolveOuter, rejectOuter);
-        });
-    }
-    _PromiseWrapper.prototype.then = function (resolve, reject) {
-        var _this = this;
-        var resolveOuter = function (value) {
-            exports.PromiseInjection.beforeResolveCallback(_this.context, _this.id, value);
-            resolve(value);
-        };
-        var rejectOuter = function (reason) {
-            exports.PromiseInjection.beforeRejectCallback(_this.context, _this.id, reason);
-            reject(reason);
-        };
-        this.promiseInner.then(resolveOuter, rejectOuter);
-        return this;
-    };
-    _PromiseWrapper.prototype.catch = function (reject) {
-        var _this = this;
-        var rejectOuter = function (reason) {
-            exports.PromiseInjection.beforeRejectCallback(_this.context, _this.id, reason);
-            reject(reason);
-        };
-        this.promiseInner.catch(rejectOuter);
-        return this;
-    };
-    return _PromiseWrapper;
-}());
-exports._PromiseWrapper = _PromiseWrapper;
 function _injectPromiseWrapper() {
-    if (typeof global === 'undefined') {
-        global = window;
-    }
-    var originalPromise = global.Promise;
-    global.Promise = _PromiseWrapper;
+    var glob = _global();
+    var originalPromise = glob.Promise;
+    glob.Promise = _PromiseWrapper;
     // Promise.All and others
     for (var _i = 0, _a = Object.getOwnPropertyNames(originalPromise); _i < _a.length; _i++) {
         var key = _a[_i];
@@ -334,107 +232,71 @@ function _injectPromiseWrapper() {
     }
 }
 exports._injectPromiseWrapper = _injectPromiseWrapper;
-// Replace Original Promise
-// Promise['constructor'] = PromiseWrapper['constructor'];
-// export const PromiseWrapper;
-// export PromiseInjection;
-// function invokeResolver(resolver, promise) {
-//     function resolvePromise(value) {
-//         resolve(promise, value);
-//     }
-//     function rejectPromise(reason) {
-//         reject(promise, reason);
-//     }
-//     try {
-//         resolver(resolvePromise, rejectPromise);
-//     } catch (e) {
-//         rejectPromise(e);
-//     }
-// }
-// function Promise(resolver) {
-//     if (typeof resolver !== 'function') {
-//         throw new TypeError('Promise resolver ' + resolver + ' is not a function');
-//     }
-//     if (this instanceof Promise === false) {
-//         throw new TypeError('Failed to construct \'Promise\': Please use the \'new\' operator, this object constructor cannot be called as a function.');
-//     }
-//     this._then = [];
-//     invokeResolver(resolver, this);
-// }
-// Promise.prototype = {
-//     constructor: Promise,
-//     _state: PENDING,
-//     _then: null,
-//     _data: undefined,
-//     _handled: false,
-//     then: function (onFulfillment, onRejection) {
-//         var subscriber = {
-//             owner: this,
-//             then: new this.constructor(NOOP),
-//             fulfilled: onFulfillment,
-//             rejected: onRejection
-//         };
-//         if ((onRejection || onFulfillment) && !this._handled) {
-//             this._handled = true;
-//             if (this._state === REJECTED && isNode) {
-//                 asyncCall(notifyRejectionHandled, this);
-//             }
-//         }
-//         if (this._state === FULFILLED || this._state === REJECTED) {
-//             // already resolved, call callback async
-//             asyncCall(invokeCallback, subscriber);
-//         } else {
-//             // subscribe
-//             this._then.push(subscriber);
-//         }
-//         return subscriber.then;
-//     },
-//     catch: function (onRejection) {
-//         return this.then(null, onRejection);
-//     }
-// };
-// function Promise(resolver) {
-// 	if (typeof resolver !== 'function') {
-// 		throw new TypeError('Promise resolver ' + resolver + ' is not a function');
-// 	}
-// 	if (this instanceof Promise === false) {
-// 		throw new TypeError('Failed to construct \'Promise\': Please use the \'new\' operator, this object constructor cannot be called as a function.');
-// 	}
-// 	this._then = [];
-// 	invokeResolver(resolver, this);
-// }
-// Promise.prototype = {
-// 	constructor: Promise,
-// 	_state: PENDING,
-// 	_then: null,
-// 	_data: undefined,
-// 	_handled: false,
-// 	then: function (onFulfillment, onRejection) {
-// 		var subscriber = {
-// 			owner: this,
-// 			then: new this.constructor(NOOP),
-// 			fulfilled: onFulfillment,
-// 			rejected: onRejection
-// 		};
-// 		if ((onRejection || onFulfillment) && !this._handled) {
-// 			this._handled = true;
-// 			if (this._state === REJECTED && isNode) {
-// 				asyncCall(notifyRejectionHandled, this);
-// 			}
-// 		}
-// 		if (this._state === FULFILLED || this._state === REJECTED) {
-// 			// already resolved, call callback async
-// 			asyncCall(invokeCallback, subscriber);
-// 		} else {
-// 			// subscribe
-// 			this._then.push(subscriber);
-// 		}
-// 		return subscriber.then;
-// 	},
-// 	catch: function (onRejection) {
-// 		return this.then(null, onRejection);
-// 	}
-// }; 
+exports._PromiseInjection = {
+    beforeConstructorCallback: function (id) {
+        var node = { name: 'PROMISE', id: id, threadId: call_tree_1.getCallTree().threadId, args: '', calls: [], parent: call_tree_1.getCallTree(), err: null, result: null };
+        call_tree_1.getCallTree().calls.push(node);
+        return node;
+    },
+    beforeResolveCallback: function (context, id, value) {
+        context.result = call_tree_1.stringifySafe(value);
+        // Next the continuation under the promise
+        // ___callTree = context;
+        // Restore to parent context
+        call_tree_1.setCallTree(context.parent);
+    },
+    beforeRejectCallback: function (context, id, reason) {
+        context.err = call_tree_1.stringifySafe(reason);
+        // Next the continuation under the promise
+        // ___callTree = context;
+        // Restore to parent context
+        call_tree_1.setCallTree(context.parent);
+    },
+};
+// tslint:disable-next-line:class-name
+var _PromiseWrapper = (function () {
+    function _PromiseWrapper(resolver) {
+        var _this = this;
+        this.id = '';
+        this.id = call_tree_1.getNextId(call_tree_1.getCallTree().threadId);
+        this.context = exports._PromiseInjection.beforeConstructorCallback(this.id);
+        this.promiseInner = new Promise_Original(function (resolveInner, rejectInner) {
+            var resolveOuter = function (value) {
+                exports._PromiseInjection.beforeResolveCallback(_this.context, _this.id, value);
+                resolveInner(value);
+            };
+            var rejectOuter = function (reason) {
+                exports._PromiseInjection.beforeRejectCallback(_this.context, _this.id, reason);
+                rejectInner(reason);
+            };
+            resolver(resolveOuter, rejectOuter);
+        });
+    }
+    _PromiseWrapper.prototype.then = function (resolve, reject) {
+        var _this = this;
+        var resolveOuter = function (value) {
+            exports._PromiseInjection.beforeResolveCallback(_this.context, _this.id, value);
+            resolve(value);
+        };
+        var rejectOuter = function (reason) {
+            exports._PromiseInjection.beforeRejectCallback(_this.context, _this.id, reason);
+            reject(reason);
+        };
+        this.promiseInner.then(resolveOuter, rejectOuter);
+        return this;
+    };
+    _PromiseWrapper.prototype.catch = function (reject) {
+        var _this = this;
+        var rejectOuter = function (reason) {
+            exports._PromiseInjection.beforeRejectCallback(_this.context, _this.id, reason);
+            reject(reason);
+        };
+        this.promiseInner.catch(rejectOuter);
+        return this;
+    };
+    return _PromiseWrapper;
+}());
+exports._PromiseWrapper = _PromiseWrapper;
 
 
 /***/ }),
@@ -579,36 +441,129 @@ function __generator(thisArg, body) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // Intentionally global
-___export = __webpack_require__(7).setDirName(__dirname).serve(__webpack_require__(133).main);
+___export = __webpack_require__(8).setDirName(__dirname).serve(__webpack_require__(133).main);
 module.exports = ___export;
 
 /***/ }),
 
 /***/ 5:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function _printCallTree(callTree, depth) {
+    if (depth === void 0) { depth = 0; }
+    var text = '';
+    for (var d = 0; d < depth; d++) {
+        text += '-';
+    }
+    if (!callTree.err) {
+        text += callTree.name + " " + callTree.id + ": " + _abbreviate(callTree.args || '{}') + " => " + _abbreviate(callTree.result || '{}');
+    }
+    else {
+        text += "ERROR " + callTree.name + " " + callTree.id + ": " + callTree.args + " => " + callTree.err;
+    }
+    text += '\r\n';
+    for (var _i = 0, _a = callTree.calls; _i < _a.length; _i++) {
+        var c = _a[_i];
+        text += _printCallTree(c, depth + 1);
+    }
+    return text;
+}
+exports._printCallTree = _printCallTree;
+function _abbreviate(text, maxLength) {
+    if (maxLength === void 0) { maxLength = 255; }
+    if (text.length <= maxLength) {
+        return text;
+    }
+    return text.substr(0, maxLength) + '...';
+}
+// export function _ensureGlobalExists<T>(name: string, getDefault: () => T): T {
+//     return _global()[name] = _global()[name] || getDefault();
+// }
+exports.DEBUG = typeof ___callTree !== 'undefined';
+function getCallTree(){ return ___call(_f_getCallTree,'getCallTree',this,arguments); }
+function _f_getCallTree() {
+    if (exports.DEBUG) {
+        return ___callTree;
+    }
+    else {
+        return { calls: [] };
+    }
+}
+exports.getCallTree = getCallTree;
+function setCallTree(){ return ___call(_f_setCallTree,'setCallTree',this,arguments); }
+function _f_setCallTree(value) {
+    if (exports.DEBUG) {
+        ___callTree = value;
+    }
+}
+exports.setCallTree = setCallTree;
+function callFunction(){ return ___call(_f_callFunction,'callFunction',this,arguments); }
+function _f_callFunction(fun, name, that, args) {
+    if (exports.DEBUG) {
+        return ___call(fun, name, that, args);
+    }
+    else {
+        return fun.apply(that, args);
+    }
+}
+exports.callFunction = callFunction;
+function getNextId(){ return ___call(_f_getNextId,'getNextId',this,arguments); }
+function _f_getNextId(threadId) {
+    if (exports.DEBUG) {
+        return ___getNextId(threadId);
+    }
+    else {
+        return '' + Date.now();
+    }
+}
+exports.getNextId = getNextId;
+function stringifySafe(){ return ___call(_f_stringifySafe,'stringifySafe',this,arguments); }
+function _f_stringifySafe(obj) {
+    var seen = [];
+    return JSON.stringify(obj, function (key, val) {
+        if (val != null && typeof val === 'object') {
+            if (seen.indexOf(val) >= 0
+                || key === 'parent'
+                || key === 'context') {
+                return;
+            }
+            seen.push(val);
+        }
+        else if (val != null && typeof val === 'string' && val.length > 40) {
+            return val.substr(0, 40) + '...';
+        }
+        return val;
+    });
+}
+exports.stringifySafe = stringifySafe;
+
+
+/***/ }),
+
+/***/ 6:
 /***/ (function(module, exports) {
 
 module.exports = require("path");
 
 /***/ }),
 
-/***/ 7:
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var tslib_1 = __webpack_require__(2);
-var path = __webpack_require__(5);
-var T = __webpack_require__(16);
-var root_dir_1 = __webpack_require__(15);
-var call_tree_1 = __webpack_require__(17);
+var path = __webpack_require__(6);
+var T = __webpack_require__(17);
+var root_dir_1 = __webpack_require__(16);
+var call_tree_1 = __webpack_require__(5);
 var promise_wrapper_1 = __webpack_require__(18);
-// declare var ___beforeFunctionCallback: BeforeFunctionCallback;
-// declare var ___afterFunctionCallback: AfterFunctionCallback;
-var DEBUG = typeof ___callTree !== 'undefined';
 var _callTreeRoot = null;
-if (DEBUG) {
+if (call_tree_1.DEBUG) {
     promise_wrapper_1._injectPromiseWrapper();
-    _callTreeRoot = ___callTree;
+    _callTreeRoot = call_tree_1.getCallTree();
 }
 function setDirName(){ return ___call(_f_setDirName,'setDirName',this,arguments); }
 function _f_setDirName(dirName) {
@@ -648,11 +603,11 @@ function _f_serve(main) {
                 req.body = orig;
             }
         }
-        if (DEBUG) {
+        if (call_tree_1.DEBUG) {
             var contextInner_1 = context;
             context = {
                 done: function () {
-                    return ___call(contextInner_1.done, 'done', contextInner_1, arguments);
+                    return call_tree_1.callFunction(contextInner_1.done, 'done', contextInner_1, arguments);
                 },
                 log: function () {
                     // Don't wrap log
@@ -663,10 +618,10 @@ function _f_serve(main) {
         var debugIntervalId = null;
         var start = Date.now();
         try {
-            if (DEBUG) {
+            if (call_tree_1.DEBUG) {
                 debugIntervalId = setInterval(function () {
                     context.log("LONG PROCESS: " + (Date.now() - start) + "ms");
-                    if (DEBUG) {
+                    if (call_tree_1.DEBUG) {
                         context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
                     }
                 }, 10 * 1000);
@@ -674,14 +629,14 @@ function _f_serve(main) {
             // Run
             main(context, req)
                 .then(function () {
-                if (DEBUG) {
+                if (call_tree_1.DEBUG) {
                     clearTimeout(debugIntervalId);
                     context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
                 }
             })
                 .catch(function (err) {
                 context.log('UNCAUGHT ERROR (Promise):', err);
-                if (DEBUG) {
+                if (call_tree_1.DEBUG) {
                     clearTimeout(debugIntervalId);
                     context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
                 }
@@ -690,21 +645,21 @@ function _f_serve(main) {
         }
         catch (err) {
             context.log('UNCAUGHT ERROR:', err);
-            if (DEBUG) {
+            if (call_tree_1.DEBUG) {
                 clearTimeout(debugIntervalId);
                 context.log(call_tree_1._printCallTree(_callTree_runnerRoot));
             }
             context.done(err, null);
         }
     };
-    if (DEBUG) {
+    if (call_tree_1.DEBUG) {
         var innerIsolate_1 = function () {
-            _callTree_runnerRoot = ___callTree;
-            return ___call(runner, 'serve', this, arguments);
+            _callTree_runnerRoot = call_tree_1.getCallTree();
+            return call_tree_1.callFunction(runner, 'serve', this, arguments);
         };
         return function () {
-            ___callTree = _callTreeRoot;
-            return ___call(innerIsolate_1, 'request', this, arguments);
+            call_tree_1.setCallTree(_callTreeRoot);
+            return call_tree_1.callFunction(innerIsolate_1, 'request', this, arguments);
         };
     }
     else {

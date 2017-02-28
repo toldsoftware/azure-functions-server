@@ -7,16 +7,14 @@ import * as T from './../src/index';
 import { main as resourceMain } from './resource';
 import { dir } from './../src/root-dir';
 
-import { _printCallTree, CallTreeNode } from '../src-cli/injectors/call-tree';
+import { _printCallTree, CallTreeNode, DEBUG, getCallTree, setCallTree } from '../src-cli/injectors/call-tree';
 import { _injectPromiseWrapper } from '../src-cli/injectors/promise-wrapper';
-declare var ___callTree: CallTreeNode;
-const DEBUG = typeof ___callTree !== 'undefined';
 
 let _callTreeRoot: CallTreeNode = null;
 
 if (DEBUG) {
     _injectPromiseWrapper();
-    _callTreeRoot = ___callTree;
+    _callTreeRoot = getCallTree();
 }
 
 export function setDirName(dirName: string) {
@@ -93,7 +91,7 @@ export function serve<T, TQuery, TBody>(functions: { name: string, main: T.MainE
                 request.pathParts.splice(0, 1);
                 try {
                     let _callTree_requestRoot = _callTreeRoot;
-                    ___callTree = _callTree_requestRoot;
+                    setCallTree(_callTree_requestRoot);
 
                     f.main(context, request)
                         .then(() => {

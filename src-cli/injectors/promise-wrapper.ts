@@ -1,40 +1,58 @@
-import { CallTreeNode } from './call-tree';
+import { CallTreeNode, getCallTree, setCallTree, getNextId, stringifySafe } from './call-tree';
+
+declare var global: any;
+declare var window: any;
+export function _global() {
+
+    if (typeof global !== 'undefined') {
+        return global;
+    } else {
+        return window;
+    }
+}
 
 type PromiseType<T> = Promise<T>;
 let Promise_Original = Promise;
 
-declare var ___callTree: CallTreeNode;
-if (typeof ___callTree === 'undefined') { ___callTree = { calls: [] } as CallTreeNode; }
+export function _injectPromiseWrapper() {
 
-declare var ___getNextId: (threadId: string) => string;
-if (typeof ___getNextId === 'undefined') { ___getNextId = () => '-1'; }
+    const glob = _global();
 
-declare var ___stringifySafe: (obj: any) => string;
-if (typeof ___stringifySafe === 'undefined') { ___stringifySafe = () => '___undefined___stringifySafe'; }
+    let originalPromise = glob.Promise;
+    glob.Promise = _PromiseWrapper;
 
-export const PromiseInjection = {
+    // Promise.All and others
+    for (let key of Object.getOwnPropertyNames(originalPromise)) {
+        if (originalPromise.hasOwnProperty(key)
+            && !_PromiseWrapper.hasOwnProperty(key)) {
+            (_PromiseWrapper as any)[key] = originalPromise[key];
+        }
+    }
+}
+
+export const _PromiseInjection = {
     beforeConstructorCallback: (id: string) => {
-        const node: CallTreeNode = { name: 'PROMISE', id, threadId: ___callTree.threadId, args: '', calls: [], parent: ___callTree, err: null, result: null };
-        ___callTree.calls.push(node);
+        const node: CallTreeNode = { name: 'PROMISE', id, threadId: getCallTree().threadId, args: '', calls: [], parent: getCallTree(), err: null, result: null };
+        getCallTree().calls.push(node);
         return node;
     },
     beforeResolveCallback: (context: CallTreeNode, id: string, value: any) => {
-        context.result = ___stringifySafe(value);
+        context.result = stringifySafe(value);
 
         // Next the continuation under the promise
         // ___callTree = context;
 
         // Restore to parent context
-        ___callTree = context.parent;
+        setCallTree(context.parent);
     },
     beforeRejectCallback: (context: CallTreeNode, id: string, reason: any) => {
-        context.err = ___stringifySafe(reason);
+        context.err = stringifySafe(reason);
 
         // Next the continuation under the promise
         // ___callTree = context;
 
         // Restore to parent context
-        ___callTree = context.parent;
+        setCallTree(context.parent);
     },
 };
 
@@ -46,17 +64,17 @@ export class _PromiseWrapper<T> {
     private promiseInner: PromiseType<T>;
 
     constructor(resolver: (resolve: (value: T) => void, reject: (reason: string) => void) => void) {
-        this.id = ___getNextId(___callTree.threadId);
-        this.context = PromiseInjection.beforeConstructorCallback(this.id);
+        this.id = getNextId(getCallTree().threadId);
+        this.context = _PromiseInjection.beforeConstructorCallback(this.id);
 
         this.promiseInner = new Promise_Original((resolveInner, rejectInner) => {
             let resolveOuter = (value: T) => {
-                PromiseInjection.beforeResolveCallback(this.context, this.id, value);
+                _PromiseInjection.beforeResolveCallback(this.context, this.id, value);
                 resolveInner(value);
             };
 
             let rejectOuter = (reason: any) => {
-                PromiseInjection.beforeRejectCallback(this.context, this.id, reason);
+                _PromiseInjection.beforeRejectCallback(this.context, this.id, reason);
                 rejectInner(reason);
             };
 
@@ -66,12 +84,12 @@ export class _PromiseWrapper<T> {
 
     then(resolve: (result: T) => void, reject: (err: any) => void) {
         let resolveOuter = (value: T) => {
-            PromiseInjection.beforeResolveCallback(this.context, this.id, value);
+            _PromiseInjection.beforeResolveCallback(this.context, this.id, value);
 
             resolve(value);
         };
         let rejectOuter = (reason: T) => {
-            PromiseInjection.beforeRejectCallback(this.context, this.id, reason);
+            _PromiseInjection.beforeRejectCallback(this.context, this.id, reason);
             reject(reason);
         };
         this.promiseInner.then(resolveOuter, rejectOuter);
@@ -81,7 +99,7 @@ export class _PromiseWrapper<T> {
 
     catch(reject: (err: any) => void) {
         let rejectOuter = (reason: T) => {
-            PromiseInjection.beforeRejectCallback(this.context, this.id, reason);
+            _PromiseInjection.beforeRejectCallback(this.context, this.id, reason);
             reject(reason);
         };
         this.promiseInner.catch(rejectOuter);
@@ -89,152 +107,3 @@ export class _PromiseWrapper<T> {
         return this;
     }
 }
-
-declare var global: any;
-declare var window: any;
-export function _injectPromiseWrapper() {
-
-    if (typeof global === 'undefined') {
-        global = window;
-    }
-
-    let originalPromise = global.Promise;
-    global.Promise = _PromiseWrapper;
-
-    // Promise.All and others
-    for (let key of Object.getOwnPropertyNames(originalPromise)) {
-        if (originalPromise.hasOwnProperty(key)
-            && !_PromiseWrapper.hasOwnProperty(key)) {
-            (_PromiseWrapper as any)[key] = originalPromise[key];
-        }
-    }
-}
-
-// Replace Original Promise
-// Promise['constructor'] = PromiseWrapper['constructor'];
-
-// export const PromiseWrapper;
-// export PromiseInjection;
-
-
-// function invokeResolver(resolver, promise) {
-//     function resolvePromise(value) {
-//         resolve(promise, value);
-//     }
-
-//     function rejectPromise(reason) {
-//         reject(promise, reason);
-//     }
-
-//     try {
-//         resolver(resolvePromise, rejectPromise);
-//     } catch (e) {
-//         rejectPromise(e);
-//     }
-// }
-
-// function Promise(resolver) {
-//     if (typeof resolver !== 'function') {
-//         throw new TypeError('Promise resolver ' + resolver + ' is not a function');
-//     }
-
-//     if (this instanceof Promise === false) {
-//         throw new TypeError('Failed to construct \'Promise\': Please use the \'new\' operator, this object constructor cannot be called as a function.');
-//     }
-
-//     this._then = [];
-
-//     invokeResolver(resolver, this);
-// }
-
-// Promise.prototype = {
-//     constructor: Promise,
-
-//     _state: PENDING,
-//     _then: null,
-//     _data: undefined,
-//     _handled: false,
-
-//     then: function (onFulfillment, onRejection) {
-//         var subscriber = {
-//             owner: this,
-//             then: new this.constructor(NOOP),
-//             fulfilled: onFulfillment,
-//             rejected: onRejection
-//         };
-
-//         if ((onRejection || onFulfillment) && !this._handled) {
-//             this._handled = true;
-//             if (this._state === REJECTED && isNode) {
-//                 asyncCall(notifyRejectionHandled, this);
-//             }
-//         }
-
-//         if (this._state === FULFILLED || this._state === REJECTED) {
-//             // already resolved, call callback async
-//             asyncCall(invokeCallback, subscriber);
-//         } else {
-//             // subscribe
-//             this._then.push(subscriber);
-//         }
-
-//         return subscriber.then;
-//     },
-
-//     catch: function (onRejection) {
-//         return this.then(null, onRejection);
-//     }
-// };
-
-// function Promise(resolver) {
-// 	if (typeof resolver !== 'function') {
-// 		throw new TypeError('Promise resolver ' + resolver + ' is not a function');
-// 	}
-
-// 	if (this instanceof Promise === false) {
-// 		throw new TypeError('Failed to construct \'Promise\': Please use the \'new\' operator, this object constructor cannot be called as a function.');
-// 	}
-
-// 	this._then = [];
-
-// 	invokeResolver(resolver, this);
-// }
-
-// Promise.prototype = {
-// 	constructor: Promise,
-
-// 	_state: PENDING,
-// 	_then: null,
-// 	_data: undefined,
-// 	_handled: false,
-
-// 	then: function (onFulfillment, onRejection) {
-// 		var subscriber = {
-// 			owner: this,
-// 			then: new this.constructor(NOOP),
-// 			fulfilled: onFulfillment,
-// 			rejected: onRejection
-// 		};
-
-// 		if ((onRejection || onFulfillment) && !this._handled) {
-// 			this._handled = true;
-// 			if (this._state === REJECTED && isNode) {
-// 				asyncCall(notifyRejectionHandled, this);
-// 			}
-// 		}
-
-// 		if (this._state === FULFILLED || this._state === REJECTED) {
-// 			// already resolved, call callback async
-// 			asyncCall(invokeCallback, subscriber);
-// 		} else {
-// 			// subscribe
-// 			this._then.push(subscriber);
-// 		}
-
-// 		return subscriber.then;
-// 	},
-
-// 	catch: function (onRejection) {
-// 		return this.then(null, onRejection);
-// 	}
-// };

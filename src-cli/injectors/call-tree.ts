@@ -40,3 +40,56 @@ function _abbreviate(text: string, maxLength = 255) {
 export type Call = (fun: Function, name: string, that: any, args: any) => any;
 export type BeforeFunctionCallback = (name: string, args: any) => number;
 export type AfterFunctionCallback = (iLog: number, name: string, result: any, err: any) => void;
+
+
+declare var ___callTree: CallTreeNode;
+declare var ___call: Call;
+declare var ___callTree: CallTreeNode;
+declare var ___getNextId: (threadId: string) => string;
+declare var ___stringifySafe: (obj: any) => string;
+
+// export function _ensureGlobalExists<T>(name: string, getDefault: () => T): T {
+//     return _global()[name] = _global()[name] || getDefault();
+// }
+
+export const DEBUG = typeof ___callTree !== 'undefined';
+export function getCallTree() {
+    if (DEBUG) { return ___callTree; }
+    else { return { calls: [] } as any; }
+}
+
+export function setCallTree(value: CallTreeNode) {
+    if (DEBUG) { ___callTree = value; }
+}
+
+export function callFunction(fun: Function, name: string, that: any, args: any) {
+    if (DEBUG) {
+        return ___call(fun, name, that, args);
+    } else {
+        return fun.apply(that, args);
+    }
+}
+
+export function getNextId(threadId: string): string {
+    if (DEBUG) { return ___getNextId(threadId); }
+    else { return '' + Date.now(); }
+}
+
+export function stringifySafe(obj: any) {
+    const seen: any[] = [];
+    return JSON.stringify(obj, function (key, val) {
+        if (val != null && typeof val === 'object') {
+            if (seen.indexOf(val) >= 0
+                || key === 'parent'
+                || key === 'context'
+            ) {
+                return;
+            }
+            seen.push(val);
+        } else if (val != null && typeof val === 'string' && val.length > 40) {
+            return val.substr(0, 40) + '...';
+        }
+
+        return val;
+    });
+}

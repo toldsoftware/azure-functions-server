@@ -3,17 +3,13 @@ import * as path from 'path';
 import * as T from './../src/index';
 import { dir } from './../src/root-dir';
 
-import { _printCallTree, CallTreeNode, AfterFunctionCallback, BeforeFunctionCallback, Call } from '../src-cli/injectors/call-tree';
+import { _printCallTree, CallTreeNode, AfterFunctionCallback, BeforeFunctionCallback, Call, DEBUG, getCallTree, setCallTree, callFunction } from '../src-cli/injectors/call-tree';
 import { _injectPromiseWrapper } from '../src-cli/injectors/promise-wrapper';
-declare var ___callTree: CallTreeNode;
-declare var ___call: Call;
-// declare var ___beforeFunctionCallback: BeforeFunctionCallback;
-// declare var ___afterFunctionCallback: AfterFunctionCallback;
-const DEBUG = typeof ___callTree !== 'undefined';
+
 let _callTreeRoot: CallTreeNode = null;
 if (DEBUG) {
     _injectPromiseWrapper();
-    _callTreeRoot = ___callTree;
+    _callTreeRoot = getCallTree();
 }
 
 export function setDirName(dirName: string) {
@@ -55,7 +51,7 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
             const contextInner = context;
             context = {
                 done() {
-                    return ___call(contextInner.done, 'done', contextInner, arguments);
+                    return callFunction(contextInner.done, 'done', contextInner, arguments);
                 },
                 log() {
                     // Don't wrap log
@@ -106,13 +102,13 @@ export function serve<TData, TQuery, TBody>(main: T.MainEntryPoint<TData, TQuery
 
     if (DEBUG) {
         const innerIsolate = function () {
-            _callTree_runnerRoot = ___callTree;
-            return ___call(runner, 'serve', this, arguments);
+            _callTree_runnerRoot = getCallTree();
+            return callFunction(runner, 'serve', this, arguments);
         };
 
         return function () {
-            ___callTree = _callTreeRoot;
-            return ___call(innerIsolate, 'request', this, arguments);
+            setCallTree(_callTreeRoot);
+            return callFunction(innerIsolate, 'request', this, arguments);
         };
     } else {
         return runner;
