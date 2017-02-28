@@ -74,7 +74,14 @@ export function serve<T, TQuery, TBody>(functions: { name: string, main: T.MainE
             };
 
             // Process Request
-            let request = { query, body: body, pathName: uri.pathname || '', pathParts: (uri.pathname as string).split('/').filter(p => p.length > 0), headers: {} };
+            let request = {
+                query, body: body,
+                pathName: uri.pathname || '',
+                pathParts: (uri.pathname as string).split('/').filter(p => p.length > 0),
+                headers: {
+                    Cookie: process.env.cookie || undefined
+                }
+            };
 
             if (request.pathParts.length === 0) {
                 request.query.name = 'test-main.html';

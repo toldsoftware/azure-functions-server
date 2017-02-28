@@ -79186,7 +79186,14 @@ function _f_serve(functions, port) {
                 }
             };
             // Process Request
-            var request = { query: query, body: body, pathName: uri.pathname || '', pathParts: uri.pathname.split('/').filter(function (p) { return p.length > 0; }), headers: {} };
+            var request = {
+                query: query, body: body,
+                pathName: uri.pathname || '',
+                pathParts: uri.pathname.split('/').filter(function (p) { return p.length > 0; }),
+                headers: {
+                    Cookie: process.env.cookie || undefined
+                }
+            };
             if (request.pathParts.length === 0) {
                 request.query.name = 'test-main.html';
                 resource_1.main(context, request).then();
