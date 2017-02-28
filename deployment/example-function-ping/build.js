@@ -145,7 +145,7 @@ function ___stringifySafe(obj) {
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 276);
+/******/ 	return __webpack_require__(__webpack_require__.s = 283);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -160,7 +160,7 @@ exports.dir = { rootDir: '' };
 
 /***/ }),
 
-/***/ 126:
+/***/ 133:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -169,40 +169,30 @@ var tslib_1 = __webpack_require__(2);
 function main(){ return ___call(_f_main,'main',this,arguments); }
 function _f_main(context, request) {
     return tslib_1.__awaiter(this, void 0, void 0, function () {
+        var response;
         return tslib_1.__generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, delay()];
-                case 1:
-                    _a.sent();
-                    if (true) {
-                        throw 'TEST ERROR';
-                    }
-                    context.done(null, {
-                        headers: {
-                            'Access-Control-Allow-Origin': '*',
-                            'Content-Type': 'application/json',
-                            'X-Told-Test-Header': 'test-header',
-                        },
-                        body: {
-                            ok: true,
-                            data: { text: 'Example Output' },
-                        }
-                    });
-                    return [2 /*return*/];
-            }
+            response = {
+                body: request.body,
+                headers: request.headers,
+                path: request.pathName,
+                query: request.query
+            };
+            context.log('Request=', response);
+            context.done(null, {
+                status: 200,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: {
+                    ok: true,
+                    data: response
+                },
+            });
+            return [2 /*return*/];
         });
     });
 }
 exports.main = main;
-function delay(){ return ___call(_f_delay,'delay',this,arguments); }
-function _f_delay(time) {
-    if (time === void 0) { time = 10; }
-    return new Promise(function (resolve, reject) {
-        setTimeout(function () {
-            resolve();
-        }, time);
-    });
-}
 
 
 /***/ }),
@@ -455,11 +445,11 @@ function __generator(thisArg, body) {
 
 /***/ }),
 
-/***/ 276:
+/***/ 283:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Intentionally global
-___export = __webpack_require__(7).setDirName(__dirname).serve(__webpack_require__(126).main);
+___export = __webpack_require__(7).setDirName(__dirname).serve(__webpack_require__(133).main);
 module.exports = ___export;
 
 /***/ }),

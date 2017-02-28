@@ -10,6 +10,7 @@ var functions = [
 	{name: 'example-function-error-stack-overflow', main: require('./../../lib/src-server/example-function-error-stack-overflow').main },
 	{name: 'example-function-get-blob', main: require('./../../lib/src-server/example-function-get-blob').main },
 	{name: 'example-function-logger', main: require('./../../lib/src-server/example-function-logger').main },
+	{name: 'example-function-ping', main: require('./../../lib/src-server/example-function-ping').main },
 	{name: 'example-function-redirect', main: require('./../../lib/src-server/example-function-redirect').main },
 	{name: 'example-timer', main: require('./../../lib/src-server/example-timer').main },
 	{name: 'example-timer-keep-alive', main: require('./../../lib/src-server/example-timer-keep-alive').main },

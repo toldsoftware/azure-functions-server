@@ -79,7 +79,10 @@ export function serve<T, TQuery, TBody>(functions: { name: string, main: T.MainE
                 pathName: uri.pathname || '',
                 pathParts: (uri.pathname as string).split('/').filter(p => p.length > 0),
                 headers: {
-                    Cookie: process.env.cookie || undefined
+                    ...{
+                        Cookie: process.env.cookie || undefined
+                    },
+                    ...req.headers
                 }
             };
 
