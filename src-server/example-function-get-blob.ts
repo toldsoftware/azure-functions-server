@@ -1,7 +1,7 @@
 import { createBlobService, BlobUtilities } from 'azure-storage';
 import { v1 as guid } from 'node-uuid';
 
-import * as T from './../src';
+import * as T from './../src/index';
 
 export interface GetBlobRequest extends T.Request<{ setup?: boolean, suffixes?: string }, {}> {
 }

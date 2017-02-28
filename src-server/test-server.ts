@@ -2,7 +2,7 @@ import * as http from 'http';
 import * as url from 'url';
 import * as querystring from 'querystring';
 
-import * as T from './../src';
+import * as T from './../src/index';
 
 export function serve<T, TQuery, TBody>(main: T.MainEntryPoint<T, TQuery, TBody>, port = 9876) {
     console.log('Server Started at http://localhost:' + port);

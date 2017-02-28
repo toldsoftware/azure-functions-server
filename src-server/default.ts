@@ -1,4 +1,4 @@
-import * as T from './../src';
+import * as T from './../src/index';
 import * as R from './resource';
 
 export async function main(context: T.RawContext, request: T.Request<{ name: string }, any>) {

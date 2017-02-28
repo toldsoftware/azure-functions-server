@@ -1,4 +1,4 @@
-import * as T from './../src';
+import * as T from './../src/index';
 export declare function setDirName(dirName: string): any;
 export declare function serve<T, TQuery, TBody>(functions: {
     name: string;

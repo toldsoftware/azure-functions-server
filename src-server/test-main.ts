@@ -3,7 +3,7 @@ import * as url from 'url';
 import * as querystring from 'querystring';
 import * as path from 'path';
 
-import * as T from './../src';
+import * as T from './../src/index';
 import { main as resourceMain } from './resource';
 import { dir } from './../src/root-dir';
 

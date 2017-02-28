@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-import * as T from './../src';
+import * as T from './../src/index';
 import { dir } from './../src/root-dir';
 
 import { _printCallTree, CallTreeNode, AfterFunctionCallback, BeforeFunctionCallback, Call } from '../src-cli/injectors/call-tree';

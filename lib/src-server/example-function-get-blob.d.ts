@@ -1,4 +1,4 @@
-import * as T from './../src';
+import * as T from './../src/index';
 export interface GetBlobRequest extends T.Request<{
     setup?: boolean;
     suffixes?: string;

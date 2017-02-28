@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as Path from 'path';
 
-import * as T from './../src';
+import * as T from './../src/index';
 import { resolveAllUrls, getPathDepthPrefix } from './../src/resolve-url';
 import { dir } from './../src/root-dir';
 

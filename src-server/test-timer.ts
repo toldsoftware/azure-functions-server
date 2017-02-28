@@ -1,4 +1,4 @@
-import * as T from './../src';
+import * as T from './../src/index';
 
 export function run(main: T.MainEntryPoint_Timer, port = 9876) {
     console.log('Timer Started at http://localhost:' + port);

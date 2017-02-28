@@ -7,6 +7,12 @@ import * as watch from 'node-watch';
 
 import { runWebpackAzureFunction, runWebpackClient } from './run-webpack';
 
+const isProduction = process.argv.some(x => x.match(/--prod/) != null);
+const isClient = process.argv.some(x => x.match(/--client/) != null);
+const shouldInject = process.argv.some(x => x.match(/--debug/) != null);
+const iSrcPathName = process.argv.map((x, i) => { if (x.match(/--src/) != null) { return i; } }).filter(x => x != null)[0];
+const srcPathName = iSrcPathName != null ? process.argv[iSrcPathName + 1] : 'lib';
+
 // declare var require: any;
 // declare var __dirname: string;
 // declare var process: { argv: string[] };
@@ -18,7 +24,8 @@ import { runWebpackAzureFunction, runWebpackClient } from './run-webpack';
 // const rimraf = require('rimraf');
 
 function getBoilerplatePath(boilerplateResourcePath: string) {
-    return __dirname.replace(/(\\|\/)src-cli$/, '').replace(/(\\|\/)lib$/, '') + boilerplateResourcePath;
+    // return __dirname.replace(/(\\|\/)src-cli$/, '').replace( /(\\|\/)lib$/, '') + boilerplateResourcePath;
+    return __dirname.replace(/(\\|\/)src-cli$/, '').replace(new RegExp(`(\\\\|\\/)${srcPathName}$`), '') + boilerplateResourcePath;
 }
 
 function delay(time = 1000) {
@@ -46,14 +53,12 @@ function waitUntilReady() {
 }
 
 async function createDeployment() {
+    console.log(`src=${srcPathName}`);
+
     await waitUntilReady();
     isRunning = true;
     keepAlive();
     try {
-
-        let isProduction = process.argv.some(x => x.match(/--prod/) != null);
-        let isClient = process.argv.some(x => x.match(/--client/) != null);
-        let shouldInject = process.argv.some(x => x.match(/--debug/) != null);
 
         let functionDirsOrFiles: string[] = [];
         let entrySourceFiles: string[] = [];
@@ -80,7 +85,7 @@ async function createDeployment() {
                         functionNames.sort();
 
                         let functions = functionNames
-                            .map(x => `{name: '${x}', main: require('${'./../../lib/src-server/' + x}').main }`)
+                            .map(x => `{name: '${x}', main: require('${`./../../${srcPathName}/src-server/` + x}').main }`)
                             .join(',\n\t');
 
                         console.log('Create Test Main');
@@ -349,5 +354,5 @@ function runWhenReady() {
 }
 
 if (process.argv.filter(x => x === '-w').length > 0) {
-    watch(['./lib', './resources', './package.json'], () => runWhenReady());
+    watch([`./${srcPathName}`, './resources', './package.json'], () => runWhenReady());
 }
